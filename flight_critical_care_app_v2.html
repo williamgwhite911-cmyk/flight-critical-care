@@ -5900,28 +5900,14 @@ textarea.bs-field{resize:vertical}
        DRUG REFERENCE LIBRARY — A-Z Monographs (moved from Protocols)
        ═══════════════════════════════════════════════════════════════ -->
   <div class="card" id="drugRefCard">
-    <div class="slbl">&#128218; Drug Reference Library &#8212; A-Z Monographs</div>
-    <p style="font-size:.72rem;color:var(--tx2);margin-bottom:12px">Tap any drug for full monograph: dosing, mechanism, compatibility, warnings &amp; protocol cross-references.</p>
-
-    <!-- Search bar -->
-    <div style="position:relative;margin-bottom:12px">
-      <input type="text" id="drugRefSearch" placeholder="Search drugs by name, class, or indication…"
-        oninput="drugRefFilter()"
-        style="width:100%;box-sizing:border-box;padding:10px 14px 10px 38px;border-radius:11px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.82rem;font-family:var(--body)">
-      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.9rem;pointer-events:none">&#128269;</span>
+    <div class="slbl">&#128218; Drug Reference Library</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <select id="drugRefSelect" onchange="drugRefSelectDrug(this.value)" style="flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.82rem;font-family:var(--body);cursor:pointer">
+        <option value="">&#8212; Select Drug Monograph &#8212;</option>
+      </select>
+      <button id="drugRefClearBtn" onclick="drugRefClear()" type="button" style="display:none;padding:8px 14px;border-radius:9px;border:1px solid rgba(251,113,133,.3);background:rgba(251,113,133,.06);color:var(--rose);font-size:.76rem;font-weight:700;cursor:pointer;font-family:var(--body);white-space:nowrap">&#10005; Clear</button>
     </div>
-
-    <!-- A-Z letter bar -->
-    <div id="drugRefLetterBar" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px"></div>
-
-    <!-- Drug grid -->
-    <div id="drugRefGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px;max-height:400px;overflow-y:auto;padding:4px"></div>
-
-    <!-- Monograph output area -->
-    <div id="drugRefOut" style="display:none"></div>
-
-    <!-- Back to list button (shown when monograph is open) -->
-    <button id="drugRefBackBtn" onclick="drugRefBack()" type="button" style="display:none;margin-top:12px;padding:8px 18px;border-radius:9px;border:1px solid rgba(0,212,245,.3);background:rgba(0,212,245,.06);color:var(--cyan);font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--body)">&#8592; Back to Drug List</button>
+    <div id="drugRefOut" style="display:none;margin-top:14px"></div>
   </div>
 
 </div></div>
@@ -34534,79 +34520,31 @@ function drugRefInit(){
     return db[a].generic.localeCompare(db[b].generic);
   });
 
-  // Build letter bar
-  var letters = {};
-  keys.forEach(function(k){ var fl = db[k].generic.charAt(0).toUpperCase(); letters[fl]=true; });
-  var letterBar = document.getElementById('drugRefLetterBar');
-  if(!letterBar) return;
-  var lh = '<button class="dr-letter-btn dr-letter-active" onclick="drugRefSetLetter(\'all\',this)">ALL</button>';
-  Object.keys(letters).sort().forEach(function(L){
-    lh += '<button class="dr-letter-btn" onclick="drugRefSetLetter(\'' + L + '\',this)">' + L + '</button>';
-  });
-  letterBar.innerHTML = lh;
-
-  drugRefRenderGrid();
-}
-
-function drugRefSetLetter(letter, btn){
-  _drugRefActiveLetter = letter;
-  document.querySelectorAll('.dr-letter-btn').forEach(function(b){ b.classList.remove('dr-letter-active'); });
-  if(btn) btn.classList.add('dr-letter-active');
-  drugRefRenderGrid();
-}
-
-function drugRefFilter(){
-  drugRefRenderGrid();
-}
-
-function drugRefRenderGrid(){
-  if(!window._protoEngine || !window._protoEngine.drugDB) return;
-  var db = window._protoEngine.drugDB;
-  var grid = document.getElementById('drugRefGrid');
-  if(!grid) return;
-
-  var q = (document.getElementById('drugRefSearch').value || '').toLowerCase();
-  var keys = Object.keys(db).sort(function(a,b){
-    return db[a].generic.localeCompare(db[b].generic);
-  });
-
-  var filtered = keys.filter(function(k){
+  // Populate dropdown
+  var sel = document.getElementById('drugRefSelect');
+  if(!sel) return;
+  // Keep the first placeholder option, clear the rest
+  while(sel.options.length > 1) sel.remove(1);
+  keys.forEach(function(k){
     var d = db[k];
-    // Letter filter
-    if(_drugRefActiveLetter !== 'all' && d.generic.charAt(0).toUpperCase() !== _drugRefActiveLetter) return false;
-    // Search filter
-    if(!q) return true;
-    var haystack = (d.generic + ' ' + (d.trade||[]).join(' ') + ' ' + d.drugClass + ' ' + d.indications.join(' ')).toLowerCase();
-    return haystack.indexOf(q) >= 0;
+    var trade = d.trade && d.trade.length ? ' (' + d.trade[0] + ')' : '';
+    var opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = d.generic + trade;
+    sel.appendChild(opt);
   });
+}
 
-  if(!filtered.length){
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--tx2);font-size:.8rem">No drugs match your search.</div>';
+function drugRefSelectDrug(key){
+  var out = document.getElementById('drugRefOut');
+  var clearBtn = document.getElementById('drugRefClearBtn');
+  if(!key){
+    if(out){ out.style.display = 'none'; out.innerHTML = ''; }
+    if(clearBtn) clearBtn.style.display = 'none';
     return;
   }
-
-  grid.innerHTML = filtered.map(function(k){
-    var d = db[k];
-    var trade = d.trade && d.trade.length ? d.trade[0] : '';
-    return '<div class="dr-drug-btn" onclick="drugRefOpen(\'' + k + '\')">'
-      + '<div style="font-weight:700;font-size:.78rem;color:var(--cyan)">' + d.generic + '</div>'
-      + (trade ? '<div style="font-size:.65rem;color:var(--tx2);font-style:italic">' + trade + '</div>' : '')
-      + '<div style="font-size:.6rem;color:var(--purple);margin-top:2px">' + d.drugClass.substring(0,40) + (d.drugClass.length > 40 ? '…' : '') + '</div>'
-      + '</div>';
-  }).join('');
-}
-
-function drugRefOpen(key){
-  var grid = document.getElementById('drugRefGrid');
-  var out = document.getElementById('drugRefOut');
-  var back = document.getElementById('drugRefBackBtn');
-  var search = document.getElementById('drugRefSearch');
-  var letterBar = document.getElementById('drugRefLetterBar');
-  if(grid) grid.style.display = 'none';
-  if(search) search.parentElement.style.display = 'none';
-  if(letterBar) letterBar.style.display = 'none';
   if(out) out.style.display = 'block';
-  if(back) back.style.display = 'inline-block';
+  if(clearBtn) clearBtn.style.display = 'inline-block';
 
   // Get patient weight context
   var useWt=false, isP=false, wt=0;
@@ -34623,17 +34561,13 @@ function drugRefOpen(key){
   window._protoEngine.renderDrugMono(key, useWt, isP, wt, "drugRefOut");
 }
 
-function drugRefBack(){
-  var grid = document.getElementById('drugRefGrid');
+function drugRefClear(){
+  var sel = document.getElementById('drugRefSelect');
   var out = document.getElementById('drugRefOut');
-  var back = document.getElementById('drugRefBackBtn');
-  var search = document.getElementById('drugRefSearch');
-  var letterBar = document.getElementById('drugRefLetterBar');
-  if(grid) grid.style.display = 'grid';
-  if(search) search.parentElement.style.display = 'block';
-  if(letterBar) letterBar.style.display = 'flex';
+  var clearBtn = document.getElementById('drugRefClearBtn');
+  if(sel) sel.selectedIndex = 0;
   if(out){ out.style.display = 'none'; out.innerHTML = ''; }
-  if(back) back.style.display = 'none';
+  if(clearBtn) clearBtn.style.display = 'none';
 }
 
 
