@@ -4782,6 +4782,14 @@ textarea.bs-field{resize:vertical}
 .ft-btt:hover{background:var(--s2);border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,245,.15)}
 .ft-btt.visible{display:flex}
 
+
+/* ── Drug Reference Library (Patient Info page) ── */
+.dr-drug-btn{padding:10px 12px;border-radius:9px;border:1px solid var(--bd1);background:var(--bg2);cursor:pointer;transition:all .15s}
+.dr-drug-btn:hover{border-color:rgba(0,212,245,.4);background:rgba(0,212,245,.06)}
+.dr-letter-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--bd1);background:transparent;color:var(--tx2);font-size:.68rem;font-weight:700;cursor:pointer;font-family:var(--mono);transition:all .15s}
+.dr-letter-btn:hover{border-color:rgba(0,212,245,.3);color:var(--cyan)}
+.dr-letter-active{background:rgba(0,212,245,.12)!important;border-color:rgba(0,212,245,.4)!important;color:var(--cyan)!important}
+
 </style>
 </head>
 <body>
@@ -5887,6 +5895,35 @@ textarea.bs-field{resize:vertical}
     </div>
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DRUG REFERENCE LIBRARY — A-Z Monographs (moved from Protocols)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="card" id="drugRefCard">
+    <div class="slbl">&#128218; Drug Reference Library &#8212; A-Z Monographs</div>
+    <p style="font-size:.72rem;color:var(--tx2);margin-bottom:12px">Tap any drug for full monograph: dosing, mechanism, compatibility, warnings &amp; protocol cross-references.</p>
+
+    <!-- Search bar -->
+    <div style="position:relative;margin-bottom:12px">
+      <input type="text" id="drugRefSearch" placeholder="Search drugs by name, class, or indication…"
+        oninput="drugRefFilter()"
+        style="width:100%;box-sizing:border-box;padding:10px 14px 10px 38px;border-radius:11px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.82rem;font-family:var(--body)">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.9rem;pointer-events:none">&#128269;</span>
+    </div>
+
+    <!-- A-Z letter bar -->
+    <div id="drugRefLetterBar" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px"></div>
+
+    <!-- Drug grid -->
+    <div id="drugRefGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px;max-height:400px;overflow-y:auto;padding:4px"></div>
+
+    <!-- Monograph output area -->
+    <div id="drugRefOut" style="display:none"></div>
+
+    <!-- Back to list button (shown when monograph is open) -->
+    <button id="drugRefBackBtn" onclick="drugRefBack()" type="button" style="display:none;margin-top:12px;padding:8px 18px;border-radius:9px;border:1px solid rgba(0,212,245,.3);background:rgba(0,212,245,.06);color:var(--cyan);font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--body)">&#8592; Back to Drug List</button>
+  </div>
+
 </div></div>
 
 <!-- ═══════════════════════ PAGE 2: SEIZURE MEDS ═══════════════════════ -->
@@ -5976,78 +6013,6 @@ textarea.bs-field{resize:vertical}
         <option value="medssedanalg" data-cat="meds">Analgesics &amp; Sedatives</option>
         <option value="medsnmb" data-cat="meds">NMB &amp; Anticonvulsants</option>
         <option value="medselectrolyte" data-cat="meds">Electrolytes &amp; Antihypertensives</option>
-        <!-- ═══ DRUGS A-Z ═══ -->
-        <option value="drug_adenosine" data-cat="meds">Adenosine (Adenocard)</option>
-        <option value="drug_albuterol" data-cat="meds">Albuterol (Proventil)</option>
-        <option value="drug_alteplase" data-cat="meds">Alteplase (tPA) (Activase)</option>
-        <option value="drug_amiodarone" data-cat="meds">Amiodarone (Cordarone)</option>
-        <option value="drug_ampicillin" data-cat="meds">Ampicillin (Principen)</option>
-        <option value="drug_aspirin" data-cat="meds">Aspirin (Acetylsalicylic Acid) (Bayer)</option>
-        <option value="drug_atropine" data-cat="meds">Atropine Sulfate (AtroPen)</option>
-        <option value="drug_caffeine_citrate" data-cat="meds">Caffeine Citrate (Cafcit)</option>
-        <option value="drug_calcium_chloride" data-cat="meds">Calcium Chloride (CaCl₂)</option>
-        <option value="drug_calcium_gluconate" data-cat="meds">Calcium Gluconate (Cal-G)</option>
-        <option value="drug_cefazolin" data-cat="meds">Cefazolin (Ancef)</option>
-        <option value="drug_cefotaxime" data-cat="meds">Cefotaxime (Claforan)</option>
-        <option value="drug_ceftriaxone" data-cat="meds">Ceftriaxone (Rocephin)</option>
-        <option value="drug_cisatracurium" data-cat="meds">Cisatracurium (Nimbex)</option>
-        <option value="drug_clevidipine" data-cat="meds">Clevidipine (Cleviprex)</option>
-        <option value="drug_clindamycin" data-cat="meds">Clindamycin (Cleocin)</option>
-        <option value="drug_dexmedetomidine" data-cat="meds">Dexmedetomidine (Precedex)</option>
-        <option value="drug_dextrose" data-cat="meds">Dextrose (Glucose) (D50W)</option>
-        <option value="drug_diazepam" data-cat="meds">Diazepam (Valium)</option>
-        <option value="drug_diltiazem" data-cat="meds">Diltiazem (Cardizem)</option>
-        <option value="drug_diphenhydramine" data-cat="meds">Diphenhydramine (Benadryl)</option>
-        <option value="drug_dobutamine" data-cat="meds">Dobutamine (Dobutrex)</option>
-        <option value="drug_dopamine" data-cat="meds">Dopamine (Intropin)</option>
-        <option value="drug_droperidol" data-cat="meds">Droperidol (Inapsine)</option>
-        <option value="drug_epinephrine" data-cat="meds">Epinephrine (Adrenalin)</option>
-        <option value="drug_esmolol" data-cat="meds">Esmolol (Brevibloc)</option>
-        <option value="drug_etomidate" data-cat="meds">Etomidate (Amidate)</option>
-        <option value="drug_fentanyl" data-cat="meds">Fentanyl (Sublimaze)</option>
-        <option value="drug_fosphenytoin" data-cat="meds">Fosphenytoin (Cerebyx)</option>
-        <option value="drug_glucagon" data-cat="meds">Glucagon (GlucaGen)</option>
-        <option value="drug_haloperidol" data-cat="meds">Haloperidol (Haldol)</option>
-        <option value="drug_heparin" data-cat="meds">Heparin Sodium (Unfractionated) (Hep-Lock (flush))</option>
-        <option value="drug_hydrocortisone" data-cat="meds">Hydrocortisone Sodium Succinate (Solu-Cortef)</option>
-        <option value="drug_hydromorphone" data-cat="meds">Hydromorphone (Dilaudid)</option>
-        <option value="drug_hypertonic_saline" data-cat="meds">Hypertonic Saline (3% NaCl) (HTS 3%)</option>
-        <option value="drug_insulin_regular" data-cat="meds">Insulin, Regular (Human) (Humulin R)</option>
-        <option value="drug_ipratropium" data-cat="meds">Ipratropium Bromide (Atrovent)</option>
-        <option value="drug_ketamine" data-cat="meds">Ketamine (Ketalar)</option>
-        <option value="drug_ketorolac" data-cat="meds">Ketorolac Tromethamine (Toradol)</option>
-        <option value="drug_labetalol" data-cat="meds">Labetalol (Trandate)</option>
-        <option value="drug_levetiracetam" data-cat="meds">Levetiracetam (Keppra)</option>
-        <option value="drug_lidocaine" data-cat="meds">Lidocaine (Xylocaine)</option>
-        <option value="drug_lorazepam" data-cat="meds">Lorazepam (Ativan)</option>
-        <option value="drug_magnesium_sulfate" data-cat="meds">Magnesium Sulfate (MgSO₄)</option>
-        <option value="drug_mannitol" data-cat="meds">Mannitol (Osmitrol)</option>
-        <option value="drug_methylprednisolone" data-cat="meds">Methylprednisolone Sodium Succinate (Solu-Medrol)</option>
-        <option value="drug_metoprolol" data-cat="meds">Metoprolol Tartrate (IV) / Succinate (PO) (Lopressor (tartrate))</option>
-        <option value="drug_midazolam" data-cat="meds">Midazolam (Versed)</option>
-        <option value="drug_milrinone" data-cat="meds">Milrinone (Primacor)</option>
-        <option value="drug_morphine" data-cat="meds">Morphine Sulfate (MS Contin)</option>
-        <option value="drug_naloxone" data-cat="meds">Naloxone (Narcan)</option>
-        <option value="drug_nicardipine" data-cat="meds">Nicardipine (Cardene)</option>
-        <option value="drug_nitroglycerin" data-cat="meds">Nitroglycerin (Nitrostat (SL))</option>
-        <option value="drug_norepinephrine" data-cat="meds">Norepinephrine (Noradrenaline) (Levophed)</option>
-        <option value="drug_ondansetron" data-cat="meds">Ondansetron (Zofran)</option>
-        <option value="drug_phenobarbital" data-cat="meds">Phenobarbital (Luminal)</option>
-        <option value="drug_phenylephrine" data-cat="meds">Phenylephrine (Neo-Synephrine)</option>
-        <option value="drug_phenytoin" data-cat="meds">Phenytoin Sodium (Dilantin)</option>
-        <option value="drug_procainamide" data-cat="meds">Procainamide (Pronestyl)</option>
-        <option value="drug_prochlorperazine" data-cat="meds">Prochlorperazine (Compazine)</option>
-        <option value="drug_promethazine" data-cat="meds">Promethazine (Phenergan)</option>
-        <option value="drug_propofol" data-cat="meds">Propofol (Diprivan)</option>
-        <option value="drug_rocuronium" data-cat="meds">Rocuronium Bromide (Zemuron)</option>
-        <option value="drug_sodium_bicarbonate" data-cat="meds">Sodium Bicarbonate (NaHCO₃)</option>
-        <option value="drug_succinylcholine" data-cat="meds">Succinylcholine Chloride (Anectine)</option>
-        <option value="drug_terbutaline" data-cat="meds">Terbutaline (Brethine)</option>
-        <option value="drug_tranexamic_acid" data-cat="meds">Tranexamic Acid (TXA) (Cyklokapron)</option>
-        <option value="drug_valproic_acid" data-cat="meds">Valproic Acid / Sodium Valproate (Depakote)</option>
-        <option value="drug_vasopressin" data-cat="meds">Vasopressin (Antidiuretic Hormone/ADH) (Pitressin)</option>
-        <option value="drug_vecuronium" data-cat="meds">Vecuronium Bromide (Norcuron)</option>
-
         <!-- ═══ RESUSCITATION PROTOCOLS ═══ -->
         <option value="resusarrest" data-cat="resus">PHI 4-2/4-9: Cardiac Arrest (BLS, ALS, Post Arrest)</option>
         <option value="resusbrady" data-cat="resus">PHI 4-10/4-11: Bradycardia</option>
@@ -6258,78 +6223,6 @@ E.load = function(){
   if(key==="medssedanalg") E.renderMedsSedAnalg(useWt,isP,wt);
   if(key==="medsnmb") E.renderMedsNMB(useWt,isP,wt);
   if(key==="medselectrolyte") E.renderMedsElectrolyte(useWt,isP,wt);
-  // ── Drugs A-Z ──
-  if(key==="drug_adenosine") E.renderDrugMono("adenosine",useWt,isP,wt);
-  if(key==="drug_albuterol") E.renderDrugMono("albuterol",useWt,isP,wt);
-  if(key==="drug_alteplase") E.renderDrugMono("alteplase",useWt,isP,wt);
-  if(key==="drug_amiodarone") E.renderDrugMono("amiodarone",useWt,isP,wt);
-  if(key==="drug_ampicillin") E.renderDrugMono("ampicillin",useWt,isP,wt);
-  if(key==="drug_aspirin") E.renderDrugMono("aspirin",useWt,isP,wt);
-  if(key==="drug_atropine") E.renderDrugMono("atropine",useWt,isP,wt);
-  if(key==="drug_caffeine_citrate") E.renderDrugMono("caffeine_citrate",useWt,isP,wt);
-  if(key==="drug_calcium_chloride") E.renderDrugMono("calcium_chloride",useWt,isP,wt);
-  if(key==="drug_calcium_gluconate") E.renderDrugMono("calcium_gluconate",useWt,isP,wt);
-  if(key==="drug_cefazolin") E.renderDrugMono("cefazolin",useWt,isP,wt);
-  if(key==="drug_cefotaxime") E.renderDrugMono("cefotaxime",useWt,isP,wt);
-  if(key==="drug_ceftriaxone") E.renderDrugMono("ceftriaxone",useWt,isP,wt);
-  if(key==="drug_cisatracurium") E.renderDrugMono("cisatracurium",useWt,isP,wt);
-  if(key==="drug_clevidipine") E.renderDrugMono("clevidipine",useWt,isP,wt);
-  if(key==="drug_clindamycin") E.renderDrugMono("clindamycin",useWt,isP,wt);
-  if(key==="drug_dexmedetomidine") E.renderDrugMono("dexmedetomidine",useWt,isP,wt);
-  if(key==="drug_dextrose") E.renderDrugMono("dextrose",useWt,isP,wt);
-  if(key==="drug_diazepam") E.renderDrugMono("diazepam",useWt,isP,wt);
-  if(key==="drug_diltiazem") E.renderDrugMono("diltiazem",useWt,isP,wt);
-  if(key==="drug_diphenhydramine") E.renderDrugMono("diphenhydramine",useWt,isP,wt);
-  if(key==="drug_dobutamine") E.renderDrugMono("dobutamine",useWt,isP,wt);
-  if(key==="drug_dopamine") E.renderDrugMono("dopamine",useWt,isP,wt);
-  if(key==="drug_droperidol") E.renderDrugMono("droperidol",useWt,isP,wt);
-  if(key==="drug_epinephrine") E.renderDrugMono("epinephrine",useWt,isP,wt);
-  if(key==="drug_esmolol") E.renderDrugMono("esmolol",useWt,isP,wt);
-  if(key==="drug_etomidate") E.renderDrugMono("etomidate",useWt,isP,wt);
-  if(key==="drug_fentanyl") E.renderDrugMono("fentanyl",useWt,isP,wt);
-  if(key==="drug_fosphenytoin") E.renderDrugMono("fosphenytoin",useWt,isP,wt);
-  if(key==="drug_glucagon") E.renderDrugMono("glucagon",useWt,isP,wt);
-  if(key==="drug_haloperidol") E.renderDrugMono("haloperidol",useWt,isP,wt);
-  if(key==="drug_heparin") E.renderDrugMono("heparin",useWt,isP,wt);
-  if(key==="drug_hydrocortisone") E.renderDrugMono("hydrocortisone",useWt,isP,wt);
-  if(key==="drug_hydromorphone") E.renderDrugMono("hydromorphone",useWt,isP,wt);
-  if(key==="drug_hypertonic_saline") E.renderDrugMono("hypertonic_saline",useWt,isP,wt);
-  if(key==="drug_insulin_regular") E.renderDrugMono("insulin_regular",useWt,isP,wt);
-  if(key==="drug_ipratropium") E.renderDrugMono("ipratropium",useWt,isP,wt);
-  if(key==="drug_ketamine") E.renderDrugMono("ketamine",useWt,isP,wt);
-  if(key==="drug_ketorolac") E.renderDrugMono("ketorolac",useWt,isP,wt);
-  if(key==="drug_labetalol") E.renderDrugMono("labetalol",useWt,isP,wt);
-  if(key==="drug_levetiracetam") E.renderDrugMono("levetiracetam",useWt,isP,wt);
-  if(key==="drug_lidocaine") E.renderDrugMono("lidocaine",useWt,isP,wt);
-  if(key==="drug_lorazepam") E.renderDrugMono("lorazepam",useWt,isP,wt);
-  if(key==="drug_magnesium_sulfate") E.renderDrugMono("magnesium_sulfate",useWt,isP,wt);
-  if(key==="drug_mannitol") E.renderDrugMono("mannitol",useWt,isP,wt);
-  if(key==="drug_methylprednisolone") E.renderDrugMono("methylprednisolone",useWt,isP,wt);
-  if(key==="drug_metoprolol") E.renderDrugMono("metoprolol",useWt,isP,wt);
-  if(key==="drug_midazolam") E.renderDrugMono("midazolam",useWt,isP,wt);
-  if(key==="drug_milrinone") E.renderDrugMono("milrinone",useWt,isP,wt);
-  if(key==="drug_morphine") E.renderDrugMono("morphine",useWt,isP,wt);
-  if(key==="drug_naloxone") E.renderDrugMono("naloxone",useWt,isP,wt);
-  if(key==="drug_nicardipine") E.renderDrugMono("nicardipine",useWt,isP,wt);
-  if(key==="drug_nitroglycerin") E.renderDrugMono("nitroglycerin",useWt,isP,wt);
-  if(key==="drug_norepinephrine") E.renderDrugMono("norepinephrine",useWt,isP,wt);
-  if(key==="drug_ondansetron") E.renderDrugMono("ondansetron",useWt,isP,wt);
-  if(key==="drug_phenobarbital") E.renderDrugMono("phenobarbital",useWt,isP,wt);
-  if(key==="drug_phenylephrine") E.renderDrugMono("phenylephrine",useWt,isP,wt);
-  if(key==="drug_phenytoin") E.renderDrugMono("phenytoin",useWt,isP,wt);
-  if(key==="drug_procainamide") E.renderDrugMono("procainamide",useWt,isP,wt);
-  if(key==="drug_prochlorperazine") E.renderDrugMono("prochlorperazine",useWt,isP,wt);
-  if(key==="drug_promethazine") E.renderDrugMono("promethazine",useWt,isP,wt);
-  if(key==="drug_propofol") E.renderDrugMono("propofol",useWt,isP,wt);
-  if(key==="drug_rocuronium") E.renderDrugMono("rocuronium",useWt,isP,wt);
-  if(key==="drug_sodium_bicarbonate") E.renderDrugMono("sodium_bicarbonate",useWt,isP,wt);
-  if(key==="drug_succinylcholine") E.renderDrugMono("succinylcholine",useWt,isP,wt);
-  if(key==="drug_terbutaline") E.renderDrugMono("terbutaline",useWt,isP,wt);
-  if(key==="drug_tranexamic_acid") E.renderDrugMono("tranexamic_acid",useWt,isP,wt);
-  if(key==="drug_valproic_acid") E.renderDrugMono("valproic_acid",useWt,isP,wt);
-  if(key==="drug_vasopressin") E.renderDrugMono("vasopressin",useWt,isP,wt);
-  if(key==="drug_vecuronium") E.renderDrugMono("vecuronium",useWt,isP,wt);
-
   // ── Resuscitation ──
   if(key==="resusarrest") E.renderResusArrest(useWt,isP,wt);
   if(key==="resusbrady") E.renderResusBrady(useWt,isP,wt);
@@ -13433,10 +13326,10 @@ E.drugDB = {
 };
 
 // ═══ Drug Monograph Renderer ═══
-E.renderDrugMono = function(drugKey, useWt, isP, wt){
+E.renderDrugMono = function(drugKey, useWt, isP, wt, targetId){
   var d = E.drugDB[drugKey];
   if(!d) return;
-  var out = document.getElementById("protoOut");
+  var out = document.getElementById(targetId || "protoOut");
   var h = "";
 
   // ── Header ──
@@ -13555,7 +13448,7 @@ E.renderDrugMono = function(drugKey, useWt, isP, wt){
     h+="<div style='display:flex;flex-wrap:wrap;gap:8px'>";
     for(var pr=0;pr<d.protocols.length;pr++){
       var pp=d.protocols[pr];
-      h+="<a onclick=\"document.getElementById('protoSel').value='"+pp.key+"';window._protoEngine.load()\" style='cursor:pointer;font-size:.76rem;padding:6px 12px;border-radius:8px;background:rgba(181,123,255,.1);border:1px solid rgba(181,123,255,.22);color:var(--purple);font-weight:600;text-decoration:none;transition:all .15s' onmouseover=\"this.style.background='rgba(181,123,255,.2)'\" onmouseout=\"this.style.background='rgba(181,123,255,.1)'\">"+pp.name+"</a>";
+      h+="<a onclick=\"document.getElementById('protoSel').value='"+pp.key+"';window._protoEngine.load();var _pb=document.querySelector('.nav-tab[onclick*=\\'protocols\\']');if(_pb)showPage('protocols',_pb);\" style='cursor:pointer;font-size:.76rem;padding:6px 12px;border-radius:8px;background:rgba(181,123,255,.1);border:1px solid rgba(181,123,255,.22);color:var(--purple);font-weight:600;text-decoration:none;transition:all .15s' onmouseover=\"this.style.background='rgba(181,123,255,.2)'\" onmouseout=\"this.style.background='rgba(181,123,255,.1)'\">"+pp.name+"</a>";
     }
     h+="</div></div>";
   }
@@ -17527,7 +17420,7 @@ function showPage(id,btn){
   if(btn) btn.classList.add("on");
 
   // Populate Patient Info transport bar from Timeline
-  if(id==="dosing") setTimeout(ptSyncTransportBar, 50);
+  if(id==="dosing"){ setTimeout(ptSyncTransportBar, 50); if(typeof drugRefInit==="function") setTimeout(drugRefInit, 100); }
 
   // Initialize Notes canvas when tab opens
   if(id==="notes") setTimeout(function(){ if(typeof notesInitCanvas==='function') notesInitCanvas(); }, 100);
@@ -34628,6 +34521,122 @@ function dlUniqueId() {
   return 'dl_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
 }
 
+
+// ═══════════════════════════════════════════════════════════════════
+// DRUG REFERENCE LIBRARY — Patient Information page functions
+// ═══════════════════════════════════════════════════════════════════
+var _drugRefActiveLetter = 'all';
+
+function drugRefInit(){
+  if(!window._protoEngine || !window._protoEngine.drugDB) return;
+  var db = window._protoEngine.drugDB;
+  var keys = Object.keys(db).sort(function(a,b){
+    return db[a].generic.localeCompare(db[b].generic);
+  });
+
+  // Build letter bar
+  var letters = {};
+  keys.forEach(function(k){ var fl = db[k].generic.charAt(0).toUpperCase(); letters[fl]=true; });
+  var letterBar = document.getElementById('drugRefLetterBar');
+  if(!letterBar) return;
+  var lh = '<button class="dr-letter-btn dr-letter-active" onclick="drugRefSetLetter(\'all\',this)">ALL</button>';
+  Object.keys(letters).sort().forEach(function(L){
+    lh += '<button class="dr-letter-btn" onclick="drugRefSetLetter(\'' + L + '\',this)">' + L + '</button>';
+  });
+  letterBar.innerHTML = lh;
+
+  drugRefRenderGrid();
+}
+
+function drugRefSetLetter(letter, btn){
+  _drugRefActiveLetter = letter;
+  document.querySelectorAll('.dr-letter-btn').forEach(function(b){ b.classList.remove('dr-letter-active'); });
+  if(btn) btn.classList.add('dr-letter-active');
+  drugRefRenderGrid();
+}
+
+function drugRefFilter(){
+  drugRefRenderGrid();
+}
+
+function drugRefRenderGrid(){
+  if(!window._protoEngine || !window._protoEngine.drugDB) return;
+  var db = window._protoEngine.drugDB;
+  var grid = document.getElementById('drugRefGrid');
+  if(!grid) return;
+
+  var q = (document.getElementById('drugRefSearch').value || '').toLowerCase();
+  var keys = Object.keys(db).sort(function(a,b){
+    return db[a].generic.localeCompare(db[b].generic);
+  });
+
+  var filtered = keys.filter(function(k){
+    var d = db[k];
+    // Letter filter
+    if(_drugRefActiveLetter !== 'all' && d.generic.charAt(0).toUpperCase() !== _drugRefActiveLetter) return false;
+    // Search filter
+    if(!q) return true;
+    var haystack = (d.generic + ' ' + (d.trade||[]).join(' ') + ' ' + d.drugClass + ' ' + d.indications.join(' ')).toLowerCase();
+    return haystack.indexOf(q) >= 0;
+  });
+
+  if(!filtered.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--tx2);font-size:.8rem">No drugs match your search.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(k){
+    var d = db[k];
+    var trade = d.trade && d.trade.length ? d.trade[0] : '';
+    return '<div class="dr-drug-btn" onclick="drugRefOpen(\'' + k + '\')">'
+      + '<div style="font-weight:700;font-size:.78rem;color:var(--cyan)">' + d.generic + '</div>'
+      + (trade ? '<div style="font-size:.65rem;color:var(--tx2);font-style:italic">' + trade + '</div>' : '')
+      + '<div style="font-size:.6rem;color:var(--purple);margin-top:2px">' + d.drugClass.substring(0,40) + (d.drugClass.length > 40 ? '…' : '') + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function drugRefOpen(key){
+  var grid = document.getElementById('drugRefGrid');
+  var out = document.getElementById('drugRefOut');
+  var back = document.getElementById('drugRefBackBtn');
+  var search = document.getElementById('drugRefSearch');
+  var letterBar = document.getElementById('drugRefLetterBar');
+  if(grid) grid.style.display = 'none';
+  if(search) search.parentElement.style.display = 'none';
+  if(letterBar) letterBar.style.display = 'none';
+  if(out) out.style.display = 'block';
+  if(back) back.style.display = 'inline-block';
+
+  // Get patient weight context
+  var useWt=false, isP=false, wt=0;
+  var wtEl = document.getElementById("ptWt");
+  if(wtEl && wtEl.value){ wt=parseFloat(wtEl.value); if(wt>0) useWt=true; }
+  var ageEl = document.getElementById("ptAge");
+  if(ageEl && ageEl.value){
+    var av=ageEl.value.toLowerCase();
+    if(av.indexOf("neo")>=0||av.indexOf("inf")>=0||av.indexOf("ped")>=0||
+       av.indexOf("mo")>=0||av.indexOf("yr")>=0||av.indexOf("year")>=0) isP=true;
+    var numMatch=av.match(/(\d+)/);
+    if(numMatch){var n=parseInt(numMatch[1]);if(n<=17) isP=true;}
+  }
+  window._protoEngine.renderDrugMono(key, useWt, isP, wt, "drugRefOut");
+}
+
+function drugRefBack(){
+  var grid = document.getElementById('drugRefGrid');
+  var out = document.getElementById('drugRefOut');
+  var back = document.getElementById('drugRefBackBtn');
+  var search = document.getElementById('drugRefSearch');
+  var letterBar = document.getElementById('drugRefLetterBar');
+  if(grid) grid.style.display = 'grid';
+  if(search) search.parentElement.style.display = 'block';
+  if(letterBar) letterBar.style.display = 'flex';
+  if(out){ out.style.display = 'none'; out.innerHTML = ''; }
+  if(back) back.style.display = 'none';
+}
+
+
 // ── Filtering & rendering ─────────────────────────────────────────
 function dlFilter() {
   _dl.searchQ = (document.getElementById('dlSearch').value || '').toLowerCase();
@@ -38449,6 +38458,9 @@ if(window.caches){
     names.forEach(function(n){caches.delete(n);});
   });
 }
+
+// Initialize Drug Reference Library grid on page load
+if(typeof drugRefInit==="function") setTimeout(drugRefInit, 500);
 </script>
 
 </body>
