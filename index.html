@@ -11,7 +11,7 @@
 <meta name="description" content="StatFlight Critical Care Transport - Medical Director's Assistant for critical care flight operations">
 <meta name="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23030710' width='180' height='180'/><circle cx='90' cy='90' r='70' fill='%2300d4f5'/><path d='M70 90 L85 110 L110 60' stroke='%23030710' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <title>StatFlight — Critical Care Transport</title>
-<link rel="manifest" href="data:application/manifest+json,{&quot;name&quot;:&quot;StatFlight Critical Care Transport&quot;,&quot;short_name&quot;:&quot;StatFlight&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23030710&quot;,&quot;theme_color&quot;:&quot;%2300d4f5&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 192 192&#x27;&gt;&lt;rect fill=&#x27;%23030710&#x27; width=&#x27;192&#x27; height=&#x27;192&#x27;/&gt;&lt;circle cx=&#x27;96&#x27; cy=&#x27;96&#x27; r=&#x27;80&#x27; fill=&#x27;%2300d4f5&#x27;/&gt;&lt;path d=&#x27;M75 96 L95 125 L130 55&#x27; stroke=&#x27;%23030710&#x27; stroke-width=&#x27;8&#x27; fill=&#x27;none&#x27; stroke-linecap=&#x27;round&#x27; stroke-linejoin=&#x27;round&#x27;/&gt;&lt;/svg&gt;&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any&quot;}]}"
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -38387,14 +38387,50 @@ if('serviceWorker' in navigator){
     regs.forEach(function(r){r.unregister();});
   });
 }
-if(window.caches){
-  caches.keys().then(function(names){
-    names.forEach(function(n){caches.delete(n);});
+// Initialize Drug Reference Library grid on page load
+if(typeof drugRefInit==="function") setTimeout(drugRefInit, 500);
+</script>
+
+<!-- ═══ Service Worker Registration & Offline/Online Indicator ═══ -->
+<script>
+// Register Service Worker for offline support
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').then(function(reg){
+      console.log('[SW] Registered, scope:', reg.scope);
+      // Check for updates periodically (every 30 min when online)
+      setInterval(function(){ if(navigator.onLine) reg.update(); }, 1800000);
+    }).catch(function(err){
+      console.log('[SW] Registration failed:', err);
+    });
   });
 }
 
-// Initialize Drug Reference Library grid on page load
-if(typeof drugRefInit==="function") setTimeout(drugRefInit, 500);
+// Offline/Online status indicator
+(function(){
+  var badge = document.createElement('div');
+  badge.id = 'connectBadge';
+  badge.style.cssText = 'position:fixed;bottom:12px;right:12px;z-index:9999;padding:5px 12px;border-radius:20px;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.06em;pointer-events:none;transition:all .4s;opacity:0';
+  document.body.appendChild(badge);
+
+  function updateBadge(){
+    var on = navigator.onLine;
+    badge.textContent = on ? '\u2713 ONLINE' : '\u26A0 OFFLINE';
+    badge.style.background = on ? 'rgba(52,211,153,.15)' : 'rgba(251,191,36,.2)';
+    badge.style.border = '1px solid ' + (on ? 'rgba(52,211,153,.4)' : 'rgba(251,191,36,.5)');
+    badge.style.color = on ? '#34d399' : '#fbbf24';
+    badge.style.opacity = '1';
+    // Auto-hide "ONLINE" after 3 seconds; keep "OFFLINE" visible
+    if(on){
+      setTimeout(function(){ badge.style.opacity='0'; }, 3000);
+    }
+  }
+
+  window.addEventListener('online', updateBadge);
+  window.addEventListener('offline', updateBadge);
+  // Show initial status briefly on load
+  setTimeout(updateBadge, 1000);
+})();
 </script>
 
 </body>
