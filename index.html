@@ -5121,6 +5121,7 @@ textarea.bs-field{resize:vertical}
   <!-- ═══ WORKFLOW TABS — Timeline → Patient (weight/meds) → Bedside → Flight → Handover ═══ -->
   <button class="nav-tab" id="tlNavBtn" onclick="showPage('timeline',this)">&#9201; Timeline</button>
   <button class="nav-tab on" onclick="showPage('dosing',this)" id="ptdirNavBtn">&#128100; Patient</button>
+  <button class="nav-tab" onclick="showPage('notes',this)">&#128221; Notes</button>
   <button class="nav-tab nav-tab-bedside" onclick="showPage('bedside',this)">&#127973; Bedside</button>
   <button class="nav-tab nav-tab-flight" onclick="showPage('flight',this)">&#9992; Flight</button>
   <button class="nav-tab nav-tab-handover" onclick="showPage('handover',this)">&#128203; Handover</button>
@@ -5129,6 +5130,9 @@ textarea.bs-field{resize:vertical}
   <button class="nav-tab" onclick="showPage('protocols',this)">&#128220; Protocols</button>
   <button class="nav-tab" onclick="showPage('medications',this)">&#128138; Medications</button>
   <button class="nav-tab" onclick="showPage('vent',this)">&#129503; Airway</button>
+  <span class="nav-tab-divider"></span>
+  <!-- ═══ ADMIN TAB — opens Patient Directory with saved charts ═══ -->
+  <button class="nav-tab" onclick="showPage('admin',this)">&#128451; Admin</button>
   <span class="nav-tab-divider"></span>
   <button class="nav-tab" onclick="apiKeyShowModal()" title="API Key Settings" style="font-size:.85rem;padding:11px 13px" id="apiKeyNavBtn">
     ⚙ API Key
@@ -5198,6 +5202,80 @@ textarea.bs-field{resize:vertical}
       </div>
       <div id="tlHeloSpeedDisplay" style="display:flex;align-items:flex-end;padding-bottom:4px">
         <div style="font-size:.7rem;color:var(--tx2)">Select helicopter to calculate flight times</div>
+      </div>
+    </div>
+
+    <!-- ═══ Flight Crew & Pilot (moved from Patient) ═══ -->
+    <div class="pt-id-field pt-crew-field" style="margin-bottom:14px">
+      <div class="pt-crew-label-row">
+        <span class="flbl">&#9992; Flight Crew</span>
+        <button class="crew-manage-btn" onclick="crewManageOpen()" type="button" title="Add / edit crew templates">&#9881; Manage Crew</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <!-- Slot 1 -->
+        <div class="crew-slot" id="crewSlot1">
+          <div class="crew-slot-wrap">
+            <select id="crewSel1" class="crew-sel" onchange="crewSelChange(1)">
+              <option value="">&#8212; Crew 1 &#8212;</option>
+            </select>
+            <button class="crew-clear-btn" onclick="crewClear(1)" type="button" title="Clear">&#215;</button>
+          </div>
+          <div class="crew-slot-badge" id="crewBadge1" style="display:none"></div>
+        </div>
+        <!-- Slot 2 -->
+        <div class="crew-slot" id="crewSlot2">
+          <div class="crew-slot-wrap">
+            <select id="crewSel2" class="crew-sel" onchange="crewSelChange(2)">
+              <option value="">&#8212; Crew 2 &#8212;</option>
+            </select>
+            <button class="crew-clear-btn" onclick="crewClear(2)" type="button" title="Clear">&#215;</button>
+          </div>
+          <div class="crew-slot-badge" id="crewBadge2" style="display:none"></div>
+        </div>
+        <!-- Pilot -->
+        <div class="crew-slot" id="crewSlot3">
+          <div class="crew-slot-wrap">
+            <select id="crewSel3" class="crew-sel" onchange="crewSelChange(3)">
+              <option value="">&#8212; Pilot &#8212;</option>
+            </select>
+            <button class="crew-clear-btn" onclick="crewClear(3)" type="button" title="Clear">&#215;</button>
+          </div>
+          <div class="crew-slot-badge" id="crewBadge3" style="display:none"></div>
+        </div>
+      </div>
+      <input type="text" class="bs-field" id="crewPilotFreeText" placeholder="Or type pilot name..." style="margin-top:4px;font-size:.72rem">
+    </div>
+
+    <!-- Crew Manager Modal -->
+    <div id="crewManagerModal" class="crew-modal" style="display:none">
+      <div class="crew-modal-box">
+        <div class="crew-modal-hdr">
+          <span>&#9881; Manage Crew Templates</span>
+          <button class="crew-modal-close" onclick="crewManageClose()" type="button">&#10005;</button>
+        </div>
+        <div class="crew-modal-body">
+          <div class="crew-modal-hint">Tap a crew member to edit. Changes save automatically.</div>
+          <div id="crewTemplateList" class="crew-tmpl-list"></div>
+          <div class="crew-add-row">
+            <input type="text" id="crewAddName" class="crew-add-input" placeholder="Full name, e.g. William White" maxlength="60">
+            <select id="crewAddRole" class="crew-add-role">
+              <option value="">&#8212; Role &#8212;</option>
+              <option>Pilot</option>
+              <option>Flight Physician</option>
+              <option>Flight Nurse</option>
+              <option>Flight Paramedic</option>
+              <option>Critical Care RN</option>
+              <option>Critical Care Paramedic</option>
+              <option>Respiratory Therapist</option>
+              <option>NICU Nurse</option>
+              <option>Neonatal NP</option>
+              <option>Attending Physician</option>
+              <option>Resident Physician</option>
+              <option>Other</option>
+            </select>
+            <button class="crew-add-btn" onclick="crewTemplateAdd()" type="button">&#43; Add</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -6101,107 +6179,7 @@ textarea.bs-field{resize:vertical}
         </div>
       </div>
 
-      <!-- Flight Crew — template dropdown slots -->
-      <div class="pt-id-field pt-crew-field">
-        <div class="pt-crew-label-row">
-          <span class="flbl">&#9992; Flight Crew</span>
-          <button class="crew-manage-btn" onclick="crewManageOpen()" type="button" title="Add / edit crew templates">&#9881; Manage Crew</button>
-        </div>
-
-        <!-- Slot 1 -->
-        <div class="crew-slot" id="crewSlot1">
-          <div class="crew-slot-wrap">
-            <select id="crewSel1" class="crew-sel" onchange="crewSelChange(1)">
-              <option value="">&#8212; Select crew member &#8212;</option>
-            </select>
-            <button class="crew-clear-btn" onclick="crewClear(1)" type="button" title="Clear">&#215;</button>
-          </div>
-          <div class="crew-slot-badge" id="crewBadge1" style="display:none"></div>
-        </div>
-
-        <!-- Slot 2 -->
-        <div class="crew-slot" id="crewSlot2">
-          <div class="crew-slot-wrap">
-            <select id="crewSel2" class="crew-sel" onchange="crewSelChange(2)">
-              <option value="">&#8212; Select crew member &#8212;</option>
-            </select>
-            <button class="crew-clear-btn" onclick="crewClear(2)" type="button" title="Clear">&#215;</button>
-          </div>
-          <div class="crew-slot-badge" id="crewBadge2" style="display:none"></div>
-        </div>
-
-        <!-- Slot 3 — Pilot -->
-        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd0)">
-          <span class="flbl" style="font-size:.6rem;color:var(--tx2)">Pilot</span>
-          <div class="crew-slot" id="crewSlot3">
-            <div class="crew-slot-wrap">
-              <select id="crewSel3" class="crew-sel" onchange="crewSelChange(3)">
-                <option value="">&#8212; Select pilot &#8212;</option>
-              </select>
-              <button class="crew-clear-btn" onclick="crewClear(3)" type="button" title="Clear">&#215;</button>
-            </div>
-            <div class="crew-slot-badge" id="crewBadge3" style="display:none"></div>
-          </div>
-          <input type="text" class="bs-field" id="crewPilotFreeText" placeholder="Or type pilot name..." style="margin-top:4px;font-size:.72rem">
-        </div>
-      </div>
-
-      <!-- Crew Manager Modal -->
-      <div id="crewManagerModal" class="crew-modal" style="display:none">
-        <div class="crew-modal-box">
-          <div class="crew-modal-hdr">
-            <span>&#9881; Manage Crew Templates</span>
-            <button class="crew-modal-close" onclick="crewManageClose()" type="button">&#10005;</button>
-          </div>
-          <div class="crew-modal-body">
-            <div class="crew-modal-hint">Tap a crew member to edit. Changes save automatically.</div>
-            <div id="crewTemplateList" class="crew-tmpl-list"></div>
-            <div class="crew-add-row">
-              <input type="text" id="crewAddName" class="crew-add-input" placeholder="Full name, e.g. William White" maxlength="60">
-              <select id="crewAddRole" class="crew-add-role">
-                <option value="">&#8212; Role &#8212;</option>
-                <option>Pilot</option>
-                <option>Flight Physician</option>
-                <option>Flight Nurse</option>
-                <option>Flight Paramedic</option>
-                <option>Critical Care RN</option>
-                <option>Critical Care Paramedic</option>
-                <option>Respiratory Therapist</option>
-                <option>NICU Nurse</option>
-                <option>Neonatal NP</option>
-                <option>Attending Physician</option>
-                <option>Resident Physician</option>
-                <option>Other</option>
-              </select>
-              <button class="crew-add-btn" onclick="crewTemplateAdd()" type="button">&#43; Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Date / Time Stamp -->
-      <div class="pt-id-field pt-id-timestamp">
-        <span class="flbl">&#128337; Arrival with Patient</span>
-        <div class="pt-stamp-row">
-          <div id="stampDisplay" class="pt-stamp-display">&#8212; Not arrived &#8212;</div>
-          <button id="stampBtn" class="pt-stamp-btn" onclick="stampDateTime()">
-            &#9201; Arrival with Patient
-          </button>
-        </div>
-        <div id="stampSubtext" style="font-size:.58rem;color:var(--tx2);margin-top:3px;min-height:14px"></div>
-      </div>
-
-      <!-- Scene → Hospital Distance Calculator -->
-      <div class="pt-id-field pt-id-route" style="grid-column:1/-1">
-        <span class="flbl">&#128205; Scene → Hospital Distance</span>
-        <div class="route-inputs">
-          <input type="text" id="routeScene" class="route-addr" placeholder="Scene address or city" autocomplete="off" onkeydown="if(event.key==='Enter')calcRoute()">
-          <span class="route-arrow">→</span>
-          <input type="text" id="routeHosp" class="route-addr" placeholder="Destination hospital" autocomplete="off" onkeydown="if(event.key==='Enter')calcRoute()">
-          <button class="route-calc-btn" onclick="calcRoute()" type="button">&#128207; Calculate</button>
-        </div>
-        <div id="routeResult" class="route-result" style="display:none"></div>
-      </div>
+      <!-- (Flight Crew, Pilot, Arrival, Scene Distance moved to Timeline tab) -->
 
     </div>
 
@@ -18597,6 +18575,9 @@ function showPage(id,btn){
     hoRefreshTimestamps();
   }
 
+  // Admin tab — refresh patient directory
+  if(id==="admin") setTimeout(function(){ if(typeof ptdirRender==='function') ptdirRender(); },50);
+
   // Refresh infusion tracker when tab opens
   if(id==="infusions") setTimeout(function(){ infRender(); },50);
 
@@ -25605,7 +25586,7 @@ function clearAllData(){
 
     // ── Clear ALL inputs in every page ──
     try{
-      ['pg-bedside','pg-flight','pg-handover','pg-dosing','pg-dashboard','pg-timeline','pg-vent','pg-seizure','pg-mixer','pg-drip'].forEach(function(pgId){
+      ['pg-bedside','pg-flight','pg-handover','pg-dosing','pg-dashboard','pg-timeline','pg-vent','pg-seizure','pg-mixer','pg-drip','pg-admin'].forEach(function(pgId){
         var pg=document.getElementById(pgId); if(!pg) return;
         pg.querySelectorAll('input[type="text"],input[type="number"],input[type="time"],input[type="date"],textarea').forEach(function(el){
           if(el.id==='htSel'||el.id==='abwIn'||el.id==='ibwOvr'||el.id==='apiKeyInput') return;
@@ -38100,7 +38081,10 @@ function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
   if(_origShowPage){
     window.showPage = function(id, btn){
       _origShowPage(id, btn);
-      if(id==='bedside') setTimeout(function(){ bsSyncPatientBar(); bsUpdateOnlineBadge(); bsSyncFromTimeline(); bsNotesInitCanvas(); }, 50);
+      if(id==='bedside'){
+        setTimeout(function(){ try{bsSyncPatientBar();}catch(e){} try{bsUpdateOnlineBadge();}catch(e){} try{bsSyncFromTimeline();}catch(e){} },50);
+        setTimeout(bsNotesInitCanvas,200);
+      }
     };
   }
 })();
@@ -38961,7 +38945,107 @@ setTimeout(apiKeyUpdateDot, 500);
 
 </div></div>
 
+<!-- ═══════════════════════════════════ PAGE: ADMIN ═══════════════════════════════════ -->
+<div class="pg" id="pg-admin"><div class="page" style="max-width:1100px">
 
+  <!-- Header -->
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <div class="slbl" style="margin:0 0 2px">&#128451; Admin &amp; Records</div>
+        <div style="font-size:.68rem;color:var(--tx2)">Saved patient charts, print, and export tools.</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="adminPrintChart()" type="button"
+          style="padding:10px 18px;border-radius:9px;border:none;background:linear-gradient(135deg,#34d399,#10b981);color:#021018;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--body);display:flex;align-items:center;gap:6px">
+          &#128424; Print Hospital Copy
+        </button>
+        <button onclick="ptdirSaveCurrent()" type="button"
+          style="padding:10px 18px;border-radius:9px;border:none;background:var(--cyan);color:#021018;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--body)">
+          &#10133; Save Current Patient
+        </button>
+        <button onclick="ptdirImportFile()" type="button"
+          style="padding:10px 18px;border-radius:9px;border:1px solid var(--bd1);background:transparent;color:var(--tx1);font-size:.78rem;font-weight:600;cursor:pointer;font-family:var(--body)">
+          &#128228; Import Chart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+    <div class="card" style="padding:14px;text-align:center">
+      <div id="adminStatTotal" style="font-size:1.6rem;font-weight:800;color:var(--cyan);font-family:var(--mono)">0</div>
+      <div style="font-size:.62rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;font-weight:600">Saved Charts</div>
+    </div>
+    <div class="card" style="padding:14px;text-align:center">
+      <div id="adminStatToday" style="font-size:1.6rem;font-weight:800;color:#34d399;font-family:var(--mono)">0</div>
+      <div style="font-size:.62rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;font-weight:600">Today</div>
+    </div>
+    <div class="card" style="padding:14px;text-align:center">
+      <div id="adminStatWeek" style="font-size:1.6rem;font-weight:800;color:#fbbf24;font-family:var(--mono)">0</div>
+      <div style="font-size:.62rem;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;font-weight:600">This Week</div>
+    </div>
+  </div>
+
+  <!-- Saved Charts Table -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:12px 20px;border-bottom:1px solid var(--bd0);display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg2)">
+      <input type="text" id="adminSearch" placeholder="&#128269; Search patients…" oninput="adminRenderCharts()"
+        style="flex:1;min-width:160px;padding:7px 12px;background:var(--bg0);border:1px solid var(--bd1);border-radius:8px;color:var(--tx0);font-size:.75rem;font-family:var(--body);outline:none">
+      <select id="adminSort" onchange="adminRenderCharts()"
+        style="padding:7px 10px;background:var(--bg0);border:1px solid var(--bd1);border-radius:8px;color:var(--tx1);font-size:.72rem;font-family:var(--body);outline:none">
+        <option value="date_desc">Newest first</option>
+        <option value="date_asc">Oldest first</option>
+        <option value="name_asc">Name A–Z</option>
+      </select>
+    </div>
+    <div id="adminChartsList" style="max-height:500px;overflow-y:auto">
+      <div style="padding:40px;text-align:center;color:var(--tx2);font-size:.75rem">Loading charts…</div>
+    </div>
+  </div>
+
+  <!-- Export All -->
+  <div class="card" style="margin-top:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--tx1)">&#128190; Export All Charts</div>
+        <div style="font-size:.65rem;color:var(--tx2)">Download all saved patient charts as a single backup file.</div>
+      </div>
+      <button onclick="adminExportAll()" type="button"
+        style="padding:9px 16px;border-radius:9px;border:1px solid var(--bd1);background:transparent;color:var(--tx1);font-size:.72rem;font-weight:600;cursor:pointer;font-family:var(--body)">
+        &#128229; Export Backup
+      </button>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══ PRINT: ONE-PAGE HOSPITAL HANDOFF (hidden, used for printing) ═══ -->
+<div id="printHandoff" style="display:none">
+  <style id="printHandoffStyle">
+    @media print {
+      body > *:not(#printHandoff) { display:none!important; }
+      #printHandoff { display:block!important;position:static!important;color:#000!important;background:#fff!important;font-family:Arial,Helvetica,sans-serif!important;font-size:11px!important;padding:12px!important;width:100%!important;max-width:none!important; }
+      #printHandoff * { color:#000!important;border-color:#666!important; }
+      #printHandoff .ph-header { text-align:center;border-bottom:3px solid #000;padding-bottom:8px;margin-bottom:10px; }
+      #printHandoff .ph-title { font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.1em; }
+      #printHandoff .ph-subtitle { font-size:10px;color:#555; }
+      #printHandoff .ph-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px; }
+      #printHandoff .ph-section { border:1px solid #999;border-radius:4px;padding:6px 8px;break-inside:avoid; }
+      #printHandoff .ph-slbl { font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#333;margin-bottom:3px;border-bottom:1px solid #ccc;padding-bottom:2px; }
+      #printHandoff .ph-row { font-size:10px;line-height:1.5;margin-bottom:1px; }
+      #printHandoff .ph-lbl { font-weight:700;display:inline; }
+      #printHandoff .ph-val { display:inline; }
+      #printHandoff .ph-full { grid-column:1/-1; }
+      #printHandoff .ph-meds-tbl { width:100%;border-collapse:collapse;font-size:9px;margin-top:3px; }
+      #printHandoff .ph-meds-tbl th { background:#eee;padding:3px 5px;text-align:left;border:1px solid #ccc;font-size:8px;text-transform:uppercase; }
+      #printHandoff .ph-meds-tbl td { padding:3px 5px;border:1px solid #ddd; }
+      #printHandoff .ph-footer { text-align:center;font-size:8px;color:#999;margin-top:8px;border-top:1px solid #ccc;padding-top:4px; }
+      @page { size:letter portrait;margin:0.4in; }
+    }
+  </style>
+</div>
 
 <!-- API Key Settings Modal -->
 <div id="apiKeyModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);overflow-y:auto">
@@ -41128,6 +41212,252 @@ function notesExport(){
 })();
 
 // ══════════════════════════════════════════════════════════
+// ADMIN TAB — CHART MANAGEMENT + PRINT
+// ══════════════════════════════════════════════════════════
+
+function adminRenderCharts(){
+  var list=typeof ptdirLoad==='function'?ptdirLoad():[];
+  var container=document.getElementById('adminChartsList');
+  if(!container) return;
+
+  // Update stats
+  var now=new Date();
+  var todayStr=now.toISOString().slice(0,10);
+  var weekAgo=new Date(now.getTime()-7*86400000);
+  var todayCount=0, weekCount=0;
+  list.forEach(function(p){
+    var d=new Date(p.savedAt||0);
+    if(d.toISOString().slice(0,10)===todayStr) todayCount++;
+    if(d>=weekAgo) weekCount++;
+  });
+  var el1=document.getElementById('adminStatTotal'); if(el1) el1.textContent=list.length;
+  var el2=document.getElementById('adminStatToday'); if(el2) el2.textContent=todayCount;
+  var el3=document.getElementById('adminStatWeek');  if(el3) el3.textContent=weekCount;
+
+  // Filter
+  var q=(document.getElementById('adminSearch')||{}).value||'';
+  q=q.toLowerCase().trim();
+  if(q) list=list.filter(function(p){
+    return (p.name||'').toLowerCase().indexOf(q)>=0 || (p.dx||'').toLowerCase().indexOf(q)>=0 || (p.facility||'').toLowerCase().indexOf(q)>=0;
+  });
+
+  // Sort
+  var sortVal=(document.getElementById('adminSort')||{}).value||'date_desc';
+  list.sort(function(a,b){
+    if(sortVal==='date_asc') return new Date(a.savedAt||0)-new Date(b.savedAt||0);
+    if(sortVal==='name_asc') return (a.name||'').localeCompare(b.name||'');
+    return new Date(b.savedAt||0)-new Date(a.savedAt||0);
+  });
+
+  if(!list.length){
+    container.innerHTML='<div style="padding:40px;text-align:center;color:var(--tx2);font-size:.75rem">No saved charts yet. Use <strong>Save Current Patient</strong> to save the active chart.</div>';
+    return;
+  }
+
+  var html='';
+  list.forEach(function(p,i){
+    var d=p.savedAt?new Date(p.savedAt):null;
+    var dateStr=d?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+    var timeStr=d?d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'';
+    html+='<div style="padding:12px 20px;border-bottom:1px solid var(--bd0);display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer" onclick="ptdirLoad_entry('+i+')">'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:.82rem;font-weight:700;color:var(--tx0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+((p.name||'Unknown Patient').replace(/</g,'&lt;'))+'</div>'
+      +'<div style="font-size:.65rem;color:var(--tx2);margin-top:2px">'+(p.dx||'No diagnosis')+' &bull; '+(p.facility||'No facility')+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0">'
+      +'<div style="font-size:.72rem;color:var(--tx1);font-family:var(--mono)">'+dateStr+'</div>'
+      +'<div style="font-size:.6rem;color:var(--tx2)">'+timeStr+'</div>'
+      +'</div>'
+      +'<button onclick="event.stopPropagation();adminPrintSaved('+i+')" type="button" title="Print this chart" style="padding:6px 10px;border-radius:6px;border:1px solid var(--bd1);background:transparent;color:var(--tx1);cursor:pointer;font-size:.7rem;flex-shrink:0">&#128424;</button>'
+      +'</div>';
+  });
+  container.innerHTML=html;
+}
+
+function adminExportAll(){
+  var list=typeof ptdirLoad==='function'?ptdirLoad():[];
+  if(!list.length){alert('No charts to export.');return;}
+  var blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='statflight-charts-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── PRINT ONE-PAGE HOSPITAL HANDOFF ──
+
+function adminPrintChart(){
+  // Gather current patient data and generate one-page handoff
+  var ph=document.getElementById('printHandoff');
+  if(!ph) return;
+
+  // Gather data from various fields
+  var ptName=(document.getElementById('ptName')||{}).value||'Unknown Patient';
+  var ptDob=(document.getElementById('ptDob')||{}).value||'—';
+  var ptAge=(document.getElementById('ptAgeCalc')||{}).textContent||'—';
+  var ptSex=(document.getElementById('ptSex')||{}).value||'—';
+  var ptWeight=(document.getElementById('ptWeight')||document.getElementById('weight')||{}).value||'—';
+  var ptAllergies=(document.getElementById('ptAllergies')||{}).value||'NKDA';
+  var ptDx='';
+  var dxTags=document.querySelectorAll('#dxChosen .dx-chip-text');
+  dxTags.forEach(function(t){if(ptDx) ptDx+=', '; ptDx+=t.textContent;});
+  if(!ptDx) ptDx='—';
+
+  // Crew
+  var crew1=window.crewMember1||{};
+  var crew2=window.crewMember2||{};
+  var crew3=window.crewMember3||{};
+  var crewStr='';
+  if(crew1.name) crewStr+=crew1.name+(crew1.role?' ('+crew1.role+')':'')+'; ';
+  if(crew2.name) crewStr+=crew2.name+(crew2.role?' ('+crew2.role+')':'')+'; ';
+  if(crew3.name) crewStr+=crew3.name+(crew3.role?' ('+crew3.role+')':'');
+  if(!crewStr) crewStr='—';
+
+  // Transport
+  var aircraft=(document.getElementById('tlAircraft')||{}).value||'—';
+  var txType=(document.getElementById('tlTransportType')||{}).value||'—';
+  var sendFac=(document.getElementById('tlSendingFacility')||{}).value||'—';
+  var recFac=(document.getElementById('tlReceivingFacility')||{}).value||'—';
+
+  // Timeline stamps
+  var stamps=[];
+  var evts=document.querySelectorAll('#tlEvents .tl-event');
+  evts.forEach(function(ev){
+    var label=ev.querySelector('.tl-event-label');
+    var time=ev.querySelector('.tl-event-time');
+    if(label && time && time.textContent && time.textContent.indexOf('—')<0){
+      stamps.push({label:label.textContent.trim(),time:time.textContent.trim()});
+    }
+  });
+  var stampHtml='';
+  stamps.forEach(function(s){ stampHtml+='<div class="ph-row"><span class="ph-lbl">'+s.label+':</span> <span class="ph-val">'+s.time+'</span></div>'; });
+  if(!stampHtml) stampHtml='<div class="ph-row" style="color:#999">No timeline events recorded</div>';
+
+  // Vitals from bedside
+  var vHR=(document.getElementById('bsVitalHR')||{}).value||'—';
+  var vBP=(document.getElementById('bsVitalBP')||{}).value||'—';
+  var vSPO2=(document.getElementById('bsVitalSpO2')||{}).value||'—';
+  var vRR=(document.getElementById('bsVitalRR')||{}).value||'—';
+  var vTemp=(document.getElementById('bsVitalTemp')||{}).value||'—';
+  var vETCO2=(document.getElementById('bsVitalETCO2')||{}).value||'—';
+  var vGCS=(document.getElementById('bsVitalGCS')||{}).value||'—';
+  var vPain=(document.getElementById('bsVitalPain')||{}).value||'—';
+
+  // Meds given (from infusion tracker or bedside)
+  var medsHtml='';
+  var infRows=document.querySelectorAll('#infRunList .inf-row, #bsMedsGiven .bs-med-row');
+  if(infRows.length){
+    medsHtml='<table class="ph-meds-tbl"><thead><tr><th>Medication</th><th>Dose</th><th>Route</th><th>Time</th></tr></thead><tbody>';
+    infRows.forEach(function(r){
+      var cells=r.querySelectorAll('td,span,.inf-med-name,.inf-dose,.inf-route,.inf-time');
+      var name=cells[0]?cells[0].textContent.trim():'';
+      var dose=cells[1]?cells[1].textContent.trim():'';
+      var route=cells[2]?cells[2].textContent.trim():'';
+      var time=cells[3]?cells[3].textContent.trim():'';
+      if(name) medsHtml+='<tr><td>'+name+'</td><td>'+dose+'</td><td>'+route+'</td><td>'+time+'</td></tr>';
+    });
+    medsHtml+='</tbody></table>';
+  }
+  // Also check bedside medication log
+  var bsMedLog=document.getElementById('bsMedLog');
+  if(bsMedLog){
+    var logRows=bsMedLog.querySelectorAll('tr');
+    if(logRows.length>1){
+      if(!medsHtml) medsHtml='<table class="ph-meds-tbl"><thead><tr><th>Medication</th><th>Dose</th><th>Route</th><th>Time</th></tr></thead><tbody>';
+      else medsHtml=medsHtml.replace('</tbody></table>','');
+      for(var i=1;i<logRows.length;i++){
+        var tds=logRows[i].querySelectorAll('td');
+        if(tds.length>=3) medsHtml+='<tr><td>'+tds[0].textContent+'</td><td>'+tds[1].textContent+'</td><td>'+(tds[2]?tds[2].textContent:'')+'</td><td>'+(tds[3]?tds[3].textContent:'')+'</td></tr>';
+      }
+      medsHtml+='</tbody></table>';
+    }
+  }
+  if(!medsHtml) medsHtml='<div class="ph-row" style="color:#999">No medications recorded</div>';
+
+  // Typed bedside notes
+  var bsNotes=(document.getElementById('bsNotesTypeArea')||{}).value||'';
+  var notesHtml=bsNotes?'<div style="font-size:9px;line-height:1.4;white-space:pre-wrap;max-height:120px;overflow:hidden">'+bsNotes.replace(/</g,'&lt;').substring(0,800)+'</div>':'<div class="ph-row" style="color:#999">No notes</div>';
+
+  // Vent settings from bedside
+  var ventMode=(document.getElementById('bsVentMode')||{}).value||'—';
+  var ventRate=(document.getElementById('bsVentRate')||{}).value||'—';
+  var ventTv=(document.getElementById('bsVentTV')||{}).value||'—';
+  var ventFio2=(document.getElementById('bsVentFiO2')||{}).value||'—';
+  var ventPeep=(document.getElementById('bsVentPEEP')||{}).value||'—';
+
+  var now=new Date();
+  var printDate=now.toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'})+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  ph.innerHTML=document.getElementById('printHandoffStyle').outerHTML+
+    '<div class="ph-header">'
+    +'<div class="ph-title">&#9992; StatFlight Critical Care Transport — Patient Handoff</div>'
+    +'<div class="ph-subtitle">Printed: '+printDate+'</div>'
+    +'</div>'
+
+    +'<div class="ph-grid">'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#128100; Patient Information</div>'
+    +'<div class="ph-row"><span class="ph-lbl">Name:</span> <span class="ph-val">'+ptName+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">DOB:</span> <span class="ph-val">'+ptDob+'</span> &nbsp; <span class="ph-lbl">Age:</span> <span class="ph-val">'+ptAge+'</span> &nbsp; <span class="ph-lbl">Sex:</span> <span class="ph-val">'+ptSex+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Weight:</span> <span class="ph-val">'+ptWeight+' kg</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Allergies:</span> <span class="ph-val">'+ptAllergies+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Diagnosis:</span> <span class="ph-val">'+ptDx+'</span></div>'
+    +'</div>'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#9992; Transport Details</div>'
+    +'<div class="ph-row"><span class="ph-lbl">Aircraft:</span> <span class="ph-val">'+aircraft+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Type:</span> <span class="ph-val">'+txType+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Sending:</span> <span class="ph-val">'+sendFac+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Receiving:</span> <span class="ph-val">'+recFac+'</span></div>'
+    +'<div class="ph-row"><span class="ph-lbl">Crew:</span> <span class="ph-val">'+crewStr+'</span></div>'
+    +'</div>'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#128147; Vitals (Latest)</div>'
+    +'<div class="ph-row"><span class="ph-lbl">HR:</span> '+vHR+' &nbsp; <span class="ph-lbl">BP:</span> '+vBP+' &nbsp; <span class="ph-lbl">SpO2:</span> '+vSPO2+'%</div>'
+    +'<div class="ph-row"><span class="ph-lbl">RR:</span> '+vRR+' &nbsp; <span class="ph-lbl">Temp:</span> '+vTemp+' &nbsp; <span class="ph-lbl">ETCO2:</span> '+vETCO2+'</div>'
+    +'<div class="ph-row"><span class="ph-lbl">GCS:</span> '+vGCS+' &nbsp; <span class="ph-lbl">Pain:</span> '+vPain+'/10</div>'
+    +'</div>'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#9201; Timeline</div>'
+    +stampHtml
+    +'</div>'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#127793; Ventilator</div>'
+    +'<div class="ph-row"><span class="ph-lbl">Mode:</span> '+ventMode+' &nbsp; <span class="ph-lbl">Rate:</span> '+ventRate+'</div>'
+    +'<div class="ph-row"><span class="ph-lbl">TV:</span> '+ventTv+' &nbsp; <span class="ph-lbl">FiO2:</span> '+ventFio2+'% &nbsp; <span class="ph-lbl">PEEP:</span> '+ventPeep+'</div>'
+    +'</div>'
+
+    +'<div class="ph-section">'
+    +'<div class="ph-slbl">&#128221; Notes</div>'
+    +notesHtml
+    +'</div>'
+
+    +'<div class="ph-section ph-full">'
+    +'<div class="ph-slbl">&#128138; Medications Administered</div>'
+    +medsHtml
+    +'</div>'
+
+    +'</div>'
+
+    +'<div class="ph-footer">StatFlight Critical Care Transport &bull; Printed '+printDate+' &bull; CONFIDENTIAL PATIENT INFORMATION</div>';
+
+  // Trigger print
+  setTimeout(function(){ window.print(); },200);
+}
+
+function adminPrintSaved(idx){
+  // Load saved chart then print
+  if(typeof ptdirLoadEntry==='function') ptdirLoadEntry(idx);
+  setTimeout(adminPrintChart,500);
+}
+
+// ══════════════════════════════════════════════════════════
 // BEDSIDE NOTES — E-PEN, TYPE, VOICE-TO-TEXT
 // ══════════════════════════════════════════════════════════
 
@@ -41162,52 +41492,60 @@ var _bsNotesPen={color:'#ffffff',size:2,erasing:false,drawing:false,ctx:null,his
 function bsNotesInitCanvas(){
   var c=document.getElementById('bsNotesPenCanvas');
   if(!c) return;
-  if(c._bsInit) return;
-  c._bsInit=true;
+  // Already fully initialized — skip
+  if(_bsNotesPen.ctx && c._bindDone) return;
   _bsNotesPen.canvas=c;
   var rect=c.getBoundingClientRect();
-  if(rect.width<10){setTimeout(function(){c._bsInit=false;bsNotesInitCanvas();},200);return;}
-  c.width=rect.width*2;
-  c.height=rect.height*2;
-  var ctx=c.getContext('2d');
-  ctx.scale(2,2);
-  ctx.lineCap='round';ctx.lineJoin='round';
-  _bsNotesPen.ctx=ctx;
-  _bsNotesPen.history=[ctx.getImageData(0,0,c.width,c.height)];
+  if(rect.width<10){setTimeout(bsNotesInitCanvas,250);return;}
+
+  // Size canvas (only first time)
+  if(!_bsNotesPen.ctx){
+    c.width=Math.round(rect.width*2);
+    c.height=Math.round(rect.height*2);
+    var ctx=c.getContext('2d');
+    ctx.scale(2,2);
+    ctx.lineCap='round';ctx.lineJoin='round';
+    _bsNotesPen.ctx=ctx;
+    _bsNotesPen.history=[ctx.getImageData(0,0,c.width,c.height)];
+  }
+
+  // Attach listeners only once
+  if(c._bindDone) return;
+  c._bindDone=true;
+  var cx=_bsNotesPen.ctx;
 
   function getPos(e){
     var r=c.getBoundingClientRect();
-    var t=e.touches?e.touches[0]:e;
-    return {x:t.clientX-r.left,y:t.clientY-r.top};
+    if(e.touches&&e.touches.length>0) return {x:e.touches[0].clientX-r.left,y:e.touches[0].clientY-r.top};
+    return {x:e.clientX-r.left,y:e.clientY-r.top};
   }
   function startDraw(e){
     e.preventDefault();
     _bsNotesPen.drawing=true;
     var p=getPos(e);
-    _bsNotesPen.ctx.beginPath();
-    _bsNotesPen.ctx.moveTo(p.x,p.y);
+    cx.beginPath();
+    cx.moveTo(p.x,p.y);
   }
   function draw(e){
     if(!_bsNotesPen.drawing) return;
     e.preventDefault();
     var p=getPos(e);
-    var ctx=_bsNotesPen.ctx;
     if(_bsNotesPen.erasing){
-      ctx.globalCompositeOperation='destination-out';
-      ctx.lineWidth=_bsNotesPen.size*5;
+      cx.globalCompositeOperation='destination-out';
+      cx.lineWidth=_bsNotesPen.size*5;
     } else {
-      ctx.globalCompositeOperation='source-over';
-      ctx.strokeStyle=_bsNotesPen.color;
-      ctx.lineWidth=_bsNotesPen.size;
+      cx.globalCompositeOperation='source-over';
+      cx.strokeStyle=_bsNotesPen.color;
+      cx.lineWidth=_bsNotesPen.size;
     }
-    ctx.lineTo(p.x,p.y);
-    ctx.stroke();
+    cx.lineTo(p.x,p.y);
+    cx.stroke();
   }
-  function endDraw(e){
+  function endDraw(){
     if(!_bsNotesPen.drawing) return;
     _bsNotesPen.drawing=false;
-    _bsNotesPen.ctx.globalCompositeOperation='source-over';
-    _bsNotesPen.history.push(_bsNotesPen.ctx.getImageData(0,0,c.width,c.height));
+    cx.globalCompositeOperation='source-over';
+    _bsNotesPen.history.push(cx.getImageData(0,0,c.width,c.height));
     if(_bsNotesPen.history.length>30) _bsNotesPen.history.shift();
   }
 
