@@ -5118,14 +5118,14 @@ textarea.bs-field{resize:vertical}
 </header>
 
 <nav class="nav-tabs">
-  <!-- ═══ WORKFLOW TABS (1-4) — Primary clinical workflow sequence ═══ -->
+  <!-- ═══ WORKFLOW TABS — Timeline → Patient (weight/meds) → Bedside → Flight → Handover ═══ -->
   <button class="nav-tab" id="tlNavBtn" onclick="showPage('timeline',this)">&#9201; Timeline</button>
+  <button class="nav-tab on" onclick="showPage('dosing',this)" id="ptdirNavBtn">&#128100; Patient</button>
   <button class="nav-tab nav-tab-bedside" onclick="showPage('bedside',this)">&#127973; Bedside</button>
   <button class="nav-tab nav-tab-flight" onclick="showPage('flight',this)">&#9992; Flight</button>
   <button class="nav-tab nav-tab-handover" onclick="showPage('handover',this)">&#128203; Handover</button>
   <span class="nav-tab-divider"></span>
-  <!-- ═══ REFERENCE TABS (5-8) — Supporting tools & info ═══ -->
-  <button class="nav-tab on" onclick="showPage('dosing',this)" id="ptdirNavBtn">&#128100; Patient</button>
+  <!-- ═══ REFERENCE TABS ═══ -->
   <button class="nav-tab" onclick="showPage('protocols',this)">&#128220; Protocols</button>
   <button class="nav-tab" onclick="showPage('medications',this)">&#128138; Medications</button>
   <button class="nav-tab" onclick="showPage('vent',this)">&#129503; Airway</button>
@@ -38331,16 +38331,31 @@ async function apiKeySave() {
       }
     }
   } catch(err) {
+    var msg = err.message || '';
+    // CORS or network errors don't mean the key is bad — keep it saved
+    var isCors = msg.indexOf('Failed to fetch') >= 0 || msg.indexOf('NetworkError') >= 0 || msg.indexOf('CORS') >= 0 || msg.indexOf('Load failed') >= 0;
     if (tr) {
-      tr.style.background = 'rgba(248,113,113,.1)';
-      tr.style.border = '1px solid rgba(248,113,113,.3)';
-      tr.style.color = '#f87171';
-      tr.textContent = '✗ ' + err.message;
+      if (isCors) {
+        tr.style.background = 'rgba(251,191,36,.1)';
+        tr.style.border = '1px solid rgba(251,191,36,.3)';
+        tr.style.color = '#fbbf24';
+        tr.textContent = '⚠ Key saved. Direct API test blocked by browser (CORS) — AI features will use proxy if configured, otherwise key is ready for supported environments.';
+      } else if (msg.indexOf('401') >= 0 || msg.indexOf('invalid') >= 0) {
+        // Only remove key if it's actually invalid (401 auth error)
+        tr.style.background = 'rgba(248,113,113,.1)';
+        tr.style.border = '1px solid rgba(248,113,113,.3)';
+        tr.style.color = '#f87171';
+        tr.textContent = '✗ Invalid API key — ' + msg;
+        SM.remove(_apiKeyStore);
+        apiKeyUpdateDot();
+        apiKeyShowBanner();
+      } else {
+        tr.style.background = 'rgba(251,191,36,.1)';
+        tr.style.border = '1px solid rgba(251,191,36,.3)';
+        tr.style.color = '#fbbf24';
+        tr.textContent = '⚠ Key saved but test failed: ' + msg;
+      }
     }
-    // Remove bad key
-    SM.remove(_apiKeyStore);
-    apiKeyUpdateDot();
-    apiKeyShowBanner();
   }
 }
 
@@ -41195,7 +41210,7 @@ function bsNotesInitCanvas(){
     ctx.lineTo(p.x,p.y);
     ctx.stroke();
   }
-  function endDraw(){
+  function endDraw(e){
     if(!_bsNotesPen.drawing) return;
     _bsNotesPen.drawing=false;
     _bsNotesPen.ctx.globalCompositeOperation='source-over';
@@ -41203,12 +41218,10 @@ function bsNotesInitCanvas(){
     if(_bsNotesPen.history.length>30) _bsNotesPen.history.shift();
   }
 
-  c.addEventListener('pointerdown',startDraw);
-  c.addEventListener('pointermove',draw);
-  c.addEventListener('pointerup',endDraw);
-  c.addEventListener('pointerleave',endDraw);
-  c.addEventListener('pointercancel',endDraw);
-  // Fallback for older browsers without pointer events
+  c.addEventListener('mousedown',startDraw);
+  c.addEventListener('mousemove',draw);
+  c.addEventListener('mouseup',endDraw);
+  c.addEventListener('mouseleave',endDraw);
   c.addEventListener('touchstart',startDraw,{passive:false});
   c.addEventListener('touchmove',draw,{passive:false});
   c.addEventListener('touchend',endDraw);
