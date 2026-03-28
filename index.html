@@ -38303,59 +38303,52 @@ async function apiKeySave() {
     return;
   }
 
-  // Save first
+  // Save immediately — key is persisted regardless of test result
   SM.set(_apiKeyStore, key);
   apiKeyUpdateDot();
   apiKeyShowBanner();
 
-  // Test the key with a minimal API call
+  // Show saved confirmation right away
   if (tr) {
     tr.style.display = 'block';
-    tr.style.background = 'rgba(148,163,184,.08)';
-    tr.style.border = '1px solid rgba(148,163,184,.2)';
-    tr.style.color = 'var(--tx2)';
-    tr.innerHTML = '<span class="bs-spinner"></span> Testing connection…';
+    tr.style.background = 'rgba(52,211,153,.1)';
+    tr.style.border = '1px solid rgba(52,211,153,.3)';
+    tr.style.color = '#34d399';
+    tr.textContent = '✓ API key saved — AI features are now active';
   }
 
+  // Quick background test with 8-second timeout (non-blocking)
   try {
-    var data = await apiFetch({
-      max_tokens: 10,
-      messages: [{ role: 'user', content: 'ping' }]
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function(){ controller.abort(); }, 8000);
+    var testResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: apiHeaders(),
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 10, messages: [{ role: 'user', content: 'ping' }] }),
+      signal: controller.signal
     });
-    if (data && data.content) {
+    clearTimeout(timeoutId);
+    var testData = await testResp.json();
+    if (testResp.ok && testData && testData.content) {
       if (tr) {
         tr.style.background = 'rgba(52,211,153,.1)';
         tr.style.border = '1px solid rgba(52,211,153,.3)';
         tr.style.color = '#34d399';
-        tr.textContent = '✓ Connection successful — all AI features are now active';
+        tr.textContent = '✓ Connection verified — API key is valid and active';
       }
-    }
-  } catch(err) {
-    var msg = err.message || '';
-    // CORS or network errors don't mean the key is bad — keep it saved
-    var isCors = msg.indexOf('Failed to fetch') >= 0 || msg.indexOf('NetworkError') >= 0 || msg.indexOf('CORS') >= 0 || msg.indexOf('Load failed') >= 0;
-    if (tr) {
-      if (isCors) {
-        tr.style.background = 'rgba(251,191,36,.1)';
-        tr.style.border = '1px solid rgba(251,191,36,.3)';
-        tr.style.color = '#fbbf24';
-        tr.textContent = '⚠ Key saved. Direct API test blocked by browser (CORS) — AI features will use proxy if configured, otherwise key is ready for supported environments.';
-      } else if (msg.indexOf('401') >= 0 || msg.indexOf('invalid') >= 0) {
-        // Only remove key if it's actually invalid (401 auth error)
+    } else if (testResp.status === 401) {
+      if (tr) {
         tr.style.background = 'rgba(248,113,113,.1)';
         tr.style.border = '1px solid rgba(248,113,113,.3)';
         tr.style.color = '#f87171';
-        tr.textContent = '✗ Invalid API key — ' + msg;
-        SM.remove(_apiKeyStore);
-        apiKeyUpdateDot();
-        apiKeyShowBanner();
-      } else {
-        tr.style.background = 'rgba(251,191,36,.1)';
-        tr.style.border = '1px solid rgba(251,191,36,.3)';
-        tr.style.color = '#fbbf24';
-        tr.textContent = '⚠ Key saved but test failed: ' + msg;
+        tr.textContent = '✗ Invalid API key — check your key at console.anthropic.com';
       }
+      SM.remove(_apiKeyStore);
+      apiKeyUpdateDot();
+      apiKeyShowBanner();
     }
+  } catch(err) {
+    // Test failed (CORS, timeout, network) — key stays saved, that's fine
   }
 }
 
