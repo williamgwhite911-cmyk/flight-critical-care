@@ -4790,6 +4790,76 @@ textarea.bs-field{resize:vertical}
 .dr-letter-btn:hover{border-color:rgba(0,212,245,.3);color:var(--cyan)}
 .dr-letter-active{background:rgba(0,212,245,.12)!important;border-color:rgba(0,212,245,.4)!important;color:var(--cyan)!important}
 
+
+/* ── Handover Print Sheet ── */
+.ho-print-sheet{background:#fff;color:#000;padding:28px 32px;border-radius:4px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:11px;line-height:1.4}
+.ho-print-sheet *{color:#000!important;border-color:#999!important}
+.ho-ps-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #000;padding-bottom:8px;margin-bottom:10px}
+.ho-ps-logo{font-size:16px;font-weight:900;letter-spacing:.02em}
+.ho-ps-logo span{font-size:10px;font-weight:400;display:block;letter-spacing:.08em;text-transform:uppercase;color:#555!important}
+.ho-ps-date{text-align:right;font-size:10px;color:#555!important}
+.ho-ps-pt-bar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:0;border:1.5px solid #000;margin-bottom:8px}
+.ho-ps-pt-bar div{padding:4px 8px;border-right:1px solid #999;font-size:10px}
+.ho-ps-pt-bar div:last-child{border-right:none}
+.ho-ps-pt-bar .ho-ps-label{font-size:8px;text-transform:uppercase;font-weight:700;color:#555!important;display:block;margin-bottom:1px}
+.ho-ps-section{margin-bottom:6px}
+.ho-ps-section-title{font-size:10px;font-weight:800;text-transform:uppercase;background:#000;color:#fff!important;padding:3px 8px;margin-bottom:4px;letter-spacing:.06em}
+.ho-ps-grid{display:grid;gap:0;border:1px solid #999;margin-bottom:4px}
+.ho-ps-grid.cols-2{grid-template-columns:1fr 1fr}
+.ho-ps-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+.ho-ps-grid.cols-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.ho-ps-grid.cols-5{grid-template-columns:1fr 1fr 1fr 1fr 1fr}
+.ho-ps-grid.cols-8{grid-template-columns:repeat(8,1fr)}
+.ho-ps-cell{padding:3px 6px;border-right:1px solid #ddd;border-bottom:1px solid #ddd;font-size:10px;min-height:18px}
+.ho-ps-cell:last-child{border-right:none}
+.ho-ps-cell.hdr{font-size:8px;font-weight:700;text-transform:uppercase;background:#eee;color:#333!important}
+.ho-ps-cell.full{grid-column:1/-1}
+.ho-ps-cell.val{font-weight:600}
+.ho-ps-notes{border:1px solid #999;padding:4px 8px;min-height:40px;font-size:10px;margin-bottom:4px}
+.ho-ps-footer{display:flex;justify-content:space-between;border-top:2px solid #000;padding-top:6px;margin-top:8px;font-size:9px}
+.ho-ps-sig{display:flex;gap:30px}
+.ho-ps-sig-line{border-bottom:1px solid #000;min-width:150px;padding-bottom:2px}
+
+@media print{
+  body>*:not(#hoPrintModal){display:none!important}
+  #hoPrintModal{position:static!important;background:none!important;padding:0!important;display:block!important}
+  #hoPrintModal>div{max-width:100%!important;margin:0!important}
+  .ho-print-toolbar{display:none!important}
+  .ho-print-sheet{padding:12px 16px!important;border-radius:0!important;box-shadow:none!important}
+  @page{size:letter portrait;margin:0.4in}
+}
+
+
+/* ── Anatomy Tab Styles ── */
+.nav-tab-anatomy{color:#f472b6}
+.nav-tab-anatomy:hover{color:#f9a8d4}
+.nav-tab-anatomy.on{color:#f472b6;border-bottom-color:#f472b6}
+
+.anat-body-btn{
+  padding:7px 14px;font-size:.72rem;font-weight:600;border-radius:6px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+  color:var(--tx1);cursor:pointer;font-family:var(--body);transition:all .15s;white-space:nowrap
+}
+.anat-body-btn:hover{background:rgba(255,255,255,.08);color:var(--tx0)}
+.anat-body-active{background:rgba(244,114,182,.15)!important;color:#f472b6!important;border-color:rgba(244,114,182,.35)!important}
+.anat-view-active{background:rgba(96,165,250,.15)!important;color:#60a5fa!important;border-color:rgba(96,165,250,.35)!important}
+
+.anat-tag-btn{
+  padding:4px 9px;font-size:.66rem;font-weight:600;border-radius:5px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);
+  color:var(--tx1);cursor:pointer;font-family:var(--body);transition:all .12s;white-space:nowrap
+}
+.anat-tag-btn:hover{background:rgba(255,255,255,.07)}
+.anat-tag-on{font-weight:700}
+
+.anat-pulse-btn{
+  padding:5px 12px;font-size:.7rem;font-weight:600;border-radius:5px;
+  border:1px solid rgba(34,197,94,.18);background:rgba(34,197,94,.04);
+  color:var(--tx1);cursor:pointer;font-family:var(--body);transition:all .12s
+}
+.anat-pulse-btn:hover{background:rgba(34,197,94,.1)}
+.anat-pulse-active{background:rgba(34,197,94,.18)!important;color:#22c55e!important;border-color:rgba(34,197,94,.35)!important}
+
 </style>
 </head>
 <body>
@@ -4804,7 +4874,7 @@ textarea.bs-field{resize:vertical}
   </div>
   <div class="tb-right">
     <div class="save-badge" id="saveBadge" onclick="doSave()" title="Click to save now"><div class="save-dot"></div><span id="saveText">AUTO-SAVE</span></div>
-    <button onclick="exportSessionHTML()" title="Save session as HTML file" style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.58rem;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(0,212,245,.08);border:1px solid rgba(0,212,245,.25);color:var(--cyan);letter-spacing:.04em;cursor:pointer;transition:all .3s;" onmouseover="this.style.background='rgba(0,212,245,.18)'" onmouseout="this.style.background='rgba(0,212,245,.08)'">&#128190; SAVE FILE</button>
+    <button onclick="if(window._protoEngine&&window._protoEngine.exportAllDrugPhotos){window._protoEngine.exportAllDrugPhotos(function(m){exportSessionHTML(m)})}else{exportSessionHTML()}" title="Save session as HTML file (includes drug photos)" style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.58rem;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(0,212,245,.08);border:1px solid rgba(0,212,245,.25);color:var(--cyan);letter-spacing:.04em;cursor:pointer;transition:all .3s;" onmouseover="this.style.background='rgba(0,212,245,.18)'" onmouseout="this.style.background='rgba(0,212,245,.08)'">&#128190; SAVE FILE</button>
     <button onclick="ptdirSaveCurrent()" title="Add current patient to directory" style="display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.58rem;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(181,123,255,.08);border:1px solid rgba(181,123,255,.25);color:var(--purple);letter-spacing:.04em;cursor:pointer;transition:all .3s;" onmouseover="this.style.background='rgba(181,123,255,.18)'" onmouseout="this.style.background='rgba(181,123,255,.08)'">&#128196; DIRECTORY</button>
     <div class="status-pill">ICU REF</div>
   </div>
@@ -4824,6 +4894,7 @@ textarea.bs-field{resize:vertical}
   <button class="nav-tab"     onclick="showPage('infusions',this)">&#128137; Infusion Tracker</button>
   <span class="nav-tab-divider"></span>
   <button class="nav-tab nav-tab-bedside"  onclick="showPage('bedside',this)">&#127973; Bedside</button>
+  <button class="nav-tab nav-tab-anatomy" onclick="showPage('anatomy',this)">&#129516; Anatomy</button>
   <button class="nav-tab nav-tab-flight"   onclick="showPage('flight',this)">&#9992; Flight</button>
   <button class="nav-tab nav-tab-handover" onclick="showPage('handover',this)">&#128203; Handover</button>
   <button class="nav-tab nav-tab-druglib"  onclick="showPage('druglib',this)">&#128138; Drug Library</button>
@@ -6035,6 +6106,131 @@ textarea.bs-field{resize:vertical}
 
 var E = {};
 window._protoEngine = E;
+
+// ═══ Drug Photo Storage (IndexedDB) ═══
+// Persists one photo per drug across sessions on same device.
+// Photos stored as base64 data URIs in IndexedDB "drugPhotos" store.
+var _drugPhotoDB = null;
+function _openPhotoDB(cb){
+  if(_drugPhotoDB){ cb(_drugPhotoDB); return; }
+  var req = indexedDB.open("FlightCritCare_DrugPhotos", 1);
+  req.onupgradeneeded = function(e){
+    var db = e.target.result;
+    if(!db.objectStoreNames.contains("photos")){
+      db.createObjectStore("photos", {keyPath:"drugKey"});
+    }
+  };
+  req.onsuccess = function(e){ _drugPhotoDB = e.target.result; cb(_drugPhotoDB); };
+  req.onerror = function(){ console.warn("DrugPhotoDB open error"); cb(null); };
+}
+
+// Save a photo (base64 data URI) for a drug key
+E.saveDrugPhoto = function(drugKey, dataURI, cb){
+  _openPhotoDB(function(db){
+    if(!db){ if(cb) cb(false); return; }
+    var tx = db.transaction("photos","readwrite");
+    tx.objectStore("photos").put({drugKey:drugKey, photo:dataURI, ts:Date.now()});
+    tx.oncomplete = function(){ if(cb) cb(true); };
+    tx.onerror = function(){ if(cb) cb(false); };
+  });
+};
+
+// Load a photo for a drug key
+E.loadDrugPhoto = function(drugKey, cb){
+  _openPhotoDB(function(db){
+    if(!db){ cb(null); return; }
+    var tx = db.transaction("photos","readonly");
+    var req = tx.objectStore("photos").get(drugKey);
+    req.onsuccess = function(){ cb(req.result ? req.result.photo : null); };
+    req.onerror = function(){ cb(null); };
+  });
+};
+
+// Delete a photo
+E.deleteDrugPhoto = function(drugKey, cb){
+  _openPhotoDB(function(db){
+    if(!db){ if(cb) cb(false); return; }
+    var tx = db.transaction("photos","readwrite");
+    tx.objectStore("photos").delete(drugKey);
+    tx.oncomplete = function(){ if(cb) cb(true); };
+    tx.onerror = function(){ if(cb) cb(false); };
+  });
+};
+
+// Export ALL photos as JSON (for bundling into HTML session)
+E.exportAllDrugPhotos = function(cb){
+  _openPhotoDB(function(db){
+    if(!db){ cb({}); return; }
+    var tx = db.transaction("photos","readonly");
+    var req = tx.objectStore("photos").getAll();
+    req.onsuccess = function(){
+      var map = {};
+      (req.result||[]).forEach(function(r){ map[r.drugKey] = r.photo; });
+      cb(map);
+    };
+    req.onerror = function(){ cb({}); };
+  });
+};
+
+// Import photos from JSON map (for restoring from bundled session)
+E.importDrugPhotos = function(map, cb){
+  _openPhotoDB(function(db){
+    if(!db){ if(cb) cb(false); return; }
+    var tx = db.transaction("photos","readwrite");
+    var store = tx.objectStore("photos");
+    var keys = Object.keys(map);
+    keys.forEach(function(k){ store.put({drugKey:k, photo:map[k], ts:Date.now()}); });
+    tx.oncomplete = function(){ if(cb) cb(true); };
+    tx.onerror = function(){ if(cb) cb(false); };
+  });
+};
+
+// Handle file input for drug photo capture (camera or gallery)
+E._handleDrugPhotoInput = function(drugKey, file){
+  if(!file) return;
+  // Resize to max 800px for storage efficiency
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    var img = new Image();
+    img.onload = function(){
+      var maxW = 800, maxH = 800;
+      var w = img.width, h = img.height;
+      if(w > maxW || h > maxH){
+        var scale = Math.min(maxW/w, maxH/h);
+        w = Math.round(w*scale);
+        h = Math.round(h*scale);
+      }
+      var canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      var dataURI = canvas.toDataURL("image/jpeg", 0.82);
+      E.saveDrugPhoto(drugKey, dataURI, function(ok){
+        if(ok){
+          // Update the photo display in the monograph
+          var el = document.getElementById("drugPhoto_"+drugKey);
+          if(el){
+            el.innerHTML = "<img src='"+dataURI+"' style='max-width:100%;border-radius:10px;border:2px solid rgba(0,212,245,.25)'/>"
+              + "<div style='display:flex;gap:8px;margin-top:8px'>"
+              + "<button onclick=\"window._protoEngine.deleteDrugPhoto('"+drugKey+"',function(){var el=document.getElementById('drugPhoto_"+drugKey+"');if(el)el.innerHTML=window._protoEngine._photoPlaceholder('"+drugKey+"')})\" style='font-size:.72rem;padding:5px 12px;border-radius:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#ef4444;cursor:pointer;font-weight:600'>Remove Photo</button>"
+              + "</div>";
+          }
+        }
+      });
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+// Placeholder HTML when no photo exists
+E._photoPlaceholder = function(drugKey){
+  return "<div style='display:flex;align-items:center;gap:10px'>"
+    + "<label style='cursor:pointer;font-size:.78rem;padding:8px 16px;border-radius:10px;background:rgba(0,212,245,.1);border:1.5px dashed rgba(0,212,245,.3);color:var(--cyan);font-weight:700;display:flex;align-items:center;gap:6px'>"
+    + "<span style='font-size:1.1rem'>&#128247;</span> Take / Upload Photo"
+    + "<input type='file' accept='image/*' capture='environment' onchange=\"window._protoEngine._handleDrugPhotoInput('"+drugKey+"',this.files[0])\" style='display:none'/>"
+    + "</label>"
+    + "</div>";
+};
 
 // ── Timestamp ──
 function stamp(){
@@ -13307,6 +13503,367 @@ E.drugDB = {
   incompatibleWith:["Alkaline solutions (pH > 8.5)","Thiopental","Trimethoprim-sulfamethoxazole"],
   warnings:["CRITICAL: Does NOT provide sedation or analgesia — MUST co-administer sedation","Requires reconstitution — adds prep time in emergencies (rocuronium preferred for RSI)","No cardiovascular effects — hemodynamically neutral","Accumulates in hepatic and renal failure (partially liver-metabolized)","3-Desacetyl vecuronium (active metabolite) accumulates in renal failure","Cannot be quickly reversed by sugammadex (rocuronium preferred for reversal capability)"],
   storage:"REFRIGERATE powder. Reconstituted: stable 24h at room temp or 48h refrigerated."
+},
+"furosemide": {
+  generic:"Furosemide", trade:["Lasix"],
+  drugClass:"Loop Diuretic",
+  moa:"Inhibits sodium and chloride reabsorption in the ascending loop of Henle, promoting rapid diuresis and reducing fluid overload.",
+  indications:["Acute pulmonary edema","Congestive heart failure","Hypertensive emergency","Ascites","Edema"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Acute pulmonary edema",dose:"0.5-1 mg/kg IV",route:"IV",freq:"May repeat q4-6h",notes:"Give as IV push or infusion over 1-2 minutes. Higher doses for refractory edema."}],
+    peds:[{indication:"Edema/fluid overload",dose:"0.5-1 mg/kg IV",route:"IV",freq:"q4-6h as needed",notes:"Maximum 6 mg/kg/day. Use lower doses in neonates."}]
+  },
+  concentration:"10 mg/mL",
+  reconstitution:"N/A",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Esmolol","Milrinone if directly mixed"],
+  warnings:["May cause hyperglycemia, hypokalemia, hyponatremia","Ototoxicity risk with high doses","Contraindicated in anuria","Monitor renal function and electrolytes"],
+  storage:"Room temperature, protect from light"
+},
+
+"dexamethasone": {
+  generic:"Dexamethasone", trade:["Decadron"],
+  drugClass:"Corticosteroid",
+  moa:"Glucocorticoid receptor agonist that suppresses immune response, reduces inflammation, and increases vascular tone.",
+  indications:["Cerebral edema","Airway edema/croup","Spinal cord injury","Anaphylaxis (adjunctive)","Adrenal insufficiency"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Cerebral edema",dose:"10 mg IV",route:"IV",freq:"q4-6h",notes:"High-dose regimen used for acute brain injury."},{indication:"Airway edema/croup",dose:"0.6 mg/kg IV or IM",route:"IV/IM",freq:"One-time dose",notes:"May repeat after 12 hours if needed."},{indication:"Adrenal insufficiency",dose:"4 mg IV",route:"IV",freq:"q4h",notes:"Equivalent to 25 mg hydrocortisone q4h."}],
+    peds:[{indication:"Cerebral edema",dose:"0.5-1 mg/kg IV",route:"IV",freq:"q4-6h",notes:"Maximum 24 mg/day in acute situations."},{indication:"Croup/airway edema",dose:"0.6 mg/kg IV or IM",route:"IV/IM",freq:"Once, may repeat in 12h",notes:"Dexamethasone preferred for rapid onset."}]
+  },
+  concentration:"4 mg/mL",
+  reconstitution:"N/A",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Chlorpromazine","Daunorubicin"],
+  warnings:["Hyperglycemia","Immunosuppression","Psychiatric effects possible","May mask signs of infection","Avoid in suspected bacterial meningitis (until antibiotics given)"],
+  storage:"Room temperature"
+},
+
+"acetaminophen_iv": {
+  generic:"Acetaminophen IV", trade:["Ofirmev"],
+  drugClass:"Analgesic/Antipyretic",
+  moa:"Inhibits prostaglandin synthesis via COX inhibition in the CNS; exact mechanism unclear but distinct from NSAIDs.",
+  indications:["Pain management","Fever reduction"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Pain/fever",dose:"650-1000 mg IV",route:"IV infusion",freq:"q4-6h",notes:"Infuse over 15 minutes. Maximum 4000 mg/day."}],
+    peds:[{indication:"Pain/fever",dose:"12.5-15 mg/kg IV",route:"IV infusion",freq:"q4-6h",notes:"Infuse over 15 minutes. Maximum 5 doses in 24 hours or 4000 mg/day, whichever is less."}]
+  },
+  concentration:"10 mg/mL in 100 mL vial",
+  reconstitution:"N/A",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Diazepam"],
+  warnings:["Hepatotoxicity with overdose","Allergic reactions rare but possible","Do not exceed maximum daily dose","Use caution in hepatic disease"],
+  storage:"Room temperature, protect from light and freezing"
+},
+
+"sugammadex": {
+  generic:"Sugammadex", trade:["Bridion"],
+  drugClass:"Selective Relaxant Binding Agent",
+  moa:"Encapsulates rocuronium and vecuronium molecules, removing them from the neuromuscular junction and reverting NMB.",
+  indications:["Reversal of rocuronium-induced neuromuscular blockade","Reversal of vecuronium-induced neuromuscular blockade"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Reversal of moderate rocuronium blockade",dose:"2 mg/kg IV",route:"IV push",freq:"Single dose",notes:"Give when 1-2 post-tetanic potentiations present."},{indication:"Reversal of deep rocuronium blockade",dose:"4 mg/kg IV",route:"IV push",freq:"Single dose",notes:"Give when 0-1 post-tetanic potentiations present."}],
+    peds:[{indication:"Reversal of moderate rocuronium blockade",dose:"2 mg/kg IV",route:"IV push",freq:"Single dose",notes:"Give when 1-2 post-tetanic potentiations present."},{indication:"Reversal of deep rocuronium blockade",dose:"4 mg/kg IV",route:"IV push",freq:"Single dose",notes:"Give when 0-1 post-tetanic potentiations present. May be used in children >2 years."}]
+  },
+  concentration:"100 mg/mL",
+  reconstitution:"N/A",
+  compatibleWith:["NS"],
+  incompatibleWith:["All other medications; use separate line"],
+  warnings:["Risk of re-curarization with rocuronium","Monitoring required post-administration","Do not use with succinylcholine","Allergic reactions including anaphylaxis possible"],
+  storage:"Room temperature, protect from light"
+},
+
+"flumazenil": {
+  generic:"Flumazenil", trade:["Romazicon"],
+  drugClass:"Benzodiazepine Antagonist",
+  moa:"Competitive antagonist at benzodiazepine receptors on GABA-A channels, rapidly reversing CNS depression.",
+  indications:["Reversal of benzodiazepine-induced sedation","Benzodiazepine overdose reversal"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Benzodiazepine reversal",dose:"0.2 mg IV",route:"IV push",freq:"May repeat q1min up to 1 mg total",notes:"Infuse over 15-30 seconds. Titrate to effect. Higher cumulative doses in overdose."}],
+    peds:[{indication:"Benzodiazepine reversal",dose:"0.01 mg/kg IV",route:"IV push",freq:"May repeat q1min up to 0.05 mg/kg or 1 mg total",notes:"Initial bolus not to exceed 0.2 mg. Titrate carefully."}]
+  },
+  concentration:"0.1 mg/mL",
+  reconstitution:"N/A",
+  compatibleWith:["NS","D5W"],
+  incompatibleWith:["No significant interactions noted"],
+  warnings:["Risk of seizures, especially in benzodiazepine-dependent patients","Re-sedation possible due to short half-life","Do not use in tricyclic antidepressant overdose","Risk of arrhythmias and autonomic instability"],
+  storage:"Room temperature, protect from light"
+},
+
+"pantoprazole": {
+  generic:"Pantoprazole", trade:["Protonix"],
+  drugClass:"Proton Pump Inhibitor",
+  moa:"Irreversibly inhibits H+/K+-ATPase pump in gastric parietal cells, suppressing acid secretion.",
+  indications:["Gastric ulcer prophylaxis","GI bleeding prophylaxis in critical illness","GERD"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"GI prophylaxis in critical illness",dose:"40 mg IV",route:"IV infusion",freq:"q12h",notes:"Infuse over 15 minutes in 100 mL NS or D5W. Effective for stress ulcer prevention."}],
+    peds:[{indication:"GI prophylaxis",dose:"0.5-1 mg/kg IV",route:"IV infusion",freq:"q12h",notes:"Infuse over 15 minutes. Maximum 40 mg/dose."}]
+  },
+  concentration:"40 mg vial (requires reconstitution)",
+  reconstitution:"Reconstitute with 10 mL NS to yield 4 mg/mL; further dilute to 100 mL for infusion",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Calcium salts"],
+  warnings:["Long-term use may reduce B12 and magnesium absorption","Increased risk of C. difficile infection with prolonged use","Monitor magnesium levels","Hepatic impairment may affect clearance"],
+  storage:"Refrigerate reconstituted solution; use within 6 hours"
+},
+
+hydralazine: {
+  generic:"Hydralazine Hydrochloride",
+  trade:["Apresoline"],
+  drugClass:"Vasodilator; Antihypertensive",
+  moa:"Direct-acting peripheral vasodilator that relaxes vascular smooth muscle, primarily affecting arteriolar beds, causing decreased peripheral vascular resistance and blood pressure.",
+  indications:["Hypertensive emergency","Acute hypertension","Preeclampsia/eclampsia","Hypertensive urgency"],
+  protocols:[],
+  dosing:{
+    adult:[
+      {indication:"Hypertensive emergency",dose:"5-20 mg",route:"IV/IM",freq:"Every 4-6 hours as needed",notes:"Start 5-10 mg IV, repeat q15-30 min if needed; max 20 mg/dose"},
+      {indication:"Preeclampsia/eclampsia",dose:"5-10 mg",route:"IV/IM",freq:"Every 20-30 minutes",notes:"Use lower doses; IV preferred over IM"}
+    ],
+    peds:[
+      {indication:"Hypertensive emergency",dose:"0.1-0.2 mg/kg",route:"IV/IM",freq:"Every 4-6 hours",notes:"Max single dose 20 mg; not routinely recommended in pediatrics"}
+    ]
+  },
+  concentration:"10 mg/mL or 20 mg/mL vials",
+  reconstitution:"N/A - supplied as liquid",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Calcium salts","Thiamine","Diazoxide"],
+  warnings:["Tachycardia and reflex tachyphylaxis may occur with prolonged use","Risk of lupus-like syndrome with chronic use","Severe hypotension possible; monitor closely","May cause headache, dizziness, angina pectoris"],
+  storage:"Room temperature; protect from light"
+},
+
+nitroprusside: {
+  generic:"Sodium Nitroprusside",
+  trade:["Nipride"],
+  drugClass:"Vasodilator; Direct-acting smooth muscle relaxant",
+  moa:"Releases nitric oxide directly on vascular smooth muscle, causing vasodilation of both arteries and veins, reducing preload and afterload.",
+  indications:["Hypertensive crisis","Acute hypertension","Cardiogenic pulmonary edema","Acute heart failure","Intraoperative hypotension control"],
+  protocols:[],
+  dosing:{
+    adult:[
+      {indication:"Hypertensive crisis/acute hypertension",dose:"0.5-10 mcg/kg/min",route:"IV infusion",freq:"Continuous",notes:"Start 0.5-1 mcg/kg/min; titrate q3-5 min; usual effective dose 3-4 mcg/kg/min; max 10 mcg/kg/min for short periods only"},
+      {indication:"Cardiogenic pulmonary edema",dose:"0.5-5 mcg/kg/min",route:"IV infusion",freq:"Continuous",notes:"Titrate to desired blood pressure and cardiac output"}
+    ],
+    peds:[
+      {indication:"Hypertensive crisis",dose:"0.5-10 mcg/kg/min",route:"IV infusion",freq:"Continuous",notes:"Same titration as adults; use extreme caution in neonates"}
+    ]
+  },
+  concentration:"50 mg vial; typically diluted to 200-500 mcg/mL",
+  reconstitution:"Reconstitute with 2-3 mL D5W without preservatives; further dilute in IV solution; solution must be freshly prepared",
+  compatibleWith:["D5W","D5NS"],
+  incompatibleWith:["NS","LR","Atropine","Ciprofloxacin","Dobutamine in same IV line"],
+  warnings:["Cyanide and thiocyanate toxicity risk with prolonged use or high doses","Protect from light - use opaque IV tubing and cover infusion bottle","Reflex tachycardia and tolerance may develop","Risk of rebound hypertension upon discontinuation","Thiocyanate levels should be monitored if used >48-72 hours"],
+  storage:"Powder: room temperature protected from light; reconstituted solution stable <4 hours"
+},
+
+oxytocin: {
+  generic:"Oxytocin",
+  trade:["Pitocin"],
+  drugClass:"Uterotonic; Posterior pituitary hormone",
+  moa:"Synthetic hormone that stimulates uterine muscle contractions and enhances myoepithelial cell contraction in breast tissue; increases intracellular calcium in myometrial cells.",
+  indications:["Induction/augmentation of labor","Prevention of postpartum hemorrhage","Treatment of incomplete abortion","Pituitary diabetes insipidus (rare)"],
+  protocols:[],
+  dosing:{
+    adult:[
+      {indication:"Labor induction/augmentation",dose:"1-2 mU/min initial",route:"IV infusion",freq:"Continuous",notes:"Increase by 1-2 mU/min every 15-30 min; max 20-40 mU/min; usual effective dose 5-20 mU/min"},
+      {indication:"Postpartum hemorrhage prevention",dose:"10 units",route:"IM or IV",freq:"Once after delivery",notes:"IV dose may be 10 units in 500 mL NS at 20-40 mU/min"},
+      {indication:"Postpartum hemorrhage treatment",dose:"10-20 units",route:"IM or IV infusion",freq:"As needed",notes:"IV infusion preferred; dilute in NS"}
+    ],
+    peds:[
+      {indication:"Not routinely used in pediatric patients",dose:"N/A",route:"N/A",freq:"N/A",notes:"Oxytocin indicated only in obstetric cases"}
+    ]
+  },
+  concentration:"10 units/mL vials",
+  reconstitution:"N/A for IM; for IV dilute 10 units in 500 mL of compatible IV solution (final concentration 20 mU/mL)",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Ergot alkaloids (separate administration by >5 min)"],
+  warnings:["Tetanic uterine contractions and uterine rupture risk with excessive dosing","Contraindicated in placenta previa, vasa previa, cord presentation","Risk of water intoxication/hyponatremia with prolonged infusion and hypotonic fluids","Hypersensitivity reactions possible","Use in augmentation of labor with caution - risk of tetany and rupture","Do not administer bolus IV - use infusion only for systemic effect"],
+  storage:"Room temperature; protect from light; refrigerate if not in use regularly"
+},
+
+bumetanide: {
+  generic:"Bumetanide",
+  trade:["Bumex"],
+  drugClass:"Loop diuretic",
+  moa:"Inhibits sodium and chloride reabsorption in the thick ascending limb of the loop of Henle by blocking the Na-K-2Cl cotransporter, promoting diuresis and natriuresis.",
+  indications:["Edema associated with heart failure","Pulmonary edema","Renal disease with edema","Hepatic cirrhosis with edema","Hypertension"],
+  protocols:[],
+  dosing:{
+    adult:[
+      {indication:"Edema/pulmonary edema",dose:"0.5-1 mg",route:"IV/IM",freq:"Every 6-12 hours or once daily",notes:"May repeat in 2-3 hours if needed; usual range 1-2 mg/day"},
+      {indication:"Acute pulmonary edema",dose:"1-2 mg",route:"IV",freq:"Every 6 hours as needed",notes:"Can give as slow IV push or infusion"}
+    ],
+    peds:[
+      {indication:"Edema/fluid overload",dose:"0.01-0.1 mg/kg",route:"IV/IM",freq:"Every 6-24 hours",notes:"Usual dose 0.015-0.1 mg/kg; max 10 mg/day"}
+    ]
+  },
+  concentration:"0.25 mg/mL vials",
+  reconstitution:"N/A - supplied as liquid",
+  compatibleWith:["NS","D5W"],
+  incompatibleWith:["Dobutamine","Milrinone (potential incompatibility)"],
+  warnings:["Severe electrolyte abnormalities possible - monitor K+, Na+, Cl-, Ca2+, Mg2+","Ototoxicity risk, especially with high doses or rapid IV administration","Hyperuricemia and gout exacerbation","Hyperglycemia possible","Nephrotoxicity risk in volume-depleted states","Hypotension and dizziness common","40 times more potent than furosemide"],
+  storage:"Room temperature; protect from light; do not freeze"
+},
+
+neostigmine: {
+  generic:"Neostigmine Methylsulfate",
+  trade:["Prostigmin"],
+  drugClass:"Cholinesterase inhibitor; Neuromuscular blocking agent reversal",
+  moa:"Reversibly inhibits acetylcholinesterase, preventing breakdown of acetylcholine, thereby increasing acetylcholine concentration at the neuromuscular junction and restoring muscle tone.",
+  indications:["Reversal of nondepolarizing neuromuscular blockade","Myasthenia gravis","Postoperative ileus"],
+  protocols:["MUST be administered with anticholinergic (glycopyrrolate or atropine) to prevent cholinergic crisis"],
+  dosing:{
+    adult:[
+      {indication:"Reversal of NMB (non-depolarizing agents)",dose:"5 mg",route:"IV",freq:"Once",notes:"Administer with glycopyrrolate 0.1 mg IV or atropine 0.6-1.2 mg IV (given first or simultaneously); usual dose 0.04-0.08 mg/kg"},
+      {indication:"Myasthenia gravis",dose:"0.5-2.5 mg",route:"IV/IM/PO",freq:"Every 3-8 hours",notes:"Adjust dose to patient response; PO forms available"}
+    ],
+    peds:[
+      {indication:"Reversal of NMB",dose:"0.04-0.08 mg/kg",route:"IV",freq:"Once",notes:"Max single dose 5 mg; use with glycopyrrolate 0.005-0.01 mg/kg (max 0.1 mg)"},
+      {indication:"Myasthenia gravis",dose:"0.01-0.04 mg/kg",route:"IV/IM/PO",freq:"Every 3-8 hours",notes:"Titrate to effect"}
+    ]
+  },
+  concentration:"0.5 mg/mL or 1 mg/mL vials",
+  reconstitution:"N/A - supplied as liquid",
+  compatibleWith:["NS","D5W"],
+  incompatibleWith:["Alkaline solutions","Depolarizing agents (succinylcholine)"],
+  warnings:["MUST be co-administered with glycopyrrolate or atropine to prevent muscarinic toxicity including bronchospasm, bradycardia, salivation","Cholinergic crisis risk if overdosed - presents as muscle weakness, bronchospasm, bronchorrhea","Bradycardia and AV block possible even with anticholinergic co-administration","Contraindicated with succinylcholine","Do not use for reversal of depolarizing blockade","Anticholinergic must be given before or with neostigmine to prevent parasympathomimetic effects"],
+  storage:"Room temperature; protect from light"
+},
+
+protamine: {
+  generic:"Protamine Sulfate",
+  trade:["Protamine Sulfate"],
+  drugClass:"Heparin antagonist; Anticoagulant reversal",
+  moa:"Strongly cationic protein that binds to heparin (anionic), forming a stable complex that is rapidly cleared by the reticuloendothelial system, directly reversing heparin's anticoagulant effects.",
+  indications:["Reversal of heparin overdose or toxicity","Reversal of unfractionated heparin anticoagulation","Bleeding due to heparin"],
+  protocols:[],
+  dosing:{
+    adult:[
+      {indication:"Reversal of heparin (unfractionated)",dose:"1 mg per 100 units of heparin",route:"IV",freq:"As single dose or slow infusion",notes:"Max 100 mg per injection; may repeat if PTT still prolonged; dose varies by route of heparin administration and time since last heparin dose - may require only 0.5 mg per 100 units"},
+      {indication:"Heparin overdose/bleeding",dose:"1-1.5 mg per 100 units",route:"IV slowly",freq:"Over 10 minutes",notes:"Give as slow IV push or infusion; repeat at 15-30 min intervals if needed"}
+    ],
+    peds:[
+      {indication:"Reversal of heparin",dose:"1 mg per 100 units heparin",route:"IV",freq:"Slow infusion",notes:"Max 50 mg per dose; titrate to PT/PTT response"}
+    ]
+  },
+  concentration:"10 mg/mL or 50 mg/mL vials",
+  reconstitution:"N/A - supplied as liquid",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Cephalosporins","Penicillins","Some other antibiotics (verify compatibility)"],
+  warnings:["Anaphylaxis and anaphylactoid reactions possible, especially in patients with fish allergy or prior protamine exposure","Hypotension, bradycardia, and cardiovascular collapse reported with rapid IV administration","Rebound hypercoagulability possible within hours of protamine administration","Only 1-1.5 mg per 100 units of heparin actually required; excess protamine itself acts as anticoagulant","Risk of thrombosis with excess dosing","Administer slowly to minimize hemodynamic effects","Monitor for recurrent bleeding - protamine does not reverse low-molecular-weight heparins effectively"],
+  storage:"Room temperature; do not freeze"
+},
+
+"aminophylline": {
+  generic:"Aminophylline", trade:["Truphylline"],
+  drugClass:"Methylxanthine Bronchodilator",
+  moa:"Releases theophylline which inhibits phosphodiesterase, increasing cAMP. Causes bronchial smooth muscle relaxation, diaphragmatic stimulation, and mild positive chronotropic/inotropic effects.",
+  indications:["Severe bronchospasm refractory to beta-agonists","Status asthmaticus (adjunctive)","Apnea of prematurity","Reversal of dipyridamole/regadenoson effects"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Acute bronchospasm",dose:"5-6 mg/kg IV loading",route:"IV infusion",freq:"Over 20-30 min, then 0.5-0.7 mg/kg/hr",notes:"Reduce dose if patient on oral theophylline. Target serum level 10-20 mcg/mL."},{indication:"Dipyridamole reversal",dose:"50-250 mg IV",route:"IV over 1-2 min",freq:"Single dose",notes:"Used in nuclear cardiac stress testing reversal."}],
+    peds:[{indication:"Acute bronchospasm",dose:"5-6 mg/kg IV loading",route:"IV infusion",freq:"Over 20-30 min, then 0.5-1 mg/kg/hr",notes:"Monitor serum levels closely. Neonatal apnea: 5 mg/kg load, then 1-2 mg/kg q6-8h."}]
+  },
+  concentration:"25 mg/mL",
+  reconstitution:"Dilute loading dose in 50-100 mL D5W or NS",
+  compatibleWith:["D5W","NS","LR"],
+  incompatibleWith:["Amiodarone","Ciprofloxacin","Dobutamine","Phenytoin"],
+  warnings:["Narrow therapeutic index — serum monitoring required","Tachyarrhythmias including VT possible","Seizures at toxic levels (>30 mcg/mL)","Drug interactions: erythromycin, cimetidine, ciprofloxacin increase levels","Nausea, vomiting, tremor common at higher levels"],
+  storage:"Room temperature, protect from light"
+},
+
+"famotidine": {
+  generic:"Famotidine", trade:["Pepcid"],
+  drugClass:"H2 Receptor Antagonist",
+  moa:"Competitively blocks histamine H2 receptors on gastric parietal cells, reducing basal and stimulated gastric acid secretion.",
+  indications:["Stress ulcer prophylaxis","GI bleeding prevention","GERD","Peptic ulcer disease","Anaphylaxis (adjunctive — H2 blocker)"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Stress ulcer prophylaxis",dose:"20 mg IV",route:"IV push or infusion",freq:"q12h",notes:"Push over 2 minutes or dilute in 50 mL NS and infuse over 15-30 min."},{indication:"Anaphylaxis adjunct",dose:"20 mg IV",route:"IV push",freq:"Single dose",notes:"Used in combination with H1 blocker (diphenhydramine)."}],
+    peds:[{indication:"Stress ulcer prophylaxis",dose:"0.25-0.5 mg/kg IV",route:"IV",freq:"q12h",notes:"Maximum 20 mg/dose. Push over 2 minutes."}]
+  },
+  concentration:"10 mg/mL (2 mL vials)",
+  reconstitution:"May dilute in 5-20 mL NS for IV push",
+  compatibleWith:["NS","D5W","LR"],
+  incompatibleWith:["Amphotericin B","Cefepime"],
+  warnings:["Thrombocytopenia rare but reported","Adjust dose in renal impairment","QT prolongation possible at high doses","CNS effects (headache, dizziness) in elderly"],
+  storage:"Room temperature, protect from light"
+},
+
+"enoxaparin": {
+  generic:"Enoxaparin Sodium", trade:["Lovenox"],
+  drugClass:"Low Molecular Weight Heparin (LMWH)",
+  moa:"Binds to antithrombin III, potentiating its inhibition of Factor Xa (primarily) and thrombin (Factor IIa to lesser extent), preventing clot formation.",
+  indications:["DVT prophylaxis","DVT/PE treatment","Acute coronary syndrome (NSTEMI/UA)","Bridge anticoagulation"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"DVT/PE treatment",dose:"1 mg/kg SQ",route:"Subcutaneous",freq:"q12h",notes:"Or 1.5 mg/kg SQ once daily. Anti-Xa monitoring for obese/renal patients."},{indication:"DVT prophylaxis",dose:"30 mg SQ",route:"Subcutaneous",freq:"q12h or 40 mg daily",notes:"Start 12-24h post-operatively. Adjust for CrCl <30."},{indication:"ACS (NSTEMI/UA)",dose:"1 mg/kg SQ",route:"Subcutaneous",freq:"q12h",notes:"With aspirin. Duration per cardiology."}],
+    peds:[{indication:"DVT treatment",dose:"1 mg/kg SQ",route:"Subcutaneous",freq:"q12h",notes:"Neonates may require 1.5 mg/kg q12h. Monitor anti-Xa levels."}]
+  },
+  concentration:"100 mg/mL prefilled syringes (various sizes)",
+  reconstitution:"N/A — supplied ready to inject",
+  compatibleWith:["N/A — subcutaneous only"],
+  incompatibleWith:["Do not mix with other injections"],
+  warnings:["Spinal/epidural hematoma risk with neuraxial procedures","Contraindicated with active major bleeding","Thrombocytopenia (HIT) — monitor platelets","Partially reversed by protamine (60% reversal)","Adjust dose for CrCl <30 mL/min","Avoid IM injection"],
+  storage:"Room temperature"
+},
+
+"tenecteplase": {
+  generic:"Tenecteplase", trade:["TNKase"],
+  drugClass:"Thrombolytic / Fibrinolytic (Modified tPA)",
+  moa:"Recombinant tissue plasminogen activator that binds to fibrin and converts plasminogen to plasmin, dissolving thrombus. Modified for longer half-life and greater fibrin specificity than alteplase.",
+  indications:["ST-elevation myocardial infarction (STEMI)","Massive pulmonary embolism (off-label)"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"STEMI",dose:"Weight-based single bolus",route:"IV push over 5 seconds",freq:"Single dose",notes:"<60 kg: 30 mg; 60-69 kg: 35 mg; 70-79 kg: 40 mg; 80-89 kg: 45 mg; ≥90 kg: 50 mg. Give with heparin and aspirin."},{indication:"Massive PE (off-label)",dose:"Weight-based (same as STEMI dosing)",route:"IV push",freq:"Single dose",notes:"Used when alteplase unavailable. Consider half-dose in submassive PE."}],
+    peds:[{indication:"Not established",dose:"N/A",route:"N/A",freq:"N/A",notes:"Tenecteplase not approved for pediatric use. Alteplase preferred if thrombolysis needed."}]
+  },
+  concentration:"50 mg vial",
+  reconstitution:"Reconstitute with 10 mL sterile water for injection provided with kit. Gently swirl — do not shake.",
+  compatibleWith:["NS for line flush only"],
+  incompatibleWith:["Dextrose solutions","Do not mix with other medications"],
+  warnings:["MAJOR BLEEDING RISK — absolute contraindications include active internal bleeding, recent CVA, intracranial neoplasm, severe uncontrolled HTN","Do not use with other thrombolytics","Cholesterol embolism reported","Arrhythmias (reperfusion) common after successful lysis","Establish 2 IV lines before administration","Hold venipunctures and invasive procedures when possible"],
+  storage:"Refrigerate; reconstituted solution stable 8 hours at room temperature"
+},
+
+"dantrolene": {
+  generic:"Dantrolene Sodium", trade:["Dantrium","Ryanodex"],
+  drugClass:"Direct-Acting Skeletal Muscle Relaxant",
+  moa:"Inhibits calcium release from the sarcoplasmic reticulum by blocking the ryanodine receptor (RyR1), reducing skeletal muscle excitation-contraction coupling and heat generation.",
+  indications:["Malignant hyperthermia (treatment and prophylaxis)","Neuroleptic malignant syndrome","Severe hyperthermia refractory to cooling"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Malignant hyperthermia",dose:"2.5 mg/kg IV initial bolus",route:"IV push",freq:"Repeat q5-10min until symptoms resolve",notes:"No maximum dose — continue until ETCO2 normalizes, temperature drops, and rigidity resolves. Typical total: 2.5-10 mg/kg. Ryanodex: 2.5 mg/kg single dose."},{indication:"Neuroleptic malignant syndrome",dose:"1-2.5 mg/kg IV",route:"IV",freq:"q6-12h",notes:"Continue until symptoms controlled. May transition to oral."}],
+    peds:[{indication:"Malignant hyperthermia",dose:"2.5 mg/kg IV initial bolus",route:"IV push",freq:"Repeat q5-10min as needed",notes:"Same dosing as adults. No maximum dose during active crisis."}]
+  },
+  concentration:"Dantrium: 20 mg/vial; Ryanodex: 250 mg/vial",
+  reconstitution:"Dantrium: reconstitute each 20 mg vial with 60 mL sterile water (without bacteriostatic agent). Ryanodex: reconstitute 250 mg with 5 mL sterile water. Shake vigorously.",
+  compatibleWith:["Sterile water for injection","D5W","NS"],
+  incompatibleWith:["Calcium channel blockers (risk of hyperkalemia and cardiovascular collapse)","Glass containers (adheres to glass)"],
+  warnings:["Hepatotoxicity with prolonged oral use","Muscle weakness expected after treatment","Dantrium requires large volumes — each 20 mg needs 60 mL diluent","Know where dantrolene is stored BEFORE emergency","Extravasation may cause tissue necrosis — use large bore IV","Monitor for recurrence — MH can recur 24-36 hours after initial episode"],
+  storage:"Room temperature, protect from light. Reconstituted Dantrium: use within 6 hours."
+},
+
+"lipid_emulsion": {
+  generic:"Intravenous Lipid Emulsion 20%", trade:["Intralipid","ClinOleic"],
+  drugClass:"Lipid Rescue / Antidote",
+  moa:"Creates a 'lipid sink' that sequesters lipophilic drugs from affected tissues (particularly cardiac and CNS). Also provides direct energy substrate to myocardium and may improve mitochondrial function.",
+  indications:["Local anesthetic systemic toxicity (LAST)","Lipophilic drug toxicity (calcium channel blockers, beta-blockers, tricyclics)","Cardiac arrest from lipophilic drug overdose"],
+  protocols:[],
+  dosing:{
+    adult:[{indication:"Local anesthetic toxicity (LAST)",dose:"1.5 mL/kg IV bolus of 20% lipid emulsion",route:"IV",freq:"Over 1 min, then 0.25 mL/kg/min infusion",notes:"May repeat bolus 1-2 times at 5-min intervals. Continue infusion x10 min after hemodynamic stability. Max total dose ~12 mL/kg. Use 20% formulation ONLY."},{indication:"Lipophilic drug toxicity",dose:"1.5 mL/kg IV bolus of 20% lipid emulsion",route:"IV",freq:"Then 0.25 mL/kg/min infusion x30-60 min",notes:"Same protocol as LAST. Evidence strongest for local anesthetics; case reports support use for other lipophilic toxins."}],
+    peds:[{indication:"LAST / lipophilic toxicity",dose:"1.5 mL/kg IV bolus of 20% lipid emulsion",route:"IV",freq:"Then 0.25 mL/kg/min infusion",notes:"Same weight-based dosing as adults. Max dose ~12 mL/kg."}]
+  },
+  concentration:"20% (200 mg/mL) in 100 mL, 250 mL, or 500 mL bottles",
+  reconstitution:"N/A — supplied ready to infuse",
+  compatibleWith:["Dedicated IV line recommended"],
+  incompatibleWith:["Do not mix with other medications","Avoid through same line as other infusions"],
+  warnings:["Use 20% formulation ONLY — do not use 10% or 30%","Fat overload syndrome with excessive dosing","Pancreatitis risk","Interferes with lab values (lipemia affects many assays)","Know location of lipid emulsion kit in your facility","May interfere with propofol dosing calculations (both are lipid-based)","Continue CPR through lipid administration if in cardiac arrest"],
+  storage:"Room temperature; do not freeze; protect from light"
 }
 
 };
@@ -13323,6 +13880,12 @@ E.renderDrugMono = function(drugKey, useWt, isP, wt, targetId){
   h+="<div style='font-size:1.8rem;font-weight:900;color:var(--cyan);margin-bottom:4px'>"+d.generic+"</div>";
   if(d.trade&&d.trade.length) h+="<div style='font-size:1rem;color:var(--tx1);margin-bottom:8px;font-style:italic'>Trade: "+d.trade.join(", ")+"</div>";
   h+="<span style='display:inline-block;font-family:var(--mono);font-size:.7rem;padding:4px 12px;border-radius:100px;background:rgba(181,123,255,.12);border:1px solid rgba(181,123,255,.25);color:var(--purple);font-weight:700'>"+d.drugClass+"</span>";
+  h+="</div>";
+
+  // ── Drug Photo Section ──
+  h+="<div style='background:var(--bg1);border:1.5px solid rgba(0,212,245,.12);border-radius:11px;padding:14px 18px;margin-bottom:14px'>";
+  h+="<div style='font-size:.85rem;font-weight:800;color:var(--cyan);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em'>&#128247; Drug Photo Reference</div>";
+  h+="<div id='drugPhoto_"+drugKey+"'>"+E._photoPlaceholder(drugKey)+"</div>";
   h+="</div>";
 
   // ── Mechanism of Action ──
@@ -13440,6 +14003,22 @@ E.renderDrugMono = function(drugKey, useWt, isP, wt, targetId){
   }
 
   out.innerHTML=h; out.style.display="block";
+
+  // Async load saved photo into the monograph
+  E.loadDrugPhoto(drugKey, function(dataURI){
+    if(!dataURI) return;
+    var el = document.getElementById("drugPhoto_"+drugKey);
+    if(el){
+      el.innerHTML = "<img src='"+dataURI+"' style='max-width:100%;border-radius:10px;border:2px solid rgba(0,212,245,.25)'/>"
+        + "<div style='display:flex;gap:8px;margin-top:8px'>"
+        + "<label style='cursor:pointer;font-size:.72rem;padding:5px 12px;border-radius:8px;background:rgba(0,212,245,.1);border:1px solid rgba(0,212,245,.25);color:var(--cyan);font-weight:600;display:flex;align-items:center;gap:4px'>"
+        + "<span>&#128247;</span> Change Photo"
+        + "<input type='file' accept='image/*' capture='environment' onchange=\"window._protoEngine._handleDrugPhotoInput('"+drugKey+"',this.files[0])\" style='display:none'/>"
+        + "</label>"
+        + "<button onclick=\"window._protoEngine.deleteDrugPhoto('"+drugKey+"',function(){var el=document.getElementById('drugPhoto_"+drugKey+"');if(el)el.innerHTML=window._protoEngine._photoPlaceholder('"+drugKey+"')})\" style='font-size:.72rem;padding:5px 12px;border-radius:8px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#ef4444;cursor:pointer;font-weight:600'>Remove</button>"
+        + "</div>";
+    }
+  });
 };
 
 
@@ -15682,6 +16261,138 @@ Example:
 </div></div>
 <!-- END BEDSIDE PAGE -->
 
+<!-- ═══════════════════════ PAGE: ANATOMY ════════════════════════ -->
+<div class="pg" id="pg-anatomy"><div class="page" style="max-width:1400px">
+
+  <!-- ── Section Header ── -->
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.4rem">&#129516;</span>
+      <div>
+        <div class="slbl" style="color:#f472b6;margin-bottom:2px">Anatomical Assessment Diagram</div>
+        <div style="font-size:.65rem;color:var(--tx2)">Head-to-Toe &middot; Tap body region to annotate findings &amp; devices</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="bs-action-btn" style="background:rgba(244,114,182,.12);color:#f472b6;border:1px solid rgba(244,114,182,.25)" onclick="anatClearAll()" type="button">&#10227; Clear All</button>
+      <button class="bs-action-btn" style="background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.25)" onclick="anatExportSummary()" type="button">&#128196; Export Summary</button>
+    </div>
+  </div>
+
+  <!-- ── Body Selector ── -->
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <label class="flbl" style="margin:0;white-space:nowrap">Body Type:</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="anat-body-btn anat-body-active" onclick="anatSetBody('male_adult',this)" type="button">&#9794; Adult Male</button>
+        <button class="anat-body-btn" onclick="anatSetBody('female_adult',this)" type="button">&#9792; Adult Female</button>
+        <button class="anat-body-btn" onclick="anatSetBody('male_child',this)" type="button">&#128102; Male Child</button>
+        <button class="anat-body-btn" onclick="anatSetBody('female_child',this)" type="button">&#128103; Female Child</button>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+        <button class="anat-body-btn" id="anatViewFrontBtn" onclick="anatSetView('front',this)" type="button" style="background:rgba(96,165,250,.2);color:#60a5fa;border-color:rgba(96,165,250,.35)">Front</button>
+        <button class="anat-body-btn" id="anatViewBackBtn" onclick="anatSetView('back',this)" type="button">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Layout: Diagram + Panel ── -->
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+
+    <!-- LEFT: SVG Diagram -->
+    <div class="card" style="flex:1;min-width:320px;position:relative;overflow:hidden">
+      <div id="anatDiagramWrap" style="position:relative;width:100%;max-width:500px;margin:0 auto">
+        <svg id="anatSvg" viewBox="0 0 500 900" style="width:100%;height:auto;cursor:crosshair" onclick="anatSvgClick(event)"></svg>
+        <!-- Annotation markers overlay -->
+        <div id="anatMarkers" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></div>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:.65rem;color:var(--tx2)">Tap/click on a body region to add annotations</div>
+    </div>
+
+    <!-- RIGHT: Annotation Panel -->
+    <div style="flex:1;min-width:300px;max-width:480px">
+
+      <!-- Active Region -->
+      <div class="card" id="anatRegionPanel" style="display:none;margin-bottom:14px;border:1.5px solid rgba(244,114,182,.25)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div class="slbl" style="color:#f472b6;margin:0" id="anatRegionTitle">Region</div>
+          <button onclick="anatClosePanel()" type="button" style="background:none;border:none;color:var(--tx2);cursor:pointer;font-size:1.1rem;padding:2px 6px">&#10005;</button>
+        </div>
+
+        <!-- Findings -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--tx0);margin-bottom:8px">Findings / Injuries</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px" id="anatFindingBtns"></div>
+        </div>
+
+        <!-- Devices / Lines -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--tx0);margin-bottom:8px">Devices &amp; Lines</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px" id="anatDeviceBtns"></div>
+        </div>
+
+        <!-- Pulses (limb regions only) -->
+        <div id="anatPulseRow" style="display:none;margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--tx0);margin-bottom:8px">Pulses</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="anat-pulse-btn" onclick="anatSetPulse('Strong')" type="button">Strong</button>
+            <button class="anat-pulse-btn" onclick="anatSetPulse('Weak')" type="button">Weak</button>
+            <button class="anat-pulse-btn" onclick="anatSetPulse('Thready')" type="button">Thready</button>
+            <button class="anat-pulse-btn" onclick="anatSetPulse('Absent')" type="button">Absent</button>
+            <button class="anat-pulse-btn" onclick="anatSetPulse('Doppler only')" type="button">Doppler</button>
+          </div>
+        </div>
+
+        <!-- Pupil Size (head region only) -->
+        <div id="anatPupilRow" style="display:none;margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--tx0);margin-bottom:8px">Pupil Assessment</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+            <div>
+              <label class="flbl">Left</label>
+              <select id="anatPupilL" onchange="anatSetPupil()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.75rem">
+                <option value="">--</option>
+                <option>1mm</option><option>2mm</option><option>3mm</option><option>4mm</option><option>5mm</option><option>6mm</option><option>7mm</option><option>8mm</option>
+              </select>
+            </div>
+            <div>
+              <label class="flbl">Right</label>
+              <select id="anatPupilR" onchange="anatSetPupil()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.75rem">
+                <option value="">--</option>
+                <option>1mm</option><option>2mm</option><option>3mm</option><option>4mm</option><option>5mm</option><option>6mm</option><option>7mm</option><option>8mm</option>
+              </select>
+            </div>
+            <div>
+              <label class="flbl">Reactivity</label>
+              <select id="anatPupilReact" onchange="anatSetPupil()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.75rem">
+                <option value="">--</option>
+                <option>PERRL</option><option>L Fixed</option><option>R Fixed</option><option>Both Fixed</option><option>Sluggish</option><option>Anisocoria</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Free text note -->
+        <div style="margin-bottom:8px">
+          <label class="flbl">Notes</label>
+          <textarea id="anatRegionNotes" rows="2" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bd1);background:var(--bg2);color:var(--tx0);font-size:.75rem;font-family:var(--body);resize:vertical" placeholder="Additional notes for this region..." oninput="anatSaveNote()"></textarea>
+        </div>
+      </div>
+
+      <!-- Annotation Summary -->
+      <div class="card">
+        <div class="slbl" style="color:#f472b6;margin-bottom:10px">&#128203; Annotation Summary</div>
+        <div id="anatSummaryList" style="font-size:.74rem;color:var(--tx1)">
+          <div style="color:var(--tx2);font-style:italic">No annotations yet. Tap a body region to begin.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div></div>
+<!-- END ANATOMY PAGE -->
+
+
 <!-- ═══════════════════════ PAGE: FLIGHT ════════════════════════ -->
 <div class="pg" id="pg-flight"><div class="page">
 
@@ -16831,8 +17542,10 @@ Example:
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
       <button class="ho-action-button primary" onclick="hoGenerateNarrative()" type="button">Generate</button>
       <button class="ho-action-button" onclick="hoCopyNarrative()" type="button">Copy to Clipboard</button>
-      <button class="ho-action-button" onclick="hoPrintNarrative()" type="button">Print</button>
+      <button class="ho-action-button" onclick="hoPrintNarrative()" type="button">Print Narrative</button>
       <button class="ho-action-button" onclick="hoExportNarrative()" type="button">Export</button>
+      <button class="ho-action-button" onclick="hoPreviewSheet()" type="button" style="background:rgba(0,212,245,.12);border-color:rgba(0,212,245,.4);color:#00d4f5">&#128196; Preview Sheet</button>
+      <button class="ho-action-button" onclick="hoPreviewSheet();setTimeout(hoPrintSheet,400)" type="button" style="background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.4);color:#34d399">&#128424; Print Sheet</button>
     </div>
     <div class="ho-narrative-box" id="hoNarrativeOutput">
       <div style="color:var(--tx2);text-align:center;padding:20px 0">
@@ -17419,6 +18132,9 @@ function showPage(id,btn){
 
   // Refresh infusion tracker when tab opens
   if(id==="infusions") setTimeout(function(){ infRender(); },50);
+
+  // Initialize anatomy diagram
+  if(id==="anatomy" && typeof anatInit==="function") setTimeout(anatInit, 100);
 
   // Sync flight tab data
   if(id==="flight"){
@@ -26963,9 +27679,11 @@ function tlFormatElapsed(ms){
 
 
 // ── Export session as self-contained HTML file ────────────────────
-function exportSessionHTML(){
+function exportSessionHTML(photoMap){
+  // photoMap is optional — if provided, drug photos are bundled into session
   // Collect all current state
   var state = {
+    drugPhotos:     photoMap || {},
     sex:            sex,
     ht:             ht,
     abw:            abw,
@@ -26984,7 +27702,7 @@ function exportSessionHTML(){
 
   // Build the restore-on-load script to inject just before </head>
 
-  var restoreScript = '<script id="__session_restore__">\n' +
+  var restoreScript = '<scr' + 'ipt id="__session_restore__">\n' +
     '(function(){\n' +
     '  var S = ' + JSON.stringify(state, null, 2) + ';\n' +
     '  // Restore state after app initialises\n' +
@@ -27013,6 +27731,10 @@ function exportSessionHTML(){
     '      if(typeof main==="function") main();\n' +
     '      if(typeof tlRender==="function") tlRender();\n' +
     '      if(typeof crewRender==="function") crewRender();\n' +
+    '      // Restore drug photos to IndexedDB\n' +
+    '      if(S.drugPhotos && Object.keys(S.drugPhotos).length && window._protoEngine && window._protoEngine.importDrugPhotos){\n' +
+    '        window._protoEngine.importDrugPhotos(S.drugPhotos);\n' +
+    '      }\n' +
     '    }, 400);\n' +
     '  });\n' +
     '})();\n' +
@@ -27020,8 +27742,11 @@ function exportSessionHTML(){
 
   // Get the current HTML source, strip any previous restore script, inject fresh one
   var src = document.documentElement.outerHTML;
-  src = src.replace(/<script id="__session_restore__"[\s\S]*?<\/script>/, '');
+  src = src.replace(new RegExp('<scr' + 'ipt id="__session_restore__">[\\s\\S]*?<\\/scr' + 'ipt>'), '');
   src = src.replace('</body>', restoreScript + '\n</body>');
+
+  // Inject drug photo restore if photos exist in IndexedDB
+  // (Photos are bundled asynchronously - see exportWithPhotos wrapper)
 
   // Build filename: ICU_[PatientName]_[date].html
   var pname = (window.patientName||'session').replace(/[^a-zA-Z0-9]/g,'_').toUpperCase();
@@ -35827,7 +36552,7 @@ var _origExportSessionHTML = null;
 function ptdirHookExport() {
   if (typeof exportSessionHTML !== 'function') return;
   _origExportSessionHTML = exportSessionHTML;
-  exportSessionHTML = function() {
+  exportSessionHTML = function(photoMap) {
     // Build filename same way as original
     var pname = (window.patientName||'session').replace(/[^a-zA-Z0-9]/g,'_').toUpperCase();
     var dt    = new Date();
@@ -35845,8 +36570,8 @@ function ptdirHookExport() {
     ptdirSave(list);
     ptdirRender();
 
-    // Run original export
-    _origExportSessionHTML();
+    // Run original export (pass through photoMap for drug photo bundling)
+    _origExportSessionHTML(photoMap);
   };
 }
 
@@ -35911,7 +36636,7 @@ function ptdirHandleImport(evt) {
   reader.onload = function(e) {
     var html = e.target.result;
     // Extract the __session_restore__ script block
-    var m = html.match(/<script id="__session_restore__">([\s\S]*?)<\/script>/);
+    var m = html.match(new RegExp('<scr' + 'ipt id="__session_restore__">([\\s\\S]*?)<\\/scr' + 'ipt>'));
     if (!m) { alert('No patient state found in this file.\nOnly ICU app exports are supported.'); return; }
     // Extract the S = {...} JSON object from the script
     var sm = m[1].match(/var S = ([\s\S]+?);\n\s*\/\/ Restore/);
@@ -38394,14 +39119,13 @@ if(typeof drugRefInit==="function") setTimeout(drugRefInit, 500);
 <!-- ═══ Service Worker Registration & Offline/Online Indicator ═══ -->
 <script>
 // Register Service Worker for offline support
-if('serviceWorker' in navigator){
+if('serviceWorker' in navigator && location.hostname.indexOf('github.io') >= 0){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('./sw.js').then(function(reg){
       console.log('[SW] Registered, scope:', reg.scope);
-      // Check for updates periodically (every 30 min when online)
       setInterval(function(){ if(navigator.onLine) reg.update(); }, 1800000);
     }).catch(function(err){
-      console.log('[SW] Registration failed:', err);
+      console.log('[SW] Registration skipped:', err);
     });
   });
 }
@@ -38431,7 +39155,1137 @@ if('serviceWorker' in navigator){
   // Show initial status briefly on load
   setTimeout(updateBadge, 1000);
 })();
+
+// ═══════════════════════════════════════════════════════════════
+// HANDOVER PRINT SHEET — Professional One-Page Layout
+// ═══════════════════════════════════════════════════════════════
+function hoGetVal(id){var el=document.getElementById(id);if(!el)return'';if(el.tagName==='SELECT')return el.options[el.selectedIndex]?el.options[el.selectedIndex].text:'';if(el.type==='checkbox')return el.checked?el.value:'';return el.value||'';}
+
+function hoPreviewSheet(){
+  var now = new Date();
+  var dateStr = (now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear();
+  var timeStr = now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  // Patient info from Patient Information tab
+  var ptName = (window.patientName||'').toUpperCase() || '—';
+  var dobEl = document.getElementById('dobMonthYear');
+  var ptDOB = dobEl ? dobEl.value : '';
+  var ageEl = document.getElementById('dobAgeDisplay');
+  var ptAge = ageEl ? ageEl.textContent.replace(/age[:\s]*/i,'').trim() : '';
+  var sexEl = document.getElementById('ptIdSex');
+  var ptSex = sexEl && sexEl.value ? sexEl.value : '';
+
+  // Handover fields
+  var aircraft     = hoGetVal('hoAircraft');
+  var sendFac      = hoGetVal('hoSendingFacility');
+  var recFac       = hoGetVal('hoReceivingFacility');
+  var diagnosis    = hoGetVal('hoDiagnosis');
+  var sendMD       = hoGetVal('hoSendingMD');
+  var recMD        = hoGetVal('hoReceivingMD') || hoGetVal('hoRecMD2');
+  var reportNurse  = hoGetVal('hoReportNurse');
+  var recNurse     = hoGetVal('hoRecNurse2');
+  var whyTransport = hoGetVal('hoWhyTransport');
+  var airVsGround  = hoGetVal('hoAirVsGround');
+  var servicesNA   = hoGetVal('hoServicesNA');
+
+  // Physical assessment
+  var pupils    = hoGetVal('hoPupils');
+  var lungs     = hoGetVal('hoLungs');
+  var heart     = hoGetVal('hoHeartTones');
+  var pulses    = hoGetVal('hoPulses');
+  var loc       = hoGetVal('hoLOC');
+  var rass      = hoGetVal('hoRASS');
+  var ivAccess  = hoGetVal('hoIVAccess');
+  var ivFluid   = hoGetVal('hoIVFluid');
+  var infusions = hoGetVal('hoInfusionsRef');
+  var allergies = hoGetVal('hoAllergies');
+  var labs      = hoGetVal('hoLabs');
+  var bg        = hoGetVal('hoBG');
+  var temp      = hoGetVal('hoTemp');
+  var hpi       = hoGetVal('hoHPISummary');
+
+  // Final vitals
+  var fHR    = hoGetVal('hoFinalHR');
+  var fBP    = hoGetVal('hoFinalBP');
+  var fMAP   = hoGetVal('hoFinalMAP');
+  var fSpO2  = hoGetVal('hoFinalSpO2');
+  var fETCO2 = hoGetVal('hoFinalETCO2');
+  var fRR    = hoGetVal('hoFinalRR');
+  var fGCS   = hoGetVal('hoFinalGCS');
+  var fTemp  = hoGetVal('hoFinalTemp');
+
+  // Vent
+  var vMode = hoGetVal('hoVentMode');
+  var vRate = hoGetVal('hoVentRate');
+  var vTV   = hoGetVal('hoVentTV');
+  var vFiO2 = hoGetVal('hoVentFiO2');
+  var vPEEP = hoGetVal('hoVentPEEP');
+
+  // Handover section
+  var stability  = hoGetVal('hoStability');
+  var pain       = hoGetVal('hoPainLevel');
+  var concerns   = hoGetVal('hoTeamConcerns');
+  var finalNotes = hoGetVal('hoFinalNotes');
+  var sheetTx    = hoGetVal('hoSheetTx2');
+  var tsSummary  = hoGetVal('hoTS2');
+
+  // Crew
+  var crew1 = document.getElementById('crewSel1');
+  var crew2 = document.getElementById('crewSel2');
+  var c1 = crew1 && crew1.selectedIndex>0 ? crew1.options[crew1.selectedIndex].text : '';
+  var c2 = crew2 && crew2.selectedIndex>0 ? crew2.options[crew2.selectedIndex].text : '';
+  var crewStr = [c1,c2].filter(Boolean).join(', ') || '—';
+
+  function c(val){return val||'—';}
+
+  var h = '';
+  // Header
+  h+='<div class="ho-ps-header">';
+  h+='<div class="ho-ps-logo">PHI AIR MEDICAL<span>Critical Care Transport \u2014 Patient Handover Report</span></div>';
+  h+='<div class="ho-ps-date">Date: '+dateStr+'<br>Time: '+timeStr+'<br>Aircraft: '+c(aircraft)+'</div>';
+  h+='</div>';
+
+  // Patient bar
+  h+='<div class="ho-ps-pt-bar">';
+  h+='<div><span class="ho-ps-label">Patient Name</span>'+c(ptName)+'</div>';
+  h+='<div><span class="ho-ps-label">DOB</span>'+c(ptDOB)+'</div>';
+  h+='<div><span class="ho-ps-label">Age</span>'+c(ptAge)+'</div>';
+  h+='<div><span class="ho-ps-label">Sex</span>'+c(ptSex)+'</div>';
+  h+='</div>';
+
+  // Transport section
+  h+='<div class="ho-ps-section">';
+  h+='<div class="ho-ps-section-title">Transport Information</div>';
+  h+='<div class="ho-ps-grid cols-3">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Sending Facility</span><br>'+c(sendFac)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Receiving Facility</span><br>'+c(recFac)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Diagnosis</span><br>'+c(diagnosis)+'</div>';
+  h+='</div>';
+  h+='<div class="ho-ps-grid cols-3">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Sending MD</span><br>'+c(sendMD)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Receiving MD</span><br>'+c(recMD)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Transport Justification</span><br>'+c(whyTransport)+'</div>';
+  h+='</div>';
+  h+='<div class="ho-ps-grid cols-2">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Air vs Ground Decision</span><br>'+c(airVsGround)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Services Not Available at Sending</span><br>'+c(servicesNA)+'</div>';
+  h+='</div>';
+  h+='</div>';
+
+  // Assessment section
+  h+='<div class="ho-ps-section">';
+  h+='<div class="ho-ps-section-title">Physical Assessment</div>';
+  h+='<div class="ho-ps-grid cols-4">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Pupils</span><br>'+c(pupils)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Lungs</span><br>'+c(lungs)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Heart</span><br>'+c(heart)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Pulses</span><br>'+c(pulses)+'</div>';
+  h+='</div>';
+  h+='<div class="ho-ps-grid cols-4">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">LOC</span><br>'+c(loc)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">RASS</span><br>'+c(rass)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Allergies</span><br>'+c(allergies)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Blood Glucose</span><br>'+c(bg)+'</div>';
+  h+='</div>';
+  h+='<div class="ho-ps-grid cols-3">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">IV Access</span><br>'+c(ivAccess)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">IV Fluid</span><br>'+c(ivFluid)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Infusions Running</span><br>'+c(infusions)+'</div>';
+  h+='</div>';
+  h+='<div class="ho-ps-grid cols-2">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Labs</span><br>'+c(labs)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Temperature</span><br>'+c(temp)+'</div>';
+  h+='</div>';
+  if(hpi){
+    h+='<div class="ho-ps-notes"><span class="ho-ps-label" style="font-weight:700">HPI Summary</span><br>'+hpi.replace(/\n/g,'<br>')+'</div>';
+  }
+  h+='</div>';
+
+  // Final Vitals
+  h+='<div class="ho-ps-section">';
+  h+='<div class="ho-ps-section-title">Final Vitals at Handover</div>';
+  h+='<div class="ho-ps-grid cols-8">';
+  h+='<div class="ho-ps-cell hdr">HR</div><div class="ho-ps-cell hdr">BP</div><div class="ho-ps-cell hdr">MAP</div><div class="ho-ps-cell hdr">SpO2</div><div class="ho-ps-cell hdr">ETCO2</div><div class="ho-ps-cell hdr">RR</div><div class="ho-ps-cell hdr">GCS</div><div class="ho-ps-cell hdr">Temp</div>';
+  h+='<div class="ho-ps-cell val">'+c(fHR)+'</div><div class="ho-ps-cell val">'+c(fBP)+'</div><div class="ho-ps-cell val">'+c(fMAP)+'</div><div class="ho-ps-cell val">'+c(fSpO2)+'</div><div class="ho-ps-cell val">'+c(fETCO2)+'</div><div class="ho-ps-cell val">'+c(fRR)+'</div><div class="ho-ps-cell val">'+c(fGCS)+'</div><div class="ho-ps-cell val">'+c(fTemp)+'</div>';
+  h+='</div>';
+  h+='</div>';
+
+  // Ventilator (only if data present)
+  if(vMode||vRate||vTV||vFiO2||vPEEP){
+    h+='<div class="ho-ps-section">';
+    h+='<div class="ho-ps-section-title">Ventilator Settings</div>';
+    h+='<div class="ho-ps-grid cols-5">';
+    h+='<div class="ho-ps-cell hdr">Mode</div><div class="ho-ps-cell hdr">Rate</div><div class="ho-ps-cell hdr">TV</div><div class="ho-ps-cell hdr">FiO2</div><div class="ho-ps-cell hdr">PEEP</div>';
+    h+='<div class="ho-ps-cell val">'+c(vMode)+'</div><div class="ho-ps-cell val">'+c(vRate)+'</div><div class="ho-ps-cell val">'+c(vTV)+'</div><div class="ho-ps-cell val">'+c(vFiO2)+'</div><div class="ho-ps-cell val">'+c(vPEEP)+'</div>';
+    h+='</div>';
+    h+='</div>';
+  }
+
+  // Handover Status
+  h+='<div class="ho-ps-section">';
+  h+='<div class="ho-ps-section-title">Handover Status</div>';
+  h+='<div class="ho-ps-grid cols-4">';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Stability</span><br>'+c(stability)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Pain (0-10)</span><br>'+c(pain)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Sheet Transfer</span><br>'+c(sheetTx)+'</div>';
+  h+='<div class="ho-ps-cell"><span class="ho-ps-label">Receiving Nurse</span><br>'+c(recNurse)+'</div>';
+  h+='</div>';
+  if(tsSummary){
+    h+='<div class="ho-ps-notes"><span class="ho-ps-label" style="font-weight:700">Transport Summary</span><br>'+tsSummary+'</div>';
+  }
+  if(concerns){
+    h+='<div class="ho-ps-notes"><span class="ho-ps-label" style="font-weight:700">Receiving Team Concerns</span><br>'+concerns.replace(/\n/g,'<br>')+'</div>';
+  }
+  if(finalNotes){
+    h+='<div class="ho-ps-notes"><span class="ho-ps-label" style="font-weight:700">Clinical Notes</span><br>'+finalNotes.replace(/\n/g,'<br>')+'</div>';
+  }
+  h+='</div>';
+
+  // Footer with signatures
+  h+='<div class="ho-ps-footer">';
+  h+='<div><strong>Flight Crew:</strong> '+crewStr+'</div>';
+  h+='<div class="ho-ps-sig">';
+  h+='<div><span class="ho-ps-label">Nurse Signature</span><div class="ho-ps-sig-line">'+c(reportNurse)+'</div></div>';
+  h+='<div><span class="ho-ps-label">Receiving Provider</span><div class="ho-ps-sig-line"></div></div>';
+  h+='</div>';
+  h+='</div>';
+
+  // Render
+  var sheetEl = document.getElementById('hoPrintSheetContent');
+  if(sheetEl) sheetEl.innerHTML = h;
+  document.getElementById('hoPrintModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function hoPrintSheet(){
+  window.print();
+}
+
+function hoCloseSheet(){
+  document.getElementById('hoPrintModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// TRACED CLINICAL BODY DIAGRAMS
+// Based on standard trauma assessment form body outlines
+// ViewBox: 0 0 400 700 for all figures
+// ═══════════════════════════════════════════════════════════════
+
+// Shared drawing config
+var _abCol = "#c8b8a0";  // body fill (warm neutral)
+var _abOut = "#4a4035";   // primary outline
+var _abDet = "#8a7a68";   // detail/landmark lines
+var _abSw  = "1.6";       // outline stroke width
+var _abDsw = "0.7";       // detail stroke width
+
+// ─── ANTERIOR MALE ADULT ─────────────────────────────────────
+window._anatSvgFrontMale = function(){
+  var o=_abOut, s=_abSw, d=_abDet, ds=_abDsw, f=_abCol;
+  var h = '<g id="ant-male">';
+
+  // ── Head ──
+  h+='<path d="M200,12 C178,12 162,28 160,52 C158,68 162,82 172,92 L176,96 L180,92 C185,96 192,100 200,100 C208,100 215,96 220,92 L224,96 L228,92 C238,82 242,68 240,52 C238,28 222,12 200,12Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Ears
+  h+='<path d="M160,52 C156,48 152,52 152,60 C152,68 156,72 160,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M240,52 C244,48 248,52 248,60 C248,68 244,72 240,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+
+  // ── Neck ──
+  h+='<path d="M184,100 L182,120 L218,120 L216,100" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // SCM lines
+  h+='<line x1="188" y1="102" x2="184" y2="118" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<line x1="212" y1="102" x2="216" y2="118" stroke="'+d+'" stroke-width="'+ds+'"/>';
+
+  // ── Torso ──
+  // Right side contour: shoulder -> arm gap -> waist -> hip -> groin
+  // Left side mirrors
+  h+='<path d="M182,120 L148,126 C130,130 120,136 118,142 L116,148 C114,156 116,164 118,170 L122,178 L126,200 C128,218 132,236 134,248 L136,262 C138,276 142,290 148,300 L156,312 C162,320 170,328 180,332 L196,338 L200,340 L204,338 L220,332 C230,328 238,320 244,312 L252,300 C258,290 262,276 264,262 L266,248 C268,236 272,218 274,200 L278,178 L282,170 C284,164 286,156 284,148 L282,142 C280,136 270,130 252,126 L218,120" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+
+  // Clavicles
+  h+='<path d="M198,124 Q178,120 155,130" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M202,124 Q222,120 245,130" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // Pectoral lines
+  h+='<path d="M164,148 Q182,162 198,152" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M236,148 Q218,162 202,152" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Nipples
+  h+='<circle cx="178" cy="160" r="1.5" fill="'+d+'"/>';
+  h+='<circle cx="222" cy="160" r="1.5" fill="'+d+'"/>';
+  // Midline / linea alba
+  h+='<line x1="200" y1="126" x2="200" y2="338" stroke="'+d+'" stroke-width="0.4" stroke-dasharray="3,3"/>';
+  // Umbilicus
+  h+='<ellipse cx="200" cy="270" rx="3.5" ry="4.5" fill="none" stroke="'+d+'" stroke-width="0.6"/>';
+  // Costal margins
+  h+='<path d="M170,150 Q180,200 200,212" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M230,150 Q220,200 200,212" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Iliac crest hints
+  h+='<path d="M152,292 Q168,284 184,288" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M248,292 Q232,284 216,288" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Inguinal lines
+  h+='<path d="M164,308 Q180,326 194,338" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M236,308 Q220,326 206,338" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Right Arm ──
+  // Upper arm
+  h+='<path d="M118,142 C112,158 108,178 104,198 C102,208 100,218 98,228" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M130,148 C126,164 122,182 120,200 C118,212 116,224 114,236" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Fill
+  h+='<path d="M118,142 C112,158 108,178 104,198 C102,208 100,218 98,228 L114,236 C116,224 118,212 120,200 C122,182 126,164 130,148 Z" fill="'+f+'" stroke="none"/>';
+  // Forearm
+  h+='<path d="M98,228 C94,248 90,268 86,288 C82,304 78,318 74,330" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M114,236 C110,254 106,272 102,290 C100,304 96,316 92,328" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M98,228 C94,248 90,268 86,288 C82,304 78,318 74,330 L92,328 C96,316 100,304 102,290 C106,272 110,254 114,236 Z" fill="'+f+'" stroke="none"/>';
+  // Elbow crease
+  h+='<path d="M100,228 Q106,234 114,228" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Left Arm (mirrored) ──
+  h+='<path d="M282,142 C288,158 292,178 296,198 C298,208 300,218 302,228" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M270,148 C274,164 278,182 280,200 C282,212 284,224 286,236" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M282,142 C288,158 292,178 296,198 C298,208 300,218 302,228 L286,236 C284,224 282,212 280,200 C278,182 274,164 270,148 Z" fill="'+f+'" stroke="none"/>';
+  h+='<path d="M302,228 C306,248 310,268 314,288 C318,304 322,318 326,330" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M286,236 C290,254 294,272 298,290 C300,304 304,316 308,328" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M302,228 C306,248 310,268 314,288 C318,304 322,318 326,330 L308,328 C304,316 300,304 298,290 C294,272 290,254 286,236 Z" fill="'+f+'" stroke="none"/>';
+  h+='<path d="M300,228 Q294,234 286,228" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Right Hand ──
+  h+='<path d="M74,330 C72,336 70,342 68,348 L66,354 C64,358 62,364 60,370 C58,374 58,378 60,380 L62,378 C60,374 62,366 64,360 L68,372 C66,376 66,380 68,382 L70,380 C68,376 70,368 72,362 L76,374 C74,378 74,382 76,384 L78,382 C76,378 78,370 80,364 L84,374 C84,378 86,380 88,378 L86,374 C86,368 88,360 90,352 L92,328 C86,332 80,334 74,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+  // Wrist crease
+  h+='<path d="M76,330 Q82,334 90,330" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  // ── Left Hand (mirrored) ──
+  h+='<path d="M326,330 C328,336 330,342 332,348 L334,354 C336,358 338,364 340,370 C342,374 342,378 340,380 L338,378 C340,374 338,366 336,360 L332,372 C334,376 334,380 332,382 L330,380 C332,376 330,368 328,362 L324,374 C326,378 326,382 324,384 L322,382 C324,378 322,370 320,364 L316,374 C316,378 314,380 312,378 L314,374 C314,368 312,360 310,352 L308,328 C314,332 320,334 326,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+  h+='<path d="M324,330 Q318,334 310,330" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  // ── Right Leg ──
+  h+='<path d="M180,340 C176,370 172,400 170,430 C168,450 168,470 170,490 C170,510 172,530 172,550 C172,570 170,590 168,610 L164,640 L162,660 L162,675" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M200,340 C198,370 196,400 194,430 C194,450 194,470 194,490 C194,510 194,530 194,550 C194,566 194,582 194,598 L192,630 L192,660 L192,675" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M180,340 C176,370 172,400 170,430 C168,450 168,470 170,490 C170,510 172,530 172,550 C172,570 170,590 168,610 L164,640 L162,660 L162,675 L192,675 L192,660 L192,630 L194,598 C194,582 194,566 194,550 C194,530 194,510 194,490 C194,470 194,450 194,430 C196,400 198,370 200,340 Z" fill="'+f+'" stroke="none"/>';
+  // Patella
+  h+='<ellipse cx="182" cy="450" rx="10" ry="8" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Tibial crest
+  h+='<line x1="180" y1="468" x2="178" y2="560" stroke="'+d+'" stroke-width="0.35"/>';
+  // Medial knee line
+  h+='<path d="M176,442 Q182,448 188,442" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  // ── Left Leg (mirrored) ──
+  h+='<path d="M200,340 C202,370 204,400 206,430 C208,450 208,470 206,490 C206,510 204,530 204,550 C204,570 206,590 208,610 L212,640 L214,660 L214,675" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M220,340 C224,370 228,400 230,430 C232,450 232,470 230,490 C230,510 228,530 228,550 C228,566 228,582 228,598 L230,630 L232,660 L238,675" fill="none" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M200,340 C202,370 204,400 206,430 C208,450 208,470 206,490 C206,510 204,530 204,550 C204,570 206,590 208,610 L212,640 L214,660 L214,675 L238,675 L232,660 L230,630 L228,598 C228,582 228,566 228,550 C228,530 230,510 230,490 C232,470 232,450 230,430 C228,400 224,370 220,340 Z" fill="'+f+'" stroke="none"/>';
+  h+='<ellipse cx="218" cy="450" rx="10" ry="8" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<line x1="220" y1="468" x2="222" y2="560" stroke="'+d+'" stroke-width="0.35"/>';
+  h+='<path d="M212,442 Q218,448 224,442" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  // ── Feet ──
+  // Right foot
+  h+='<path d="M158,672 L156,682 C154,690 158,696 168,698 L182,698 C192,696 196,690 196,682 L196,672 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  // Toes
+  h+='<path d="M160,696 L158,702 M166,697 L165,704 M172,698 L172,705 M178,697 L179,704 M184,696 L186,702" stroke="'+o+'" stroke-width="0.6"/>';
+  // Malleoli
+  h+='<circle cx="164" cy="668" r="3" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<circle cx="190" cy="668" r="3" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Left foot
+  h+='<path d="M210,672 L204,682 C204,690 208,696 218,698 L232,698 C242,696 246,690 244,682 L242,672 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M216,696 L214,702 M222,697 L221,704 M228,698 L228,705 M234,697 L235,704 M240,696 L242,702" stroke="'+o+'" stroke-width="0.6"/>';
+  h+='<circle cx="212" cy="668" r="3" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<circle cx="236" cy="668" r="3" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  h+='</g>';
+  return h;
+};
+
+// ─── POSTERIOR MALE ADULT ────────────────────────────────────
+window._anatSvgBackMale = function(){
+  var o=_abOut, s=_abSw, d=_abDet, ds=_abDsw, f=_abCol;
+  var h = '<g id="post-male">';
+
+  // ── Head (back view) ──
+  h+='<path d="M200,12 C178,12 162,28 160,52 C158,68 162,82 172,92 L176,96 L180,92 C185,96 192,100 200,100 C208,100 215,96 220,92 L224,96 L228,92 C238,82 242,68 240,52 C238,28 222,12 200,12Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Hair/occipital mass
+  h+='<path d="M165,18 C175,6 190,2 200,2 C210,2 225,6 235,18 C232,14 218,8 200,8 C182,8 168,14 165,18Z" fill="'+d+'" opacity="0.2"/>';
+  // Ears
+  h+='<path d="M160,52 C156,48 152,52 152,60 C152,68 156,72 160,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M240,52 C244,48 248,52 248,60 C248,68 244,72 240,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+
+  // ── Neck ──
+  h+='<path d="M184,100 L182,120 L218,120 L216,100" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Trapezius lines
+  h+='<path d="M190,102 Q185,110 180,120" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M210,102 Q215,110 220,120" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // C7 prominence
+  h+='<circle cx="200" cy="116" r="2.5" fill="none" stroke="'+d+'" stroke-width="0.6"/>';
+
+  // ── Torso (back) ── same outer contour as front
+  h+='<path d="M182,120 L148,126 C130,130 120,136 118,142 L116,148 C114,156 116,164 118,170 L122,178 L126,200 C128,218 132,236 134,248 L136,262 C138,276 142,290 148,300 L156,312 C162,320 170,328 180,332 L196,338 L200,340 L204,338 L220,332 C230,328 238,320 244,312 L252,300 C258,290 262,276 264,262 L266,248 C268,236 272,218 274,200 L278,178 L282,170 C284,164 286,156 284,148 L282,142 C280,136 270,130 252,126 L218,120" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+
+  // Spine - vertebral column
+  h+='<line x1="200" y1="120" x2="200" y2="330" stroke="'+d+'" stroke-width="0.8"/>';
+  // Vertebral processes
+  for(var v=128; v<=320; v+=12){
+    h+='<line x1="197" y1="'+v+'" x2="203" y2="'+v+'" stroke="'+d+'" stroke-width="0.4"/>';
+    h+='<circle cx="200" cy="'+v+'" r="1" fill="'+d+'"/>';
+  }
+  // Scapulae
+  h+='<path d="M160,136 Q172,132 188,148 Q186,172 176,182 Q166,180 158,166 Z" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M240,136 Q228,132 212,148 Q214,172 224,182 Q234,180 242,166 Z" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // Scapular spines
+  h+='<path d="M160,140 Q172,138 186,150" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M240,140 Q228,138 214,150" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Erector spinae grooves
+  h+='<path d="M192,130 Q190,220 195,310" fill="none" stroke="'+d+'" stroke-width="0.3"/>';
+  h+='<path d="M208,130 Q210,220 205,310" fill="none" stroke="'+d+'" stroke-width="0.3"/>';
+  // Sacrum
+  h+='<path d="M192,310 Q200,326 208,310" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Gluteal fold
+  h+='<path d="M172,320 Q200,342 228,320" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<line x1="200" y1="308" x2="200" y2="340" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Arms (same outline as front) ──
+  // Right arm
+  h+='<path d="M118,142 C112,158 108,178 104,198 C102,208 100,218 98,228 L114,236 C116,224 118,212 120,200 C122,182 126,164 130,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M98,228 C94,248 90,268 86,288 C82,304 78,318 74,330 L92,328 C96,316 100,304 102,290 C106,272 110,254 114,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Olecranon
+  h+='<circle cx="106" cy="230" r="4" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Left arm
+  h+='<path d="M282,142 C288,158 292,178 296,198 C298,208 300,218 302,228 L286,236 C284,224 282,212 280,200 C278,182 274,164 270,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M302,228 C306,248 310,268 314,288 C318,304 322,318 326,330 L308,328 C304,316 300,304 298,290 C294,272 290,254 286,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<circle cx="294" cy="230" r="4" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Hands (same as front) ──
+  h+='<path d="M74,330 C72,336 70,342 68,348 L66,354 C64,358 62,364 60,370 C58,374 58,378 60,380 L62,378 C60,374 62,366 64,360 L68,372 C66,376 66,380 68,382 L70,380 C68,376 70,368 72,362 L76,374 C74,378 74,382 76,384 L78,382 C76,378 78,370 80,364 L84,374 C84,378 86,380 88,378 L86,374 C86,368 88,360 90,352 L92,328 C86,332 80,334 74,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+  h+='<path d="M326,330 C328,336 330,342 332,348 L334,354 C336,358 338,364 340,370 C342,374 342,378 340,380 L338,378 C340,374 338,366 336,360 L332,372 C334,376 334,380 332,382 L330,380 C332,376 330,368 328,362 L324,374 C326,378 326,382 324,384 L322,382 C324,378 322,370 320,364 L316,374 C316,378 314,380 312,378 L314,374 C314,368 312,360 310,352 L308,328 C314,332 320,334 326,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+
+  // ── Legs (same outline as front) ──
+  h+='<path d="M180,340 C176,370 172,400 170,430 C168,450 168,470 170,490 C170,510 172,530 172,550 C172,570 170,590 168,610 L164,640 L162,660 L162,675 L192,675 L192,660 L192,630 L194,598 C194,582 194,566 194,550 C194,530 194,510 194,490 C194,470 194,450 194,430 C196,400 198,370 200,340 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M200,340 C202,370 204,400 206,430 C208,450 208,470 206,490 C206,510 204,530 204,550 C204,570 206,590 208,610 L212,640 L214,660 L214,675 L238,675 L232,660 L230,630 L228,598 C228,582 228,566 228,550 C228,530 230,510 230,490 C232,470 232,450 230,430 C228,400 224,370 220,340 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Popliteal fossae
+  h+='<path d="M172,448 Q182,456 192,448" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M208,448 Q218,456 228,448" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Achilles tendons
+  h+='<line x1="178" y1="600" x2="176" y2="670" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<line x1="222" y1="600" x2="224" y2="670" stroke="'+d+'" stroke-width="0.4"/>';
+  // Calf contour
+  h+='<path d="M172,470 Q178,510 176,550" fill="none" stroke="'+d+'" stroke-width="0.3"/>';
+  h+='<path d="M228,470 Q222,510 224,550" fill="none" stroke="'+d+'" stroke-width="0.3"/>';
+
+  // ── Feet (back view - heels) ──
+  h+='<path d="M158,672 L156,682 C154,690 158,694 168,696 L182,696 C192,694 196,690 196,682 L196,672 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<ellipse cx="176" cy="684" rx="8" ry="5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M210,672 L204,682 C204,690 208,694 218,696 L232,696 C242,694 246,690 244,682 L242,672 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<ellipse cx="224" cy="684" rx="8" ry="5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  h+='</g>';
+  return h;
+};
+
+// ─── ANTERIOR FEMALE ADULT ───────────────────────────────────
+window._anatSvgFrontFemale = function(){
+  var o=_abOut, s=_abSw, d=_abDet, ds=_abDsw, f=_abCol;
+  var h = '<g id="ant-female">';
+
+  // ── Head (same as male) ──
+  h+='<path d="M200,12 C178,12 162,28 160,52 C158,68 162,82 172,92 L176,96 L180,92 C185,96 192,100 200,100 C208,100 215,96 220,92 L224,96 L228,92 C238,82 242,68 240,52 C238,28 222,12 200,12Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M160,52 C156,48 152,52 152,60 C152,68 156,72 160,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M240,52 C244,48 248,52 248,60 C248,68 244,72 240,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  // Longer hair indication
+  h+='<path d="M162,40 Q158,20 165,8 Q180,-2 200,-4 Q220,-2 235,8 Q242,20 238,40" fill="none" stroke="'+d+'" stroke-width="0.8"/>';
+
+  // ── Neck ──
+  h+='<path d="M186,100 L184,120 L216,120 L214,100" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<line x1="190" y1="102" x2="186" y2="118" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<line x1="210" y1="102" x2="214" y2="118" stroke="'+d+'" stroke-width="'+ds+'"/>';
+
+  // ── Torso — female: narrower shoulders, wider hips, waist indentation ──
+  h+='<path d="M184,120 L152,126 C136,130 126,136 124,142 L122,148 C120,156 122,164 124,170 L128,178 L132,200 C134,216 138,232 140,244 L142,258 C140,270 138,280 140,292 L148,308 C156,322 168,332 182,338 L196,342 L200,344 L204,342 L218,338 C232,332 244,322 252,308 L260,292 C262,280 260,270 258,258 L266,244 C268,232 272,216 274,200 L278,178 L282,170 C284,164 286,156 284,148 L282,142 C280,136 270,130 248,126 L216,120" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+
+  // Clavicles
+  h+='<path d="M198,124 Q180,120 158,130" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M202,124 Q220,120 242,130" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // Breast contours
+  h+='<path d="M162,148 Q156,166 168,180 Q182,188 194,174" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M238,148 Q244,166 232,180 Q218,188 206,174" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // Areolae
+  h+='<circle cx="176" cy="170" r="3.5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<circle cx="224" cy="170" r="3.5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Midline
+  h+='<line x1="200" y1="126" x2="200" y2="342" stroke="'+d+'" stroke-width="0.4" stroke-dasharray="3,3"/>';
+  // Waist indentation
+  h+='<path d="M140,210 Q165,200 200,198 Q235,200 260,210" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Umbilicus
+  h+='<ellipse cx="200" cy="270" rx="3.5" ry="4.5" fill="none" stroke="'+d+'" stroke-width="0.6"/>';
+  // Costal margins
+  h+='<path d="M168,148 Q178,196 200,208" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M232,148 Q222,196 200,208" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Iliac crests
+  h+='<path d="M148,294 Q166,286 184,290" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M252,294 Q234,286 216,290" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Inguinal lines
+  h+='<path d="M160,310 Q178,330 194,342" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M240,310 Q222,330 206,342" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Arms (slightly thinner than male) ──
+  h+='<path d="M124,142 C118,158 114,178 110,198 C108,208 106,218 104,228 L118,236 C120,224 122,212 124,200 C126,182 130,164 134,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M104,228 C100,248 96,268 92,288 C88,304 84,318 80,330 L96,328 C100,316 104,304 106,290 C110,272 114,254 118,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M106,228 Q112,234 118,228" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M282,142 C288,158 286,178 290,198 C292,208 294,218 296,228 L282,236 C280,224 278,212 276,200 C274,182 270,164 266,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M296,228 C300,248 304,268 308,288 C312,304 316,318 320,330 L304,328 C300,316 296,304 294,290 C290,272 286,254 282,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M294,228 Q288,234 282,228" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Hands ──
+  h+='<path d="M80,330 C78,336 76,342 74,348 L72,354 C70,358 68,364 66,370 C64,374 64,378 66,380 L68,378 C66,374 68,366 70,360 L74,372 C72,376 72,380 74,382 L76,380 C74,376 76,368 78,362 L82,374 C80,378 80,382 82,384 L84,382 C82,378 84,370 86,364 L90,374 C90,378 92,380 94,378 L92,374 C92,368 94,360 96,352 L96,328 C92,332 86,334 80,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+  h+='<path d="M320,330 C322,336 324,342 326,348 L328,354 C330,358 332,364 334,370 C336,374 336,378 334,380 L332,378 C334,374 332,366 330,360 L326,372 C328,376 328,380 326,382 L324,380 C326,376 324,368 322,362 L318,374 C320,378 320,382 318,384 L316,382 C318,378 316,370 314,364 L310,374 C310,378 308,380 306,378 L308,374 C308,368 306,360 304,352 L304,328 C308,332 314,334 320,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+
+  // ── Legs (slightly different proportions - wider hips) ──
+  h+='<path d="M182,344 C178,374 174,404 172,434 C170,454 170,474 172,494 C172,514 174,534 174,554 C174,574 172,594 170,614 L166,644 L164,664 L164,678 L194,678 L194,664 L194,634 L196,602 C196,586 196,570 196,554 C196,534 196,514 196,494 C196,474 196,454 196,434 C198,404 200,374 202,344 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M198,344 C200,374 202,404 204,434 C206,454 206,474 204,494 C204,514 202,534 202,554 C202,574 204,594 206,614 L210,644 L212,664 L212,678 L242,678 L236,664 L234,634 L232,602 C232,586 232,570 232,554 C232,534 234,514 234,494 C236,474 236,454 234,434 C232,404 228,374 224,344 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<ellipse cx="184" cy="454" rx="10" ry="8" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<ellipse cx="218" cy="454" rx="10" ry="8" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // ── Feet ──
+  h+='<path d="M160,676 L158,686 C156,692 160,698 168,700 L184,700 C192,698 196,692 196,686 L196,676 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M162,698 L160,704 M168,699 L167,706 M174,700 L174,707 M180,699 L181,706 M186,698 L188,704" stroke="'+o+'" stroke-width="0.6"/>';
+  h+='<path d="M208,676 L204,686 C204,692 208,698 218,700 L234,700 C242,698 246,692 244,686 L242,676 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M216,698 L214,704 M222,699 L221,706 M228,700 L228,707 M234,699 L235,706 M240,698 L242,704" stroke="'+o+'" stroke-width="0.6"/>';
+
+  h+='</g>';
+  return h;
+};
+
+// ─── POSTERIOR FEMALE ────────────────────────────────────────
+window._anatSvgBackFemale = function(){
+  var o=_abOut, s=_abSw, d=_abDet, ds=_abDsw, f=_abCol;
+  var h = '<g id="post-female">';
+
+  // Head (same as back male + hair)
+  h+='<path d="M200,12 C178,12 162,28 160,52 C158,68 162,82 172,92 L176,96 L180,92 C185,96 192,100 200,100 C208,100 215,96 220,92 L224,96 L228,92 C238,82 242,68 240,52 C238,28 222,12 200,12Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M165,18 C175,6 190,2 200,2 C210,2 225,6 235,18 C232,14 218,8 200,8 C182,8 168,14 165,18Z" fill="'+d+'" opacity="0.2"/>';
+  h+='<path d="M162,40 Q158,20 165,8 Q180,-2 200,-4 Q220,-2 235,8 Q242,20 238,40" fill="none" stroke="'+d+'" stroke-width="0.8"/>';
+  h+='<path d="M160,52 C156,48 152,52 152,60 C152,68 156,72 160,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<path d="M240,52 C244,48 248,52 248,60 C248,68 244,72 240,68" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+
+  // Neck
+  h+='<path d="M186,100 L184,120 L216,120 L214,100" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<circle cx="200" cy="116" r="2.5" fill="none" stroke="'+d+'" stroke-width="0.6"/>';
+
+  // Torso (female back — wider hips)
+  h+='<path d="M184,120 L152,126 C136,130 126,136 124,142 L122,148 C120,156 122,164 124,170 L128,178 L132,200 C134,216 138,232 140,244 L142,258 C140,270 138,280 140,292 L148,308 C156,322 168,332 182,338 L196,342 L200,344 L204,342 L218,338 C232,332 244,322 252,308 L260,292 C262,280 260,270 258,258 L266,244 C268,232 272,216 274,200 L278,178 L282,170 C284,164 286,156 284,148 L282,142 C280,136 270,130 248,126 L216,120" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+
+  // Spine
+  h+='<line x1="200" y1="120" x2="200" y2="330" stroke="'+d+'" stroke-width="0.8"/>';
+  for(var v=128;v<=320;v+=12){
+    h+='<line x1="197" y1="'+v+'" x2="203" y2="'+v+'" stroke="'+d+'" stroke-width="0.4"/>';
+    h+='<circle cx="200" cy="'+v+'" r="1" fill="'+d+'"/>';
+  }
+  // Scapulae
+  h+='<path d="M162,136 Q174,132 190,148 Q188,172 178,182 Q168,180 160,166 Z" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<path d="M238,136 Q226,132 210,148 Q212,172 222,182 Q232,180 240,166 Z" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  // Waist
+  h+='<path d="M138,210 Q165,200 200,198 Q235,200 262,210" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  // Sacrum & gluteal fold
+  h+='<path d="M192,310 Q200,326 208,310" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M168,322 Q200,346 232,322" fill="none" stroke="'+d+'" stroke-width="'+ds+'"/>';
+  h+='<line x1="200" y1="308" x2="200" y2="342" stroke="'+d+'" stroke-width="0.5"/>';
+
+  // Arms
+  h+='<path d="M124,142 C118,158 114,178 110,198 C108,208 106,218 104,228 L118,236 C120,224 122,212 124,200 C126,182 130,164 134,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M104,228 C100,248 96,268 92,288 C88,304 84,318 80,330 L96,328 C100,316 104,304 106,290 C110,272 114,254 118,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M282,142 C288,158 286,178 290,198 C292,208 294,218 296,228 L282,236 C280,224 278,212 276,200 C274,182 270,164 266,148 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M296,228 C300,248 304,268 308,288 C312,304 316,318 320,330 L304,328 C300,316 296,304 294,290 C290,272 286,254 282,236 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+
+  // Hands
+  h+='<path d="M80,330 C78,336 76,342 74,348 L72,354 C70,358 68,364 66,370 C64,374 64,378 66,380 L68,378 C66,374 68,366 70,360 L74,372 C72,376 72,380 74,382 L76,380 C74,376 76,368 78,362 L82,374 C80,378 80,382 82,384 L84,382 C82,378 84,370 86,364 L90,374 C90,378 92,380 94,378 L92,374 C92,368 94,360 96,352 L96,328 C92,332 86,334 80,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+  h+='<path d="M320,330 C322,336 324,342 326,348 L328,354 C330,358 332,364 334,370 C336,374 336,378 334,380 L332,378 C334,374 332,366 330,360 L326,372 C328,376 328,380 326,382 L324,380 C326,376 324,368 322,362 L318,374 C320,378 320,382 318,384 L316,382 C318,378 316,370 314,364 L310,374 C310,378 308,380 306,378 L308,374 C308,368 306,360 304,352 L304,328 C308,332 314,334 320,330 Z" fill="'+f+'" stroke="'+o+'" stroke-width="0.9"/>';
+
+  // Legs (wider hip variant)
+  h+='<path d="M182,344 C178,374 174,404 172,434 C170,454 170,474 172,494 C172,514 174,534 174,554 C174,574 172,594 170,614 L166,644 L164,664 L164,678 L194,678 L194,664 L194,634 L196,602 C196,586 196,570 196,554 C196,534 196,514 196,494 C196,474 196,454 196,434 C198,404 200,374 202,344 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  h+='<path d="M198,344 C200,374 202,404 204,434 C206,454 206,474 204,494 C204,514 202,534 202,554 C202,574 204,594 206,614 L210,644 L212,664 L212,678 L242,678 L236,664 L234,634 L232,602 C232,586 232,570 232,554 C232,534 234,514 234,494 C236,474 236,454 234,434 C232,404 228,374 224,344 Z" fill="'+f+'" stroke="'+o+'" stroke-width="'+s+'"/>';
+  // Popliteal fossae
+  h+='<path d="M174,454 Q184,462 194,454" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  h+='<path d="M206,454 Q216,462 226,454" fill="none" stroke="'+d+'" stroke-width="0.5"/>';
+  // Achilles
+  h+='<line x1="180" y1="604" x2="178" y2="674" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<line x1="222" y1="604" x2="224" y2="674" stroke="'+d+'" stroke-width="0.4"/>';
+
+  // Feet
+  h+='<path d="M160,676 L158,686 C156,692 160,696 168,698 L184,698 C192,696 196,692 196,686 L196,676 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<ellipse cx="178" cy="688" rx="8" ry="5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+  h+='<path d="M208,676 L204,686 C204,692 208,696 218,698 L234,698 C242,696 246,692 244,686 L242,676 Z" fill="'+f+'" stroke="'+o+'" stroke-width="1"/>';
+  h+='<ellipse cx="224" cy="688" rx="8" ry="5" fill="none" stroke="'+d+'" stroke-width="0.4"/>';
+
+  h+='</g>';
+  return h;
+};
+
+// ANATOMICAL DIAGRAM — Interactive Assessment Tool
+// Professional Medical-Grade SVG Diagrams
+// ═══════════════════════════════════════════════════════════════
+
+(function(){
+"use strict";
+
+// ── State ──
+var anatState = {
+  body: "male_adult",
+  view: "front",
+  activeRegion: null,
+  regions: {}
+};
+window._anatState = anatState;
+
+// ── Region definitions with hitboxes (x,y,w,h) for front and back views ──
+// Based on 400x820 viewBox for adult, 400x650 for child
+
+var REGIONS = {
+  head:          { label:"Head / Scalp",          front:[168,5,64,55],     back:[168,5,64,55],     hasPupil:true, hasPulse:false },
+  face:          { label:"Face",                  front:[172,42,56,42],    back:null,              hasPupil:false,hasPulse:false },
+  neck_anterior: { label:"Neck (Anterior)",       front:[180,90,40,25],    back:null,              hasPupil:false,hasPulse:false },
+  neck_posterior:{ label:"Neck (Posterior)",       front:null,              back:[180,90,40,25],    hasPupil:false,hasPulse:false },
+  chest_r:       { label:"R Chest",               front:[148,118,52,80],   back:null,              hasPupil:false,hasPulse:false },
+  chest_l:       { label:"L Chest",               front:[200,118,52,80],   back:null,              hasPupil:false,hasPulse:false },
+  upper_back_r:  { label:"R Upper Back",          front:null,              back:[148,118,52,80],   hasPupil:false,hasPulse:false },
+  upper_back_l:  { label:"L Upper Back",          front:null,              back:[200,118,52,80],   hasPupil:false,hasPulse:false },
+  abdomen_ruq:   { label:"Abdomen RUQ",           front:[155,200,45,45],   back:null,              hasPupil:false,hasPulse:false },
+  abdomen_luq:   { label:"Abdomen LUQ",           front:[200,200,45,45],   back:null,              hasPupil:false,hasPulse:false },
+  abdomen_rlq:   { label:"Abdomen RLQ",           front:[155,245,45,42],   back:null,              hasPupil:false,hasPulse:false },
+  abdomen_llq:   { label:"Abdomen LLQ",           front:[200,245,45,42],   back:null,              hasPupil:false,hasPulse:false },
+  lower_back:    { label:"Lower Back / Flank",    front:null,              back:[155,200,90,87],   hasPupil:false,hasPulse:false },
+  pelvis:        { label:"Pelvis / Groin",        front:[162,290,76,35],   back:[162,290,76,35],   hasPupil:false,hasPulse:true  },
+  r_shoulder:    { label:"R Shoulder",             front:[108,108,42,28],   back:[108,108,42,28],   hasPupil:false,hasPulse:false },
+  l_shoulder:    { label:"L Shoulder",             front:[250,108,42,28],   back:[250,108,42,28],   hasPupil:false,hasPulse:false },
+  r_upper_arm:   { label:"R Upper Arm",            front:[92,136,32,65],    back:[92,136,32,65],    hasPupil:false,hasPulse:true  },
+  l_upper_arm:   { label:"L Upper Arm",            front:[276,136,32,65],   back:[276,136,32,65],   hasPupil:false,hasPulse:true  },
+  r_elbow:       { label:"R Elbow",                front:[84,201,30,22],    back:[84,201,30,22],    hasPupil:false,hasPulse:true  },
+  l_elbow:       { label:"L Elbow",                front:[286,201,30,22],   back:[286,201,30,22],   hasPupil:false,hasPulse:true  },
+  r_forearm:     { label:"R Forearm",              front:[76,223,30,55],    back:[76,223,30,55],    hasPupil:false,hasPulse:true  },
+  l_forearm:     { label:"L Forearm",              front:[294,223,30,55],   back:[294,223,30,55],   hasPupil:false,hasPulse:true  },
+  r_hand:        { label:"R Hand / Wrist",         front:[62,278,35,40],    back:[62,278,35,40],    hasPupil:false,hasPulse:true  },
+  l_hand:        { label:"L Hand / Wrist",         front:[303,278,35,40],   back:[303,278,35,40],   hasPupil:false,hasPulse:true  },
+  r_thigh:       { label:"R Thigh",                front:[155,328,44,100],  back:[155,328,44,100],  hasPupil:false,hasPulse:true  },
+  l_thigh:       { label:"L Thigh",                front:[201,328,44,100],  back:[201,328,44,100],  hasPupil:false,hasPulse:true  },
+  r_knee:        { label:"R Knee",                  front:[156,428,42,28],   back:[156,428,42,28],   hasPupil:false,hasPulse:true  },
+  l_knee:        { label:"L Knee",                  front:[202,428,42,28],   back:[202,428,42,28],   hasPupil:false,hasPulse:true  },
+  r_lower_leg:   { label:"R Lower Leg / Shin",      front:[158,456,38,100],  back:[158,456,38,100],  hasPupil:false,hasPulse:true  },
+  l_lower_leg:   { label:"L Lower Leg / Shin",      front:[204,456,38,100],  back:[204,456,38,100],  hasPupil:false,hasPulse:true  },
+  r_foot:        { label:"R Foot / Ankle",           front:[150,556,44,35],   back:[150,556,44,35],   hasPupil:false,hasPulse:true  },
+  l_foot:        { label:"L Foot / Ankle",           front:[206,556,44,35],   back:[206,556,44,35],   hasPupil:false,hasPulse:true  },
+  buttocks:      { label:"Buttocks",                 front:null,              back:[160,292,80,38],   hasPupil:false,hasPulse:false }
+};
+
+
+// ── Findings & Devices ──
+var FINDINGS = [
+  {key:"laceration",    label:"Laceration",      color:"#ef4444"},
+  {key:"abrasion",      label:"Abrasion",        color:"#f97316"},
+  {key:"contusion",     label:"Contusion",       color:"#a855f7"},
+  {key:"swelling",      label:"Swelling",        color:"#eab308"},
+  {key:"burn",          label:"Burn",            color:"#f43f5e"},
+  {key:"fracture",      label:"Fracture",        color:"#dc2626"},
+  {key:"dislocation",   label:"Dislocation",     color:"#ea580c"},
+  {key:"amputation",    label:"Amputation",      color:"#991b1b"},
+  {key:"puncture",      label:"Puncture / GSW",  color:"#be123c"},
+  {key:"avulsion",      label:"Avulsion",        color:"#e11d48"},
+  {key:"deformity",     label:"Deformity",       color:"#d97706"},
+  {key:"ecchymosis",    label:"Ecchymosis",      color:"#7c3aed"},
+  {key:"hematoma",      label:"Hematoma",        color:"#6d28d9"},
+  {key:"crepitus",      label:"Crepitus",        color:"#ca8a04"},
+  {key:"tenderness",    label:"Tenderness",      color:"#2563eb"},
+  {key:"open_wound",    label:"Open Wound",      color:"#dc2626"},
+  {key:"bleeding",      label:"Active Bleeding", color:"#b91c1c"},
+  {key:"skin_intact",   label:"Skin Intact / WNL",color:"#22c55e"}
+];
+
+var DEVICES = [
+  {key:"iv_line",       label:"IV Line",              color:"#3b82f6"},
+  {key:"io_line",       label:"IO Line",              color:"#f59e0b"},
+  {key:"central_line",  label:"Central Line",         color:"#8b5cf6"},
+  {key:"a_line",        label:"Arterial Line",        color:"#ec4899"},
+  {key:"cvp_line",      label:"CVP Line",             color:"#6366f1"},
+  {key:"et_tube",       label:"ET Tube",              color:"#06b6d4"},
+  {key:"igel",          label:"i-gel / SGA",          color:"#14b8a6"},
+  {key:"opa",           label:"OPA",                  color:"#0ea5e9"},
+  {key:"npa",           label:"NPA",                  color:"#0284c7"},
+  {key:"ng_tube",       label:"NG Tube",              color:"#a3e635"},
+  {key:"og_tube",       label:"OG Tube",              color:"#84cc16"},
+  {key:"foley",         label:"Foley Catheter",       color:"#facc15"},
+  {key:"chest_tube",    label:"Chest Tube",           color:"#f97316"},
+  {key:"needle_decomp", label:"Needle Decompression", color:"#ef4444"},
+  {key:"splint",        label:"Splint",               color:"#78716c"},
+  {key:"c_collar",      label:"C-Collar",             color:"#fb923c"},
+  {key:"tourniquet",    label:"Tourniquet",           color:"#dc2626"},
+  {key:"pelvic_binder", label:"Pelvic Binder",        color:"#854d0e"},
+  {key:"traction",      label:"Traction Splint",      color:"#71717a"},
+  {key:"dressing",      label:"Dressing / Bandage",   color:"#d6d3d1"}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// SVG BODY DRAWING — Professional anatomical line-art style
+// Clean monochrome medical illustration with anatomical landmarks
+// ═══════════════════════════════════════════════════════════════
+
+
+function drawBody(){
+  var svg = document.getElementById("anatSvg");
+  if(!svg) return;
+  var isChild = anatState.body.indexOf("child") >= 0;
+  var isFemale = anatState.body.indexOf("female") >= 0;
+  var isFront = anatState.view === "front";
+
+  var vbH = isChild ? 600 : 700;
+  svg.setAttribute("viewBox","0 0 400 " + vbH);
+
+  var h = "";
+  var sc = isChild ? 0.78 : 1;
+  var tx = isChild ? 44 : 0;
+  var ty = isChild ? 30 : 0;
+
+  h += '<g transform="translate(' + tx + ',' + ty + ') scale(' + sc + ')">';
+
+  // Use pre-built detailed SVG bodies
+  if(isFront && !isFemale) h += window._anatSvgFrontMale();
+  else if(isFront && isFemale) h += window._anatSvgFrontFemale();
+  else if(!isFront && !isFemale) h += window._anatSvgBackMale();
+  else h += window._anatSvgBackFemale();
+
+  h += '</g>';
+
+  // Region overlays
+  h += buildRegionOverlays(isChild, tx, ty, sc);
+
+  // View label
+  var labelY = vbH - 6;
+  var bodyLabel = (isFemale ? "FEMALE" : "MALE") + (isChild ? " PEDIATRIC" : " ADULT") + " \u2014 " + (isFront ? "ANTERIOR" : "POSTERIOR");
+  h += '<text x="200" y="' + labelY + '" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="9" font-family="system-ui" letter-spacing=".1em">' + bodyLabel + '</text>';
+
+  svg.innerHTML = h;
+}
+
+function buildRegionOverlays(isChild, tx, ty, sc){
+  var h = "";
+  var view = anatState.view;
+  for(var rid in REGIONS){
+    var r = REGIONS[rid];
+    var box = r[view];
+    if(!box) continue;
+    var x = box[0] * sc + tx;
+    var y = box[1] * sc + ty;
+    var w = box[2] * sc;
+    var ht = box[3] * sc;
+    var hasData = anatState.regions[rid] && hasAnnotations(rid);
+    var isActive = anatState.activeRegion === rid;
+
+    var fill, stroke, strokeW;
+    if(isActive){
+      fill = "rgba(244,114,182,.18)";
+      stroke = "rgba(244,114,182,.7)";
+      strokeW = "1.5";
+    } else if(hasData){
+      fill = "rgba(244,114,182,.1)";
+      stroke = "rgba(244,114,182,.4)";
+      strokeW = "1";
+    } else {
+      fill = "rgba(255,255,255,.02)";
+      stroke = "rgba(255,255,255,.06)";
+      strokeW = "0.5";
+    }
+
+    h += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + ht + '" rx="3" ';
+    h += 'fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + strokeW + '" ';
+    h += 'data-region="' + rid + '" style="cursor:pointer" ';
+    h += 'onmouseover="this.setAttribute(\'fill\',\'rgba(244,114,182,.15)\')" ';
+    h += 'onmouseout="this.setAttribute(\'fill\',\'' + fill + '\')"/>';
+
+    if(hasData){
+      var count = countAnnotations(rid);
+      var bx = x + w - 3;
+      var by = y + 5;
+      h += '<circle cx="' + bx + '" cy="' + by + '" r="6" fill="#f472b6" stroke="#0f172a" stroke-width="0.5"/>';
+      h += '<text x="' + bx + '" y="' + (by + 3) + '" text-anchor="middle" fill="#fff" font-size="7" font-weight="700" font-family="system-ui">' + count + '</text>';
+    }
+  }
+  return h;
+}
+
+function hasAnnotations(rid){
+  var d = anatState.regions[rid];
+  if(!d) return false;
+  return (d.findings && d.findings.length > 0) || (d.devices && d.devices.length > 0) || d.pulse || (d.pupil && (d.pupil.l || d.pupil.r || d.pupil.react)) || d.notes;
+}
+
+function countAnnotations(rid){
+  var d = anatState.regions[rid];
+  if(!d) return 0;
+  var c = 0;
+  if(d.findings) c += d.findings.length;
+  if(d.devices) c += d.devices.length;
+  if(d.pulse) c++;
+  if(d.pupil && (d.pupil.l || d.pupil.r || d.pupil.react)) c++;
+  if(d.notes) c++;
+  return c;
+}
+
+// ═══ Event Handlers ═══
+
+window.anatSvgClick = function(e){
+  var svg = document.getElementById("anatSvg");
+  var rect = svg.getBoundingClientRect();
+  var vb = svg.viewBox.baseVal;
+  var svgX = (e.clientX - rect.left) / rect.width * vb.width;
+  var svgY = (e.clientY - rect.top) / rect.height * vb.height;
+
+  var isChild = anatState.body.indexOf("child") >= 0;
+  var sc = isChild ? 0.75 : 1;
+  var tx = isChild ? 50 : 0;
+  var ty = isChild ? 35 : 0;
+  var view = anatState.view;
+
+  var best = null;
+  var bestDist = Infinity;
+  for(var rid in REGIONS){
+    var r = REGIONS[rid];
+    var box = r[view];
+    if(!box) continue;
+    var x = box[0] * sc + tx;
+    var y = box[1] * sc + ty;
+    var w = box[2] * sc;
+    var ht = box[3] * sc;
+    if(svgX >= x && svgX <= x+w && svgY >= y && svgY <= y+ht){
+      var cx = x + w/2;
+      var cy = y + ht/2;
+      var dist = Math.sqrt((svgX-cx)*(svgX-cx) + (svgY-cy)*(svgY-cy));
+      if(dist < bestDist){ bestDist = dist; best = rid; }
+    }
+  }
+
+  if(best){
+    anatState.activeRegion = best;
+    if(!anatState.regions[best]){
+      anatState.regions[best] = { findings:[], devices:[], pulse:"", pupil:{l:"",r:"",react:""}, notes:"" };
+    }
+    openRegionPanel(best);
+    drawBody();
+    updateSummary();
+  }
+};
+
+function openRegionPanel(rid){
+  var panel = document.getElementById("anatRegionPanel");
+  var region = REGIONS[rid];
+  if(!panel || !region) return;
+
+  panel.style.display = "block";
+  document.getElementById("anatRegionTitle").textContent = region.label;
+
+  var data = anatState.regions[rid];
+
+  // Build finding buttons
+  var fbHtml = "";
+  for(var i=0;i<FINDINGS.length;i++){
+    var f = FINDINGS[i];
+    var active = data.findings.indexOf(f.key) >= 0;
+    fbHtml += '<button type="button" class="anat-tag-btn' + (active ? ' anat-tag-on' : '') + '" ';
+    fbHtml += 'data-tcolor="' + f.color + '" ';
+    if(active) fbHtml += 'style="background:' + f.color + '22;border-color:' + f.color + '55;color:' + f.color + '" ';
+    fbHtml += 'onclick="anatToggleFinding(\'' + rid + '\',\'' + f.key + '\',' + i + ')">';
+    fbHtml += f.label + '</button>';
+  }
+  document.getElementById("anatFindingBtns").innerHTML = fbHtml;
+
+  // Build device buttons
+  var dbHtml = "";
+  var regionDevices = getRegionDevices(rid);
+  for(var j=0;j<regionDevices.length;j++){
+    var dv = regionDevices[j];
+    var dActive = data.devices.indexOf(dv.key) >= 0;
+    dbHtml += '<button type="button" class="anat-tag-btn' + (dActive ? ' anat-tag-on' : '') + '" ';
+    dbHtml += 'data-tcolor="' + dv.color + '" ';
+    if(dActive) dbHtml += 'style="background:' + dv.color + '22;border-color:' + dv.color + '55;color:' + dv.color + '" ';
+    dbHtml += 'onclick="anatToggleDevice(\'' + rid + '\',\'' + dv.key + '\')">';
+    dbHtml += dv.label + '</button>';
+  }
+  document.getElementById("anatDeviceBtns").innerHTML = dbHtml;
+
+  // Pulse row
+  document.getElementById("anatPulseRow").style.display = region.hasPulse ? "block" : "none";
+  if(region.hasPulse){
+    var btns = document.querySelectorAll(".anat-pulse-btn");
+    for(var pb=0;pb<btns.length;pb++){
+      btns[pb].classList.toggle("anat-pulse-active", btns[pb].textContent === data.pulse);
+    }
+  }
+
+  // Pupil row
+  document.getElementById("anatPupilRow").style.display = region.hasPupil ? "block" : "none";
+  if(region.hasPupil && data.pupil){
+    document.getElementById("anatPupilL").value = data.pupil.l || "";
+    document.getElementById("anatPupilR").value = data.pupil.r || "";
+    document.getElementById("anatPupilReact").value = data.pupil.react || "";
+  }
+
+  document.getElementById("anatRegionNotes").value = data.notes || "";
+}
+
+function getRegionDevices(rid){
+  var head = ["et_tube","igel","opa","npa","ng_tube","og_tube","c_collar"];
+  var neck = ["central_line","cvp_line","c_collar","et_tube"];
+  var chest = ["chest_tube","needle_decomp","central_line","cvp_line","a_line","iv_line","dressing"];
+  var abdomen = ["ng_tube","og_tube","dressing","iv_line"];
+  var pelvis = ["foley","pelvic_binder","dressing","iv_line","io_line"];
+  var arm = ["iv_line","io_line","a_line","central_line","splint","tourniquet","dressing"];
+  var hand = ["iv_line","a_line","splint","dressing"];
+  var leg = ["iv_line","io_line","splint","traction","tourniquet","dressing"];
+  var foot = ["iv_line","splint","dressing"];
+  var back = ["dressing","splint"];
+
+  var map = {
+    head:head, face:head, neck_anterior:neck, neck_posterior:neck,
+    chest_r:chest, chest_l:chest, upper_back_r:back, upper_back_l:back,
+    abdomen_ruq:abdomen, abdomen_luq:abdomen, abdomen_rlq:abdomen, abdomen_llq:abdomen,
+    lower_back:back, pelvis:pelvis, buttocks:back,
+    r_shoulder:arm, l_shoulder:arm, r_upper_arm:arm, l_upper_arm:arm,
+    r_elbow:arm, l_elbow:arm, r_forearm:arm, l_forearm:arm,
+    r_hand:hand, l_hand:hand,
+    r_thigh:leg, l_thigh:leg, r_knee:leg, l_knee:leg,
+    r_lower_leg:leg, l_lower_leg:leg, r_foot:foot, l_foot:foot
+  };
+
+  var keys = map[rid] || [];
+  var result = [];
+  for(var i=0;i<DEVICES.length;i++){
+    if(keys.indexOf(DEVICES[i].key) >= 0) result.push(DEVICES[i]);
+  }
+  return result;
+}
+
+window.anatToggleFinding = function(rid, key, idx){
+  var data = anatState.regions[rid];
+  var pos = data.findings.indexOf(key);
+  if(pos >= 0){ data.findings.splice(pos, 1); }
+  else { data.findings.push(key); }
+  openRegionPanel(rid);
+  drawBody();
+  updateSummary();
+};
+
+window.anatToggleDevice = function(rid, key){
+  var data = anatState.regions[rid];
+  var pos = data.devices.indexOf(key);
+  if(pos >= 0){ data.devices.splice(pos, 1); }
+  else { data.devices.push(key); }
+  openRegionPanel(rid);
+  drawBody();
+  updateSummary();
+};
+
+window.anatSetPulse = function(val){
+  var rid = anatState.activeRegion;
+  if(!rid) return;
+  var data = anatState.regions[rid];
+  data.pulse = (data.pulse === val) ? "" : val;
+  var btns = document.querySelectorAll(".anat-pulse-btn");
+  for(var i=0;i<btns.length;i++){
+    btns[i].classList.toggle("anat-pulse-active", btns[i].textContent === data.pulse);
+  }
+  drawBody();
+  updateSummary();
+};
+
+window.anatSetPupil = function(){
+  var rid = anatState.activeRegion;
+  if(!rid) return;
+  anatState.regions[rid].pupil = {
+    l: document.getElementById("anatPupilL").value,
+    r: document.getElementById("anatPupilR").value,
+    react: document.getElementById("anatPupilReact").value
+  };
+  updateSummary();
+};
+
+window.anatSaveNote = function(){
+  var rid = anatState.activeRegion;
+  if(!rid) return;
+  anatState.regions[rid].notes = document.getElementById("anatRegionNotes").value;
+  updateSummary();
+};
+
+window.anatClosePanel = function(){
+  anatState.activeRegion = null;
+  document.getElementById("anatRegionPanel").style.display = "none";
+  drawBody();
+};
+
+window.anatSetBody = function(type, btn){
+  anatState.body = type;
+  var btns = document.querySelectorAll(".anat-body-btn");
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove("anat-body-active");
+  btn.classList.add("anat-body-active");
+  drawBody();
+};
+
+window.anatSetView = function(view){
+  anatState.view = view;
+  var fb = document.getElementById("anatViewFrontBtn");
+  var bb = document.getElementById("anatViewBackBtn");
+  if(fb) fb.className = "anat-body-btn" + (view==="front" ? " anat-view-active" : "");
+  if(bb) bb.className = "anat-body-btn" + (view==="back" ? " anat-view-active" : "");
+  drawBody();
+};
+
+window.anatClearAll = function(){
+  if(!confirm("Clear all anatomical annotations?")) return;
+  anatState.regions = {};
+  anatState.activeRegion = null;
+  document.getElementById("anatRegionPanel").style.display = "none";
+  drawBody();
+  updateSummary();
+};
+
+// ── Summary ──
+function updateSummary(){
+  var el = document.getElementById("anatSummaryList");
+  if(!el) return;
+  var h = "";
+  var hasAny = false;
+  var order = ["head","face","neck_anterior","neck_posterior","r_shoulder","l_shoulder","chest_r","chest_l","upper_back_r","upper_back_l","r_upper_arm","l_upper_arm","r_elbow","l_elbow","r_forearm","l_forearm","r_hand","l_hand","abdomen_ruq","abdomen_luq","abdomen_rlq","abdomen_llq","lower_back","pelvis","buttocks","r_thigh","l_thigh","r_knee","l_knee","r_lower_leg","l_lower_leg","r_foot","l_foot"];
+
+  for(var oi=0;oi<order.length;oi++){
+    var rid = order[oi];
+    if(!anatState.regions[rid] || !hasAnnotations(rid)) continue;
+    hasAny = true;
+    var data = anatState.regions[rid];
+    var reg = REGIONS[rid];
+    h += '<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg2);border-radius:6px;border-left:3px solid #f472b6;font-size:.72rem">';
+    h += '<div style="font-weight:700;color:var(--tx0);margin-bottom:3px">' + reg.label + '</div>';
+
+    if(data.findings.length > 0){
+      var fNames = [];
+      for(var fi=0;fi<data.findings.length;fi++){
+        for(var fj=0;fj<FINDINGS.length;fj++){
+          if(FINDINGS[fj].key===data.findings[fi]){ fNames.push(FINDINGS[fj].label); break; }
+        }
+      }
+      h += '<div style="margin-bottom:2px"><span style="color:#ef4444;font-weight:600">Findings:</span> ' + fNames.join(", ") + '</div>';
+    }
+    if(data.devices.length > 0){
+      var dNames = [];
+      for(var di=0;di<data.devices.length;di++){
+        for(var dj=0;dj<DEVICES.length;dj++){
+          if(DEVICES[dj].key===data.devices[di]){ dNames.push(DEVICES[dj].label); break; }
+        }
+      }
+      h += '<div style="margin-bottom:2px"><span style="color:#3b82f6;font-weight:600">Devices:</span> ' + dNames.join(", ") + '</div>';
+    }
+    if(data.pulse){
+      h += '<div style="margin-bottom:2px"><span style="color:#22c55e;font-weight:600">Pulse:</span> ' + data.pulse + '</div>';
+    }
+    if(data.pupil && (data.pupil.l || data.pupil.r || data.pupil.react)){
+      var pStr = "";
+      if(data.pupil.l) pStr += "L:" + data.pupil.l + " ";
+      if(data.pupil.r) pStr += "R:" + data.pupil.r + " ";
+      if(data.pupil.react) pStr += "(" + data.pupil.react + ")";
+      h += '<div style="margin-bottom:2px"><span style="color:#a855f7;font-weight:600">Pupils:</span> ' + pStr + '</div>';
+    }
+    if(data.notes){
+      h += '<div><span style="color:var(--tx2);font-weight:600">Notes:</span> ' + data.notes.replace(/</g,"&lt;") + '</div>';
+    }
+    h += '</div>';
+  }
+
+  if(!hasAny){
+    h = '<div style="color:var(--tx2);font-style:italic;font-size:.72rem">No annotations yet. Tap a body region to begin assessment.</div>';
+  }
+  el.innerHTML = h;
+}
+
+// ── Export Summary ──
+window.anatExportSummary = function(){
+  var lines = [];
+  lines.push("ANATOMICAL ASSESSMENT SUMMARY");
+  lines.push("Body Type: " + anatState.body.replace(/_/g," ").toUpperCase());
+  lines.push("Date/Time: " + new Date().toLocaleString());
+  lines.push("Patient: " + (window.patientName || "N/A"));
+  lines.push(new Array(45).join("\u2500"));
+
+  var order = ["head","face","neck_anterior","neck_posterior","r_shoulder","l_shoulder","chest_r","chest_l","upper_back_r","upper_back_l","r_upper_arm","l_upper_arm","r_elbow","l_elbow","r_forearm","l_forearm","r_hand","l_hand","abdomen_ruq","abdomen_luq","abdomen_rlq","abdomen_llq","lower_back","pelvis","buttocks","r_thigh","l_thigh","r_knee","l_knee","r_lower_leg","l_lower_leg","r_foot","l_foot"];
+  var hasAny = false;
+
+  for(var i=0;i<order.length;i++){
+    var rid = order[i];
+    if(!anatState.regions[rid] || !hasAnnotations(rid)) continue;
+    hasAny = true;
+    var data = anatState.regions[rid];
+    var reg = REGIONS[rid];
+    lines.push("");
+    lines.push(reg.label.toUpperCase());
+    if(data.findings.length){
+      var fN = [];
+      for(var fi=0;fi<data.findings.length;fi++){
+        for(var fj=0;fj<FINDINGS.length;fj++){
+          if(FINDINGS[fj].key===data.findings[fi]){ fN.push(FINDINGS[fj].label); break; }
+        }
+      }
+      lines.push("  Findings: " + fN.join(", "));
+    }
+    if(data.devices.length){
+      var dN = [];
+      for(var di=0;di<data.devices.length;di++){
+        for(var dj=0;dj<DEVICES.length;dj++){
+          if(DEVICES[dj].key===data.devices[di]){ dN.push(DEVICES[dj].label); break; }
+        }
+      }
+      lines.push("  Devices: " + dN.join(", "));
+    }
+    if(data.pulse) lines.push("  Pulse: " + data.pulse);
+    if(data.pupil && (data.pupil.l || data.pupil.r || data.pupil.react)){
+      var pStr = "";
+      if(data.pupil.l) pStr += "L:" + data.pupil.l + " ";
+      if(data.pupil.r) pStr += "R:" + data.pupil.r + " ";
+      if(data.pupil.react) pStr += "(" + data.pupil.react + ")";
+      lines.push("  Pupils: " + pStr.trim());
+    }
+    if(data.notes) lines.push("  Notes: " + data.notes);
+  }
+
+  if(!hasAny) lines.push("\nNo annotations recorded.");
+
+  var text = lines.join("\n");
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      alert("Assessment summary copied to clipboard.");
+    });
+  } else {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    alert("Assessment summary copied to clipboard.");
+  }
+};
+
+// ── Initialize ──
+window.anatInit = function(){
+  drawBody();
+  updateSummary();
+};
+
+})();
 </script>
 
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HANDOVER PRINT SHEET — Professional One-Page Layout
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="hoPrintModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.85);overflow-y:auto;padding:20px">
+  <div style="max-width:820px;margin:0 auto">
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:12px" class="ho-print-toolbar">
+      <button onclick="hoPrintSheet()" type="button" style="padding:8px 20px;border-radius:8px;border:1px solid rgba(52,211,153,.5);background:rgba(52,211,153,.15);color:#34d399;font-size:.8rem;font-weight:700;cursor:pointer">&#128424; Print</button>
+      <button onclick="hoCloseSheet()" type="button" style="padding:8px 20px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.1);color:#f87171;font-size:.8rem;font-weight:700;cursor:pointer">&#10005; Close</button>
+    </div>
+    <div id="hoPrintSheetContent" class="ho-print-sheet">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
 </body>
 </html>
