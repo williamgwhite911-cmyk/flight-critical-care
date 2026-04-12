@@ -5048,88 +5048,28 @@ textarea.bs-field{resize:vertical}
       <div>
         <div class="flbl">Sending Facility / Scene</div>
         <select id="tlSendingFacility" onchange="tlFacilityChange()" style="width:100%">
-          <option value="">Select Sending...</option>
-          <optgroup label="West-Central Indiana">
-            <option value="Ascension St. Vincent Williamsport Hospital">Williamsport Hospital (Ascension)</option>
-            <option value="Putnam County Hospital">Putnam County Hospital (Greencastle)</option>
-            <option value="IU Health White Memorial Hospital">IU Health White Memorial (Monticello)</option>
-            <option value="Franciscan Health Crawfordsville">Franciscan Crawfordsville</option>
-            <option value="Franciscan Health Lafayette">Franciscan Lafayette</option>
-          </optgroup>
-          <optgroup label="Terre Haute Area">
-            <option value="Terre Haute Regional Hospital">Terre Haute Regional</option>
-            <option value="Union Hospital">Union Hospital (Terre Haute)</option>
-          </optgroup>
-          <optgroup label="Southern Indiana">
-            <option value="Sullivan County Community Hospital">Sullivan County (Sullivan)</option>
-            <option value="Greene County General Hospital">Greene County (Linton)</option>
-            <option value="Daviess Community Hospital">Daviess Community (Washington)</option>
-            <option value="Good Samaritan Hospital">Good Samaritan (Vincennes)</option>
-            <option value="IU Health Bloomington Hospital">IU Health Bloomington</option>
-            <option value="Columbus Regional Hospital">Columbus Regional</option>
-            <option value="Jasper Memorial Hospital">Jasper Memorial</option>
-            <option value="Perry County Memorial Hospital">Perry County (Tell City)</option>
-            <option value="Gibson General Hospital">Gibson General (Princeton)</option>
-            <option value="Pike County Memorial Hospital">Pike County (Petersburg)</option>
-            <option value="Decatur County Memorial Hospital">Decatur County (Greensburg)</option>
-            <option value="Margaret Mary Health">Margaret Mary (Batesville)</option>
-          </optgroup>
-          <optgroup label="Florida Keys">
-            <option value="Lower Keys Medical Center">Lower Keys Medical Center (Key West)</option>
-            <option value="Baptist Health Fishermen's Community Hospital">Fishermen's Community Hospital (Marathon)</option>
-            <option value="Baptist Health Mariners Hospital">Mariners Hospital (Tavernier)</option>
-          </optgroup>
-          <optgroup label="Scene / Rendezvous">
-            <option value="Badlands Off Road Park">Badlands ATV Park (Attica)</option>
-          </optgroup>
+          <option value="">Select state above first...</option>
         </select>
       </div>
       <div>
         <div class="flbl">Receiving Facility</div>
         <select id="tlReceivingFacility" onchange="tlFacilityChange()" style="width:100%">
-          <option value="">Select Receiving...</option>
-          <optgroup label="Indianapolis — Level I Trauma">
-            <option value="Ascension St. Vincent Hospital Indianapolis">St. Vincent 86th St — Level I / Heart Center</option>
-            <option value="IU Health Methodist Hospital">IU Health Methodist — Level I Trauma</option>
-            <option value="Eskenazi Health (Smith Level I Shock Trauma Center)">Eskenazi — Level I Shock Trauma</option>
-          </optgroup>
-          <optgroup label="Indianapolis — Pediatric Level I">
-            <option value="Peyton Manning Children's Hospital (86th St)">Peyton Manning Children's — Level I Peds</option>
-            <option value="Riley Hospital for Children at IU Health">Riley Children's — Level I Peds</option>
-          </optgroup>
-          <optgroup label="Indianapolis — Heart / Burn / Specialty">
-            <option value="Franciscan Health Indianapolis">Franciscan Health Indy — Heart Center</option>
-            <option value="Eskenazi Health (Fairbanks Burn Center)">Eskenazi — Adult Burn Center</option>
-            <option value="Riley Hospital (Riley Burn Center)">Riley — Pediatric Burn Center</option>
-          </optgroup>
-          <optgroup label="Central Illinois — Level I Trauma">
-            <option value="Carle Foundation Hospital">Carle Foundation (Champaign) — Level I Trauma</option>
-            <option value="OSF Saint Francis Medical Center">OSF St. Francis (Peoria) — Level I Trauma</option>
-            <option value="HSHS St. Johns Hospital">HSHS St. John's (Springfield) — Level I Trauma</option>
-          </optgroup>
-          <optgroup label="Northern Illinois — Level I Trauma">
-            <option value="OSF Saint Anthony Medical Center">OSF St. Anthony (Rockford) — Level I Trauma</option>
-            <option value="Advocate Christ Medical Center">Advocate Christ (Oak Lawn/Chicago) — Level I Trauma</option>
-            <option value="Loyola University Medical Center">Loyola (Maywood/Chicago) — Level I Trauma</option>
-            <option value="Northwestern Memorial Hospital">Northwestern Memorial (Chicago) — Level I Trauma</option>
-          </optgroup>
-          <optgroup label="Miami — Level I Trauma">
-            <option value="Jackson Memorial Hospital — Ryder Trauma Center">Ryder Trauma / Jackson Memorial — Level I</option>
-            <option value="HCA Florida Kendall Hospital">Kendall Regional — Level I Trauma / Burn Center</option>
-          </optgroup>
-          <optgroup label="Miami — Specialty">
-            <option value="University of Miami Hospital (UHealth Tower)">UM Hospital / UHealth — Academic Medical Center</option>
-            <option value="HCA Florida Mercy Hospital">Mercy Hospital — Hyperbaric Chamber</option>
-            <option value="Mount Sinai Medical Center">Mount Sinai (Miami Beach)</option>
-          </optgroup>
-          <optgroup label="Miami — Level II / Pediatric Trauma">
-            <option value="Baptist Hospital of Miami">Baptist Hospital of Miami — Level II Trauma</option>
-            <option value="Jackson South Medical Center">Jackson South — Level II Trauma</option>
-            <option value="Homestead Hospital (Baptist Health)">Homestead Hospital — Level II Trauma / Stroke / STEMI</option>
-            <option value="HCA Florida Aventura Hospital">Aventura Hospital — Level II Trauma</option>
-            <option value="Nicklaus Children's Hospital">Nicklaus Children's — Pediatric Trauma</option>
-          </optgroup>
+          <option value="">Select state above first...</option>
         </select>
+      </div>
+    </div>
+
+    <!-- Transport Route Map -->
+    <div id="tlRouteMapPanel" style="display:none;margin-bottom:14px;padding:14px;border-radius:10px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:.62rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em">&#128506; Transport Route & Diversion Hospitals</div>
+        <button onclick="tlToggleMapFullscreen()" style="font-size:.6rem;padding:4px 10px;border-radius:6px;background:rgba(0,212,245,.1);border:1px solid rgba(0,212,245,.3);color:var(--cyan);cursor:pointer" type="button">&#x26F6; Expand</button>
+      </div>
+      <div id="tlRouteMapContainer" style="width:100%;height:340px;border-radius:8px;overflow:hidden;background:#1a1a2e;position:relative">
+        <canvas id="tlRouteMapCanvas" style="width:100%;height:100%"></canvas>
+      </div>
+      <div id="tlRouteMapLegend" style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;font-size:.58rem;color:var(--tx2)">
+        <span>&#128994; Sending</span> <span>&#128308; Receiving</span> <span>&#128309; Diversion Hospitals</span> <span>&#10145;&#65039; Route</span>
       </div>
     </div>
 
@@ -27394,8 +27334,363 @@ function tlSelectState(state) {
   // Render hospital list for the selected state
   tlStateHospitalRender();
 
+  // Populate sending/receiving dropdowns based on state
+  tlPopulateFacilityDropdowns(state);
+
   // Save state preference
   try{ localStorage.setItem('tl_operating_state', state); }catch(e){}
+}
+
+// ── Populate Sending / Receiving facility dropdowns by state ──
+var TL_SENDING_EXTRA = {
+  IN: [
+    {name:'Ascension St. Vincent Williamsport Hospital', city:'Williamsport', label:'Williamsport Hospital (Ascension)'},
+    {name:'Putnam County Hospital', city:'Greencastle', label:'Putnam County Hospital (Greencastle)'},
+    {name:'IU Health White Memorial Hospital', city:'Monticello', label:'IU Health White Memorial (Monticello)'},
+    {name:'Franciscan Health Crawfordsville', city:'Crawfordsville', label:'Franciscan Crawfordsville'},
+    {name:'Sullivan County Community Hospital', city:'Sullivan', label:'Sullivan County (Sullivan)'},
+    {name:'Greene County General Hospital', city:'Linton', label:'Greene County (Linton)'},
+    {name:'Daviess Community Hospital', city:'Washington', label:'Daviess Community (Washington)'},
+    {name:'Good Samaritan Hospital', city:'Vincennes', label:'Good Samaritan (Vincennes)'},
+    {name:'Columbus Regional Hospital', city:'Columbus', label:'Columbus Regional'},
+    {name:'Jasper Memorial Hospital', city:'Jasper', label:'Jasper Memorial'},
+    {name:'Perry County Memorial Hospital', city:'Tell City', label:'Perry County (Tell City)'},
+    {name:'Gibson General Hospital', city:'Princeton', label:'Gibson General (Princeton)'},
+    {name:'Pike County Memorial Hospital', city:'Petersburg', label:'Pike County (Petersburg)'},
+    {name:'Decatur County Memorial Hospital', city:'Greensburg', label:'Decatur County (Greensburg)'},
+    {name:'Margaret Mary Health', city:'Batesville', label:'Margaret Mary (Batesville)'}
+  ],
+  FL: []
+};
+var TL_SCENE_LOCATIONS = {
+  IN: [
+    {name:'Badlands Off Road Park', label:'Badlands ATV Park (Attica)'},
+    {name:'Scene — GPS Location', label:'Scene — GPS Location'}
+  ],
+  FL: [
+    {name:'Scene — GPS Location', label:'Scene — GPS Location'}
+  ]
+};
+
+function tlPopulateFacilityDropdowns(state) {
+  var sendSel = document.getElementById('tlSendingFacility');
+  var recvSel = document.getElementById('tlReceivingFacility');
+  if(!sendSel || !recvSel) return;
+
+  var hospitals = STATE_HOSPITALS[state] || [];
+  var extras = TL_SENDING_EXTRA[state] || [];
+  var scenes = TL_SCENE_LOCATIONS[state] || [];
+
+  // ── Build Sending dropdown ──
+  var sendHtml = '<option value="">Select Sending...</option>';
+  // All state hospitals as sending options
+  var stateName = state==='IN' ? 'Indiana' : 'Florida';
+  sendHtml += '<optgroup label="' + stateName + ' Hospitals">';
+  hospitals.forEach(function(h) {
+    var spec = h.specialties.length ? ' — ' + h.specialties.slice(0,2).join(', ') : '';
+    sendHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ')' + spec + '</option>';
+  });
+  sendHtml += '</optgroup>';
+  // Extra community/rural hospitals for sending
+  if(extras.length) {
+    sendHtml += '<optgroup label="Community / Rural Hospitals">';
+    extras.forEach(function(e) {
+      sendHtml += '<option value="' + e.name + '">' + e.label + '</option>';
+    });
+    sendHtml += '</optgroup>';
+  }
+  // Scene locations
+  if(scenes.length) {
+    sendHtml += '<optgroup label="Scene / Rendezvous">';
+    scenes.forEach(function(s) {
+      sendHtml += '<option value="' + s.name + '">' + s.label + '</option>';
+    });
+    sendHtml += '</optgroup>';
+  }
+  var prevSend = sendSel.value;
+  sendSel.innerHTML = sendHtml;
+  if(prevSend) { for(var i=0;i<sendSel.options.length;i++){ if(sendSel.options[i].value===prevSend){sendSel.value=prevSend;break;} } }
+
+  // ── Build Receiving dropdown ──
+  var recvHtml = '<option value="">Select Receiving...</option>';
+  // Group hospitals by specialty level for receiving
+  var level1 = hospitals.filter(function(h){ return h.specialties.some(function(s){ return s.indexOf('Level I')>=0; }); });
+  var level2 = hospitals.filter(function(h){ return h.specialties.some(function(s){ return s.indexOf('Level II')>=0; }) && !h.specialties.some(function(s){ return s.indexOf('Level I')>=0; }); });
+  var peds = hospitals.filter(function(h){ return h.specialties.some(function(s){ return s.indexOf('Pediatric')>=0; }); });
+  var specialty = hospitals.filter(function(h){ return !h.specialties.some(function(s){ return s.indexOf('Level I')>=0 || s.indexOf('Level II')>=0 || s.indexOf('Pediatric')>=0; }) && h.specialties.length > 0; });
+  var other = hospitals.filter(function(h){ return h.specialties.length===0; });
+
+  if(level1.length) {
+    recvHtml += '<optgroup label="' + stateName + ' — Level I Trauma">';
+    level1.forEach(function(h) {
+      var spec = h.specialties.join(', ');
+      recvHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ') — ' + spec + '</option>';
+    });
+    recvHtml += '</optgroup>';
+  }
+  if(peds.length) {
+    recvHtml += '<optgroup label="' + stateName + ' — Pediatric">';
+    peds.forEach(function(h) {
+      recvHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ')</option>';
+    });
+    recvHtml += '</optgroup>';
+  }
+  if(level2.length) {
+    recvHtml += '<optgroup label="' + stateName + ' — Level II / Regional">';
+    level2.forEach(function(h) {
+      var spec = h.specialties.join(', ');
+      recvHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ') — ' + spec + '</option>';
+    });
+    recvHtml += '</optgroup>';
+  }
+  if(specialty.length) {
+    recvHtml += '<optgroup label="' + stateName + ' — Specialty">';
+    specialty.forEach(function(h) {
+      var spec = h.specialties.join(', ');
+      recvHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ') — ' + spec + '</option>';
+    });
+    recvHtml += '</optgroup>';
+  }
+  if(other.length) {
+    recvHtml += '<optgroup label="' + stateName + ' — Other">';
+    other.forEach(function(h) {
+      recvHtml += '<option value="' + h.name + '">' + h.name + ' (' + h.city + ')</option>';
+    });
+    recvHtml += '</optgroup>';
+  }
+  var prevRecv = recvSel.value;
+  recvSel.innerHTML = recvHtml;
+  if(prevRecv) { for(var i=0;i<recvSel.options.length;i++){ if(recvSel.options[i].value===prevRecv){recvSel.value=prevRecv;break;} } }
+
+  // Trigger distance recalc
+  tlFacilityChange();
+}
+
+// ── Route Map with Diversion Hospitals ──
+function tlRenderRouteMap() {
+  var mapPanel = document.getElementById('tlRouteMapPanel');
+  var canvas = document.getElementById('tlRouteMapCanvas');
+  if(!mapPanel || !canvas || !_tlSelectedState) { if(mapPanel) mapPanel.style.display='none'; return; }
+
+  var sendSel = document.getElementById('tlSendingFacility');
+  var recvSel = document.getElementById('tlReceivingFacility');
+  var sendVal = sendSel ? sendSel.value : '';
+  var recvVal = recvSel ? recvSel.value : '';
+
+  if(!sendVal || !recvVal) { mapPanel.style.display='none'; return; }
+
+  // Find coordinates for sending
+  var sendCoords = null;
+  var hospitals = STATE_HOSPITALS[_tlSelectedState] || [];
+  for(var i=0;i<hospitals.length;i++) {
+    if(hospitals[i].name === sendVal) { sendCoords = {lat:hospitals[i].lat, lon:hospitals[i].lon}; break; }
+  }
+  if(!sendCoords && typeof facFindFacCoords==='function') sendCoords = facFindFacCoords(sendVal);
+  if(!sendCoords && typeof facFindCoords==='function') sendCoords = facFindCoords(sendVal);
+
+  // Find coordinates for receiving
+  var recvCoords = null;
+  for(var i=0;i<hospitals.length;i++) {
+    if(hospitals[i].name === recvVal) { recvCoords = {lat:hospitals[i].lat, lon:hospitals[i].lon}; break; }
+  }
+  if(!recvCoords && typeof facFindFacCoords==='function') recvCoords = facFindFacCoords(recvVal);
+  if(!recvCoords && typeof facFindCoords==='function') recvCoords = facFindCoords(recvVal);
+
+  if(!sendCoords || !recvCoords) { mapPanel.style.display='none'; return; }
+
+  mapPanel.style.display = 'block';
+
+  // Get all state hospitals for diversion markers (exclude send/recv)
+  var diversionHospitals = hospitals.filter(function(h) {
+    return h.name !== sendVal && h.name !== recvVal;
+  }).map(function(h) {
+    var dist = facHaversine(sendCoords.lat, sendCoords.lon, h.lat, h.lon);
+    var distRecv = facHaversine(recvCoords.lat, recvCoords.lon, h.lat, h.lon);
+    return {name:h.name, city:h.city, lat:h.lat, lon:h.lon, specialties:h.specialties, distFromSend:dist, distFromRecv:distRecv};
+  });
+
+  // Find bounding box of route + nearby diversions
+  var routeDist = facHaversine(sendCoords.lat, sendCoords.lon, recvCoords.lat, recvCoords.lon);
+  var nearbyRadius = Math.max(routeDist * 0.8, 30); // Show diversions within 80% of route distance or 30mi
+
+  var nearby = diversionHospitals.filter(function(h) {
+    // Show hospitals near the route corridor
+    var midLat = (sendCoords.lat + recvCoords.lat) / 2;
+    var midLon = (sendCoords.lon + recvCoords.lon) / 2;
+    var distFromMid = facHaversine(midLat, midLon, h.lat, h.lon);
+    return distFromMid <= nearbyRadius;
+  }).sort(function(a,b) { return a.distFromSend - b.distFromSend; }).slice(0, 12);
+
+  // All points for bounding box
+  var allPts = [{lat:sendCoords.lat, lon:sendCoords.lon}, {lat:recvCoords.lat, lon:recvCoords.lon}];
+  nearby.forEach(function(h) { allPts.push({lat:h.lat, lon:h.lon}); });
+
+  var minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
+  allPts.forEach(function(p) {
+    if(p.lat < minLat) minLat = p.lat;
+    if(p.lat > maxLat) maxLat = p.lat;
+    if(p.lon < minLon) minLon = p.lon;
+    if(p.lon > maxLon) maxLon = p.lon;
+  });
+
+  // Add padding
+  var latPad = (maxLat - minLat) * 0.15 || 0.05;
+  var lonPad = (maxLon - minLon) * 0.15 || 0.05;
+  minLat -= latPad; maxLat += latPad;
+  minLon -= lonPad; maxLon += lonPad;
+
+  // Set canvas resolution
+  var container = document.getElementById('tlRouteMapContainer');
+  var w = container.offsetWidth;
+  var h2 = container.offsetHeight;
+  canvas.width = w * 2;
+  canvas.height = h2 * 2;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h2 + 'px';
+
+  var ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+
+  // Clear
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(0, 0, w, h2);
+
+  // Coordinate transform functions
+  function toX(lon) { return ((lon - minLon) / (maxLon - minLon)) * (w - 40) + 20; }
+  function toY(lat) { return h2 - (((lat - minLat) / (maxLat - minLat)) * (h2 - 40) + 20); }
+
+  // Draw grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,.04)';
+  ctx.lineWidth = 0.5;
+  for(var gi=0;gi<5;gi++) {
+    var gy = 20 + gi * (h2-40)/4;
+    ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(w,gy); ctx.stroke();
+    var gx = 20 + gi * (w-40)/4;
+    ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,h2); ctx.stroke();
+  }
+
+  // Draw route line (dashed)
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = 'rgba(0,212,245,.6)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(toX(sendCoords.lon), toY(sendCoords.lat));
+  ctx.lineTo(toX(recvCoords.lon), toY(recvCoords.lat));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw route arrow
+  var ax = toX(recvCoords.lon), ay = toY(recvCoords.lat);
+  var bx = toX(sendCoords.lon), by = toY(sendCoords.lat);
+  var angle = Math.atan2(ay - by, ax - bx);
+  var arrLen = 12;
+  ctx.fillStyle = 'rgba(0,212,245,.8)';
+  ctx.beginPath();
+  ctx.moveTo(ax, ay);
+  ctx.lineTo(ax - arrLen * Math.cos(angle - 0.4), ay - arrLen * Math.sin(angle - 0.4));
+  ctx.lineTo(ax - arrLen * Math.cos(angle + 0.4), ay - arrLen * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+
+  // Draw diversion hospitals
+  nearby.forEach(function(dh) {
+    var dx = toX(dh.lon), dy = toY(dh.lat);
+    // Diversion line to route (faint)
+    ctx.strokeStyle = 'rgba(250,204,21,.12)';
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([2,3]);
+    ctx.beginPath(); ctx.moveTo(dx,dy); ctx.lineTo(toX(recvCoords.lon),toY(recvCoords.lat)); ctx.stroke();
+    ctx.setLineDash([]);
+    // Dot
+    ctx.beginPath();
+    ctx.arc(dx, dy, 5, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(250,204,21,.7)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(250,204,21,.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Label
+    ctx.font = '8px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(250,204,21,.85)';
+    var label = dh.city || dh.name.split('(')[0].trim();
+    if(label.length > 18) label = label.substring(0,16) + '..';
+    ctx.fillText(label, dx + 8, dy + 3);
+    // Distance from sending
+    ctx.font = '7px -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba(250,204,21,.5)';
+    ctx.fillText(Math.round(dh.distFromSend) + ' mi', dx + 8, dy + 12);
+  });
+
+  // Draw sending facility (green)
+  var sx = toX(sendCoords.lon), sy = toY(sendCoords.lat);
+  ctx.beginPath();
+  ctx.arc(sx, sy, 8, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(52,211,153,.9)';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // Pulse ring
+  ctx.beginPath();
+  ctx.arc(sx, sy, 13, 0, Math.PI*2);
+  ctx.strokeStyle = 'rgba(52,211,153,.25)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // Label
+  ctx.font = 'bold 9px -apple-system, sans-serif';
+  ctx.fillStyle = '#34d399';
+  var sendLabel = sendVal.split('—')[0].split('(')[0].trim();
+  if(sendLabel.length > 22) sendLabel = sendLabel.substring(0,20) + '..';
+  ctx.fillText('SEND: ' + sendLabel, sx + 14, sy - 4);
+
+  // Draw receiving facility (red)
+  var rx = toX(recvCoords.lon), ry = toY(recvCoords.lat);
+  ctx.beginPath();
+  ctx.arc(rx, ry, 8, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(248,113,113,.9)';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(rx, ry, 13, 0, Math.PI*2);
+  ctx.strokeStyle = 'rgba(248,113,113,.25)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.font = 'bold 9px -apple-system, sans-serif';
+  ctx.fillStyle = '#f87171';
+  var recvLabel = recvVal.split('—')[0].split('(')[0].trim();
+  if(recvLabel.length > 22) recvLabel = recvLabel.substring(0,20) + '..';
+  ctx.fillText('RECV: ' + recvLabel, rx + 14, ry - 4);
+
+  // Route distance label at midpoint
+  var mx = (sx + rx) / 2, my = (sy + ry) / 2;
+  ctx.font = 'bold 10px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(0,212,245,.9)';
+  var routeLabel = Math.round(routeDist) + ' mi';
+  var helo = typeof tlGetHeloSpeed==='function' ? tlGetHeloSpeed() : {mph:161};
+  var flightMin = Math.round(routeDist / helo.mph * 60);
+  routeLabel += ' | ~' + flightMin + ' min flight';
+  var tw = ctx.measureText(routeLabel).width;
+  ctx.fillStyle = 'rgba(15,23,42,.85)';
+  ctx.fillRect(mx - tw/2 - 6, my - 16, tw + 12, 20);
+  ctx.strokeStyle = 'rgba(0,212,245,.3)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(mx - tw/2 - 6, my - 16, tw + 12, 20);
+  ctx.fillStyle = 'rgba(0,212,245,.95)';
+  ctx.font = 'bold 10px -apple-system, sans-serif';
+  ctx.fillText(routeLabel, mx - tw/2, my - 2);
+}
+
+function tlToggleMapFullscreen() {
+  var container = document.getElementById('tlRouteMapContainer');
+  if(!container) return;
+  if(container.style.height === '340px' || container.style.height === '') {
+    container.style.height = '520px';
+  } else {
+    container.style.height = '340px';
+  }
+  tlRenderRouteMap();
 }
 
 // Backward compat alias
@@ -27709,7 +28004,14 @@ function tlFacilityChange(){
   var sendCoords=typeof facFindFacCoords==='function'?facFindFacCoords(sendVal):null;
   var recvCoords=typeof facFindFacCoords==='function'?facFindFacCoords(recvVal):null;
 
-  if(!sendCoords||!recvCoords){panel.style.display='none';return;}
+  // Fallback: check STATE_HOSPITALS for coords
+  if(!sendCoords || !recvCoords) {
+    var allSH = (STATE_HOSPITALS.IN||[]).concat(STATE_HOSPITALS.FL||[]);
+    if(!sendCoords) { for(var si=0;si<allSH.length;si++){ if(allSH[si].name===sendVal){sendCoords={lat:allSH[si].lat,lon:allSH[si].lon};break;} } }
+    if(!recvCoords) { for(var ri=0;ri<allSH.length;ri++){ if(allSH[ri].name===recvVal){recvCoords={lat:allSH[ri].lat,lon:allSH[ri].lon};break;} } }
+  }
+
+  if(!sendCoords||!recvCoords){panel.style.display='none'; if(typeof tlRenderRouteMap==='function') tlRenderRouteMap(); return;}
 
   var straightMi=facHaversine(sendCoords.lat,sendCoords.lon,recvCoords.lat,recvCoords.lon);
   var driveMi=straightMi*1.35;
@@ -27742,6 +28044,9 @@ function tlFacilityChange(){
 
   // Trigger bedside distance calc too
   if(typeof bsCalcDist==='function') setTimeout(bsCalcDist,200);
+
+  // Render transport route map with diversion hospitals
+  if(typeof tlRenderRouteMap==='function') tlRenderRouteMap();
 }
 
 // ── ETA Banner — only shows after wheels up stamped ──────────
