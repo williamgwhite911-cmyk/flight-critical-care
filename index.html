@@ -4320,6 +4320,25 @@ mark.dx-hl{
 }
 .tl-reset-btn:hover{ background:rgba(248,113,113,.2); }
 
+.master-reset-btn{
+  font-size:.7rem;
+  font-weight:800;
+  background:rgba(220,38,38,.15);
+  border:2px solid rgba(220,38,38,.6);
+  color:#ef4444;
+  border-radius:8px;
+  padding:6px 14px;
+  cursor:pointer;
+  transition:background .15s, transform .1s;
+  white-space:nowrap;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.master-reset-btn:hover{
+  background:rgba(220,38,38,.35);
+  transform:scale(1.03);
+}
+
 /* ── Progress bar ── */
 .tl-progress-wrap{
   height:5px;
@@ -4952,7 +4971,8 @@ textarea.bs-field{resize:vertical}
       </div>
       <div class="tl-header-actions">
         <button class="tl-copy-btn" onclick="tlSaveToLog(this)" type="button">&#128190; Save to Log</button>
-        <button class="tl-reset-btn" onclick="tlResetConfirm()" type="button">&#8635; Reset</button>
+        <button class="tl-reset-btn" onclick="tlResetConfirm()" type="button">&#8635; Reset Timeline</button>
+        <button class="master-reset-btn" onclick="masterResetConfirm()" type="button">&#9888; RESET ALL DATA</button>
       </div>
     </div>
 
@@ -5283,6 +5303,16 @@ textarea.bs-field{resize:vertical}
       <span>Reset all timestamps?</span>
       <button class="tl-reset-yes" onclick="tlReset()" type="button">Yes, reset</button>
       <button class="tl-reset-no" onclick="document.getElementById('tlResetConfirmBox').style.display='none'" type="button">Cancel</button>
+    </div>
+
+    <!-- Master Reset Confirmation -->
+    <div id="masterResetConfirmBox" style="display:none;margin-top:10px;padding:16px 18px;background:rgba(239,68,68,.12);border:2px solid rgba(239,68,68,.7);border-radius:12px;text-align:center">
+      <div style="font-size:1.1rem;font-weight:700;color:#f87171;margin-bottom:6px">&#9888; ERASE ALL PATIENT DATA?</div>
+      <div style="font-size:.78rem;color:#fca5a5;margin-bottom:14px;line-height:1.4">This will clear the Timeline, Patient Info, Vitals, Medications, Vent Settings, Handover Form, Flight Data, Notes, and all other sections. This action cannot be undone.</div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button onclick="masterResetExecute()" type="button" style="padding:10px 28px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;letter-spacing:.5px">YES — ERASE EVERYTHING</button>
+        <button onclick="document.getElementById('masterResetConfirmBox').style.display='none'" type="button" style="padding:10px 22px;background:rgba(255,255,255,.08);color:var(--tx2);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:.85rem;cursor:pointer">Cancel</button>
+      </div>
     </div>
 
   </div>
@@ -27795,6 +27825,84 @@ function tlReset(){
   }catch(e){}
   var cb=document.getElementById('tlResetConfirmBox');if(cb)cb.style.display='none';
   tlRender();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MASTER RESET — erases ALL data in the entire app
+// ═══════════════════════════════════════════════════════════════════
+function masterResetConfirm(){
+  // Hide the timeline-only confirm if open
+  var tlBox=document.getElementById('tlResetConfirmBox');
+  if(tlBox) tlBox.style.display='none';
+  var el=document.getElementById('masterResetConfirmBox');
+  if(el) el.style.display=el.style.display==='none'?'block':'none';
+}
+
+function masterResetExecute(){
+  // 1) Reset the timeline (clears stamps, fields, panels, localStorage keys)
+  try{ tlReset(); }catch(e){ console.error('masterReset tlReset:',e); }
+
+  // 2) Clear all app data (patient info, meds, RSI, vent, photos, etc.)
+  try{ clearAllData(); }catch(e){ console.error('masterReset clearAllData:',e); }
+
+  // 3) Also clear handover-specific fields
+  try{
+    var hoPg=document.getElementById('pg-handover');
+    if(hoPg){
+      hoPg.querySelectorAll('input[type="text"],input[type="number"],input[type="time"],input[type="date"],textarea').forEach(function(el){ el.value=''; });
+      hoPg.querySelectorAll('select').forEach(function(el){ el.selectedIndex=0; });
+      hoPg.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(function(el){ el.checked=false; });
+    }
+  }catch(e){}
+
+  // 4) Clear notes
+  try{
+    var notesPg=document.getElementById('pg-notes');
+    if(notesPg){
+      notesPg.querySelectorAll('input[type="text"],textarea').forEach(function(el){ el.value=''; });
+    }
+  }catch(e){}
+
+  // 5) Clear bedside pumps and infusion tracker
+  try{
+    if(window._bs){ _bs.pumps=[]; _bs.lastPumpExtraction=null; }
+    var bsPG=document.getElementById('bsPumpGrid'); if(bsPG) bsPG.innerHTML='';
+    if(window._infRows){ window._infRows=[]; if(typeof infRender==='function') infRender(); }
+  }catch(e){}
+
+  // 6) Clear the handoff form container specifically
+  try{
+    var hfC=document.getElementById('hoHandoffFormContainer');
+    if(hfC){
+      hfC.querySelectorAll('input[type="text"],input[type="number"],input[type="time"],textarea').forEach(function(el){ el.value=''; });
+      hfC.querySelectorAll('select').forEach(function(el){ el.selectedIndex=0; });
+      hfC.querySelectorAll('input[type="checkbox"]').forEach(function(el){ el.checked=false; });
+    }
+  }catch(e){}
+
+  // 7) Clear remaining localStorage
+  try{
+    var keysToRemove=[];
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i);
+      if(k&&k!=='icu_anthropic_api_key_v1'&&k!=='icu_proxy_url'&&k!=='icu_crew_roster'){
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(function(k){ try{localStorage.removeItem(k);}catch(e){} });
+  }catch(e){}
+
+  // 8) Hide confirmation box
+  var mcb=document.getElementById('masterResetConfirmBox');
+  if(mcb) mcb.style.display='none';
+
+  // 9) Navigate to Patient Info tab and flash confirmation
+  try{
+    var piBtn=document.querySelector('.nav-tab');
+    showPage('info',piBtn);
+  }catch(e){}
+
+  dbFlash('ALL DATA ERASED — Fresh chart ready','#ef4444');
 }
 
 // ── Copy log to clipboard ─────────────────────────────────────────
