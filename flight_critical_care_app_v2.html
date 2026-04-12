@@ -5210,15 +5210,14 @@ textarea.bs-field{resize:vertical}
       </select>
     </div>
 
-    <!-- Recommended Facility Based on Complaint (populated by JS) -->
-    <div id="tlRecommendedFacility" style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:9px;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.25)">
-      <div style="font-size:.62rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Recommended Receiving — Based on Complaint</div>
-      <div id="tlRecommendedList" style="font-size:.78rem;color:var(--tx1);line-height:1.7"></div>
-    </div>
-
-    <!-- ── Recommended Receiving Hospitals (State-Based) ── -->
+    <!-- ── Recommended Receiving Hospitals (Merged: Complaint + State) ── -->
     <div style="margin-bottom:14px;padding:14px;border-radius:10px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
       <div style="font-size:.68rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">🏥 Recommended Receiving Hospitals</div>
+      <!-- Complaint-based recommendation (shows inside merged panel) -->
+      <div id="tlRecommendedFacility" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:8px;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.25)">
+        <div style="font-size:.58rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Based on Chief Complaint</div>
+        <div id="tlRecommendedList" style="font-size:.75rem;color:var(--tx1);line-height:1.6"></div>
+      </div>
       <div style="margin-bottom:10px">
         <div class="flbl">Filter by Specialty</div>
         <select id="tlStateSpecialtyFilter" onchange="tlStateHospitalRender()" style="width:100%">
@@ -27353,6 +27352,11 @@ function tlSelectState(state) {
       html += '<option value="Stat Flight 6">Stat Flight 6</option>';
       html += '<option value="Stat Flight 7">Stat Flight 7</option>';
       html += '</optgroup>';
+      html += '<optgroup label="Trauma Star">';
+      html += '<option value="Trauma Star 1">Trauma Star 1</option>';
+      html += '<option value="Trauma Star 2">Trauma Star 2</option>';
+      html += '<option value="Trauma Star 3">Trauma Star 3</option>';
+      html += '</optgroup>';
     } else if(state === 'FL') {
       html += '<optgroup label="Trauma Star">';
       html += '<option value="Trauma Star 1">Trauma Star 1</option>';
@@ -27368,6 +27372,23 @@ function tlSelectState(state) {
       }
     }
     tlAircraftSync();
+  }
+
+  // Auto-select helicopter type based on state
+  var heloSel = document.getElementById('tlHeloType');
+  if(heloSel) {
+    if(state === 'IN') {
+      // Auto-select Bell 407 for Indiana/StatFlight
+      for(var h=0;h<heloSel.options.length;h++){
+        if(heloSel.options[h].value==='Bell 407'){ heloSel.value='Bell 407'; break; }
+      }
+    } else if(state === 'FL') {
+      // Auto-select AW139 for Florida/Trauma Star
+      for(var h=0;h<heloSel.options.length;h++){
+        if(heloSel.options[h].value==='AW139'){ heloSel.value='AW139'; break; }
+      }
+    }
+    if(typeof tlHeloTypeSync==='function') tlHeloTypeSync();
   }
 
   // Render hospital list for the selected state
