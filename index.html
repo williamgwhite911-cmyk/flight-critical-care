@@ -5196,6 +5196,39 @@ textarea.bs-field{resize:vertical}
       <div id="tlRecommendedList" style="font-size:.78rem;color:var(--tx1);line-height:1.7"></div>
     </div>
 
+    <!-- ── State-Based Receiving Hospital Guide ── -->
+    <div style="margin-bottom:14px;padding:14px;border-radius:10px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <div style="font-size:.68rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.07em">🏥 Recommended Receiving Hospitals by State</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button type="button" id="tlStateIN" onclick="tlStateHospitalSelect('IN')"
+          style="font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌽 Indiana</button>
+        <button type="button" id="tlStateFL" onclick="tlStateHospitalSelect('FL')"
+          style="font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌴 Florida</button>
+      </div>
+      <div style="margin-bottom:10px">
+        <div class="flbl">Filter by Specialty</div>
+        <select id="tlStateSpecialtyFilter" onchange="tlStateHospitalRender()" style="width:100%">
+          <option value="">All Specialties</option>
+          <option value="Level I Trauma">Level I Trauma</option>
+          <option value="Level II Trauma">Level II Trauma</option>
+          <option value="Pediatric Trauma">Pediatric Trauma</option>
+          <option value="Burn Center">Burn Center</option>
+          <option value="Cardiac/STEMI">Cardiac / STEMI</option>
+          <option value="Stroke">Comprehensive Stroke</option>
+          <option value="Neuro/Spine">Neurosurgery / Spine</option>
+          <option value="ECMO">ECMO</option>
+          <option value="OB/NICU">OB / NICU</option>
+          <option value="Hyperbaric">Hyperbaric / Dive Medicine</option>
+          <option value="Toxicology">Toxicology / Poison Control</option>
+        </select>
+      </div>
+      <div id="tlStateHospitalPanel">
+        <div style="text-align:center;padding:16px;color:var(--tx2);font-size:.72rem">Select a state above to view recommended hospitals ↑</div>
+      </div>
+    </div>
+
     <!-- Scene Call Panel -->
     <div id="tlScenePanel" style="display:none;background:var(--s1);border:1px solid var(--bd1);border-radius:9px;padding:14px;margin-bottom:14px">
       <div class="slbl" style="margin-bottom:12px">Scene Call Details</div>
@@ -27220,6 +27253,175 @@ var SPECIALTY_FACILITIES = {
   envenomation:  [{name:'IU Health Methodist Hospital',type:'Toxicology + Antivenom',lat:39.7870,lon:-86.1752},{name:'Riley Hospital for Children (if pediatric)',type:'Pediatric Toxicology',lat:39.7830,lon:-86.1770}],
   electrocution: [{name:'Eskenazi Health (Fairbanks Burn Center)',type:'Burn Center + Electrical Injury',lat:39.7850,lon:-86.1830},{name:'IU Health Methodist Hospital',type:'Trauma + Cardiac Monitoring',lat:39.7870,lon:-86.1752}]
 };
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE-BASED RECEIVING HOSPITAL GUIDE
+// ═══════════════════════════════════════════════════════════════════
+var _tlSelectedState = null;
+
+var STATE_HOSPITALS = {
+  IN: [
+    // Level I Trauma — Indianapolis
+    {name:'Ascension St. Vincent Indianapolis (86th St)', city:'Indianapolis', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine'], lat:39.8772, lon:-86.2248},
+    {name:'IU Health Methodist Hospital', city:'Indianapolis', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine','ECMO','Hyperbaric','Toxicology'], lat:39.7870, lon:-86.1752},
+    {name:'Eskenazi Health — Smith Level I Shock Trauma', city:'Indianapolis', specialties:['Level I Trauma','Burn Center','Toxicology'], lat:39.7850, lon:-86.1830},
+    // Pediatric Trauma — Indianapolis
+    {name:'Riley Hospital for Children at IU Health', city:'Indianapolis', specialties:['Pediatric Trauma','Burn Center','OB/NICU','Toxicology'], lat:39.7830, lon:-86.1770},
+    {name:'Peyton Manning Children\'s Hospital (86th St)', city:'Indianapolis', specialties:['Pediatric Trauma','OB/NICU'], lat:39.8772, lon:-86.2248},
+    // Heart Centers
+    {name:'Franciscan Health Indianapolis', city:'Indianapolis', specialties:['Cardiac/STEMI'], lat:39.6521, lon:-86.0727},
+    // Regional Hospitals
+    {name:'IU Health Arnett Hospital', city:'Lafayette', specialties:['Level II Trauma','Stroke'], lat:40.4195, lon:-86.8587},
+    {name:'Franciscan Health Lafayette', city:'Lafayette', specialties:['Level II Trauma','Cardiac/STEMI'], lat:40.3903, lon:-86.8476},
+    {name:'IU Health Bloomington Hospital', city:'Bloomington', specialties:['Level II Trauma','Stroke'], lat:39.1536, lon:-86.4956},
+    {name:'Deaconess Midtown Hospital', city:'Evansville', specialties:['Level I Trauma','Stroke','Cardiac/STEMI'], lat:37.9727, lon:-87.5586},
+    {name:'Parkview Regional Medical Center', city:'Fort Wayne', specialties:['Level I Trauma','Stroke','Cardiac/STEMI','Neuro/Spine'], lat:41.0436, lon:-85.0912},
+    {name:'IU Health Ball Memorial Hospital', city:'Muncie', specialties:['Level II Trauma','Stroke'], lat:40.1972, lon:-85.3771},
+    {name:'St. Vincent Evansville', city:'Evansville', specialties:['Cardiac/STEMI','Stroke'], lat:37.9916, lon:-87.5367},
+    {name:'Community Hospital North', city:'Indianapolis', specialties:['Level II Trauma','Cardiac/STEMI'], lat:39.9109, lon:-86.0557},
+    {name:'IU Health West Hospital', city:'Avon', specialties:['Level II Trauma'], lat:39.7604, lon:-86.3906},
+    {name:'Reid Health', city:'Richmond', specialties:['Level II Trauma','Stroke'], lat:39.8365, lon:-84.8912},
+    {name:'Terre Haute Regional Hospital', city:'Terre Haute', specialties:['Level II Trauma','Cardiac/STEMI'], lat:39.4416, lon:-87.3716},
+    {name:'Union Hospital', city:'Terre Haute', specialties:['Level II Trauma','Stroke'], lat:39.4698, lon:-87.3895},
+    // Burn Centers
+    {name:'Eskenazi Health — Fairbanks Burn Center', city:'Indianapolis', specialties:['Burn Center'], lat:39.7850, lon:-86.1830},
+    {name:'Riley Hospital — Pediatric Burn Center', city:'Indianapolis', specialties:['Burn Center','Pediatric Trauma'], lat:39.7830, lon:-86.1770},
+    // OB/NICU
+    {name:'IU Health Methodist — Maternal-Fetal Medicine', city:'Indianapolis', specialties:['OB/NICU'], lat:39.7870, lon:-86.1752},
+    {name:'Ascension St. Vincent Women\'s Hospital', city:'Indianapolis', specialties:['OB/NICU'], lat:39.8772, lon:-86.2248}
+  ],
+  FL: [
+    // Miami-Dade — Level I Trauma
+    {name:'Jackson Memorial — Ryder Trauma Center', city:'Miami', specialties:['Level I Trauma','Burn Center','Neuro/Spine','ECMO','Toxicology'], lat:25.7900, lon:-80.2101},
+    {name:'Kendall Regional Medical Center', city:'Miami', specialties:['Level I Trauma','Burn Center'], lat:25.6826, lon:-80.3446},
+    // Miami-Dade — Pediatric
+    {name:'Nicklaus Children\'s Hospital', city:'Miami', specialties:['Pediatric Trauma','OB/NICU','Burn Center'], lat:25.7304, lon:-80.2398},
+    {name:'Holtz Children\'s Hospital at Jackson', city:'Miami', specialties:['Pediatric Trauma','OB/NICU','ECMO'], lat:25.7900, lon:-80.2101},
+    // Miami-Dade — Level II
+    {name:'Baptist Hospital of Miami', city:'Miami', specialties:['Level II Trauma','Cardiac/STEMI','Stroke'], lat:25.6918, lon:-80.3378},
+    {name:'Jackson South Medical Center', city:'Miami', specialties:['Level II Trauma'], lat:25.5997, lon:-80.3510},
+    {name:'Aventura Hospital & Medical Center', city:'Aventura', specialties:['Level II Trauma','Cardiac/STEMI'], lat:25.9566, lon:-80.1377},
+    // Miami-Dade — Specialty
+    {name:'University of Miami Hospital (UHealth Tower)', city:'Miami', specialties:['Stroke','Neuro/Spine','ECMO','Cardiac/STEMI'], lat:25.7898, lon:-80.2108},
+    {name:'Mount Sinai Medical Center', city:'Miami Beach', specialties:['Cardiac/STEMI','Stroke'], lat:25.8152, lon:-80.1340},
+    {name:'Mercy Hospital (HCA Florida)', city:'Miami', specialties:['Hyperbaric','Cardiac/STEMI'], lat:25.7279, lon:-80.2260},
+    // Monroe County / Keys
+    {name:'Lower Keys Medical Center', city:'Key West', specialties:['Level II Trauma'], lat:24.5657, lon:-81.7418},
+    {name:'Fishermen\'s Hospital', city:'Marathon', specialties:[], lat:24.7130, lon:-81.0923},
+    {name:'Mariners Hospital', city:'Tavernier', specialties:[], lat:25.0068, lon:-80.5170},
+    // Broward County
+    {name:'Broward Health Medical Center', city:'Fort Lauderdale', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine','Burn Center'], lat:26.1399, lon:-80.1208},
+    {name:'Memorial Regional Hospital', city:'Hollywood', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Burn Center'], lat:26.0270, lon:-80.1735},
+    {name:'Joe DiMaggio Children\'s Hospital', city:'Hollywood', specialties:['Pediatric Trauma','OB/NICU'], lat:26.0270, lon:-80.1735},
+    // Palm Beach County
+    {name:'St. Mary\'s Medical Center', city:'West Palm Beach', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine'], lat:26.7205, lon:-80.0678},
+    {name:'Delray Medical Center', city:'Delray Beach', specialties:['Level I Trauma','Cardiac/STEMI','Stroke'], lat:26.4466, lon:-80.1168},
+    {name:'Palms West Hospital', city:'Loxahatchee', specialties:['Level II Trauma'], lat:26.6981, lon:-80.2573},
+    // Central Florida
+    {name:'Orlando Regional Medical Center', city:'Orlando', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine','Burn Center','ECMO'], lat:28.5369, lon:-81.3773},
+    {name:'Arnold Palmer Hospital for Children', city:'Orlando', specialties:['Pediatric Trauma','OB/NICU'], lat:28.5362, lon:-81.3786},
+    // Tampa Bay
+    {name:'Tampa General Hospital', city:'Tampa', specialties:['Level I Trauma','Cardiac/STEMI','Stroke','Neuro/Spine','Burn Center','ECMO'], lat:27.9372, lon:-82.4556},
+    {name:'All Children\'s Hospital (Johns Hopkins)', city:'St. Petersburg', specialties:['Pediatric Trauma','OB/NICU'], lat:27.7775, lon:-82.6780},
+    // Jacksonville
+    {name:'UF Health Jacksonville', city:'Jacksonville', specialties:['Level I Trauma','Stroke','Neuro/Spine','ECMO'], lat:30.3570, lon:-81.6538},
+    {name:'Wolfson Children\'s Hospital', city:'Jacksonville', specialties:['Pediatric Trauma','OB/NICU'], lat:30.3548, lon:-81.6534}
+  ]
+};
+
+function tlStateHospitalSelect(state) {
+  _tlSelectedState = state;
+  // Style the active button
+  var btnIN = document.getElementById('tlStateIN');
+  var btnFL = document.getElementById('tlStateFL');
+  var activeStyle = 'font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1.5px solid var(--cyan);background:rgba(0,212,245,.15);color:var(--cyan);transition:all .15s';
+  var dimStyle = 'font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s';
+  if(btnIN) btnIN.style.cssText = state==='IN' ? activeStyle : dimStyle;
+  if(btnFL) btnFL.style.cssText = state==='FL' ? activeStyle : dimStyle;
+  tlStateHospitalRender();
+}
+
+function tlStateHospitalRender() {
+  var panel = document.getElementById('tlStateHospitalPanel');
+  if(!panel || !_tlSelectedState) return;
+  var hospitals = STATE_HOSPITALS[_tlSelectedState];
+  if(!hospitals || !hospitals.length) { panel.innerHTML='<div style="text-align:center;padding:16px;color:var(--tx2);font-size:.72rem">No hospitals found</div>'; return; }
+
+  // Filter by specialty
+  var filterSel = document.getElementById('tlStateSpecialtyFilter');
+  var filter = filterSel ? filterSel.value : '';
+  var filtered = filter ? hospitals.filter(function(h){ return h.specialties.indexOf(filter) >= 0; }) : hospitals;
+
+  if(!filtered.length) {
+    panel.innerHTML='<div style="text-align:center;padding:12px;color:var(--amber);font-size:.72rem">No hospitals match this specialty in ' + (_tlSelectedState==='IN'?'Indiana':'Florida') + '</div>';
+    return;
+  }
+
+  // Get origin for distance calculations
+  var origin = null;
+  var helo = typeof tlGetHeloSpeed==='function' ? tlGetHeloSpeed() : {mph:161, label:'Default 140 kts'};
+
+  // Try sending facility, rendezvous, or scene location
+  var rvSel = document.getElementById('tlRendezvousPoint');
+  if(rvSel && rvSel.value && typeof TL_RENDEZVOUS_COORDS!=='undefined') origin = TL_RENDEZVOUS_COORDS[rvSel.value];
+  if(!origin) {
+    var sendSel = document.getElementById('tlSendingFacility');
+    var sendVal = sendSel ? sendSel.value : '';
+    if(sendVal && typeof facFindCoords==='function') origin = facFindCoords(sendVal);
+  }
+
+  // Calculate distances and sort by closest
+  var results = filtered.map(function(h) {
+    var dist = origin ? facHaversine(origin.lat, origin.lon, h.lat, h.lon) : null;
+    var driveMi = dist ? dist * 1.35 : null;
+    var driveMin = dist ? Math.round(driveMi / 55 * 60) : null;
+    var flightMin = dist ? Math.round(dist / helo.mph * 60) : null;
+    return {name:h.name, city:h.city, specialties:h.specialties, dist:dist, driveMi:driveMi, driveMin:driveMin, flightMin:flightMin};
+  });
+
+  if(origin) results.sort(function(a,b){ return a.dist - b.dist; });
+
+  var stateName = _tlSelectedState==='IN' ? 'Indiana' : 'Florida';
+  var stateEmoji = _tlSelectedState==='IN' ? '🌽' : '🌴';
+
+  var html = '<div style="font-size:.6rem;font-weight:700;color:var(--cyan);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">' +
+    stateEmoji + ' ' + stateName + ' — ' + filtered.length + ' hospital' + (filtered.length!==1?'s':'') +
+    (filter ? ' (' + filter + ')' : '') + '</div>';
+
+  html += results.map(function(r, i) {
+    var isClosest = i === 0 && origin;
+    var badge = isClosest ? '<span style="font-size:.52rem;padding:1px 6px;border-radius:3px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:#34d399;font-weight:700;margin-left:6px">CLOSEST</span>' : '';
+    var highlight = isClosest ? 'border-left:3px solid #34d399;padding-left:8px;' : 'padding-left:11px;';
+
+    var specHtml = r.specialties.map(function(s){
+      var col = s.indexOf('Level I')>=0 ? '#f87171' : s.indexOf('Pediatric')>=0 ? '#c084fc' : s.indexOf('Burn')>=0 ? '#fbbf24' :
+        s.indexOf('Cardiac')>=0 ? '#f472b6' : s.indexOf('Stroke')>=0 ? '#60a5fa' : s.indexOf('ECMO')>=0 ? '#34d399' : 'var(--tx2)';
+      return '<span style="font-size:.5rem;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:'+col+';font-weight:600">'+s+'</span>';
+    }).join(' ');
+
+    var distHtml = '';
+    if(r.dist !== null) {
+      distHtml = '<div style="display:flex;gap:12px;margin-top:3px;font-size:.62rem">' +
+        '<span style="color:var(--cyan)"><strong>' + r.driveMi.toFixed(1) + '</strong> mi</span>' +
+        '<span style="color:var(--tx2)">' + r.driveMin + ' min ground</span>' +
+        '<span style="color:#34d399">' + r.flightMin + ' min flight</span>' +
+      '</div>';
+    } else {
+      distHtml = '<div style="font-size:.55rem;color:var(--amber);margin-top:2px">Select sending facility above for distance</div>';
+    }
+
+    return '<div style="' + highlight + 'padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+      '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">' +
+        '<span style="font-size:.72rem;font-weight:700;color:var(--tx0)">' + r.name + '</span>' + badge +
+      '</div>' +
+      '<div style="font-size:.58rem;color:var(--tx2);margin-bottom:3px">' + r.city + '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:2px">' + specHtml + '</div>' +
+      distHtml +
+    '</div>';
+  }).join('');
+
+  panel.innerHTML = html;
+}
 
 function tlComplaintChange(){
   var sel=document.getElementById('tlChiefComplaint');
