@@ -4976,19 +4976,23 @@ textarea.bs-field{resize:vertical}
       </div>
     </div>
 
+    <!-- State Selection — drives aircraft + hospital lists -->
+    <div style="margin-bottom:14px">
+      <div class="flbl">Operating State</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="tlStateIN" onclick="tlSelectState('IN')"
+          style="font-size:.72rem;padding:10px 28px;border-radius:8px;cursor:pointer;font-weight:700;border:1.5px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌽 Indiana</button>
+        <button type="button" id="tlStateFL" onclick="tlSelectState('FL')"
+          style="font-size:.72rem;padding:10px 28px;border-radius:8px;cursor:pointer;font-weight:700;border:1.5px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌴 Florida</button>
+      </div>
+    </div>
+
     <!-- Aircraft & Transport Type Selection -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
       <div>
         <div class="flbl">Aircraft</div>
         <select id="tlAircraft" onchange="tlAircraftSync()" style="width:100%">
-          <option value="">Select Aircraft...</option>
-          <option value="Stat Flight 1">Stat Flight 1</option>
-          <option value="Stat Flight 2">Stat Flight 2</option>
-          <option value="Stat Flight 3">Stat Flight 3</option>
-          <option value="Stat Flight 4">Stat Flight 4</option>
-          <option value="Stat Flight 5">Stat Flight 5</option>
-          <option value="Stat Flight 6">Stat Flight 6</option>
-          <option value="Stat Flight 7">Stat Flight 7</option>
+          <option value="">Select state above first...</option>
         </select>
       </div>
       <div>
@@ -5106,6 +5110,7 @@ textarea.bs-field{resize:vertical}
           <optgroup label="Miami — Level II / Pediatric Trauma">
             <option value="Baptist Hospital of Miami">Baptist Hospital of Miami — Level II Trauma</option>
             <option value="Jackson South Medical Center">Jackson South — Level II Trauma</option>
+            <option value="Homestead Hospital (Baptist Health)">Homestead Hospital — Level II Trauma / Stroke / STEMI</option>
             <option value="HCA Florida Aventura Hospital">Aventura Hospital — Level II Trauma</option>
             <option value="Nicklaus Children's Hospital">Nicklaus Children's — Pediatric Trauma</option>
           </optgroup>
@@ -5190,23 +5195,15 @@ textarea.bs-field{resize:vertical}
       </select>
     </div>
 
-    <!-- Recommended Facility Based on Complaint -->
+    <!-- Recommended Facility Based on Complaint (populated by JS) -->
     <div id="tlRecommendedFacility" style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:9px;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.25)">
-      <div style="font-size:.62rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Recommended Receiving Facility</div>
+      <div style="font-size:.62rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Recommended Receiving — Based on Complaint</div>
       <div id="tlRecommendedList" style="font-size:.78rem;color:var(--tx1);line-height:1.7"></div>
     </div>
 
-    <!-- ── State-Based Receiving Hospital Guide ── -->
+    <!-- ── Recommended Receiving Hospitals (State-Based) ── -->
     <div style="margin-bottom:14px;padding:14px;border-radius:10px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-        <div style="font-size:.68rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.07em">🏥 Recommended Receiving Hospitals by State</div>
-      </div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-        <button type="button" id="tlStateIN" onclick="tlStateHospitalSelect('IN')"
-          style="font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌽 Indiana</button>
-        <button type="button" id="tlStateFL" onclick="tlStateHospitalSelect('FL')"
-          style="font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s">🌴 Florida</button>
-      </div>
+      <div style="font-size:.68rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">🏥 Recommended Receiving Hospitals</div>
       <div style="margin-bottom:10px">
         <div class="flbl">Filter by Specialty</div>
         <select id="tlStateSpecialtyFilter" onchange="tlStateHospitalRender()" style="width:100%">
@@ -5225,7 +5222,7 @@ textarea.bs-field{resize:vertical}
         </select>
       </div>
       <div id="tlStateHospitalPanel">
-        <div style="text-align:center;padding:16px;color:var(--tx2);font-size:.72rem">Select a state above to view recommended hospitals ↑</div>
+        <div style="text-align:center;padding:16px;color:var(--tx2);font-size:.72rem">Select a state at the top to view recommended hospitals</div>
       </div>
     </div>
 
@@ -27300,6 +27297,7 @@ var STATE_HOSPITALS = {
     // Miami-Dade — Level II
     {name:'Baptist Hospital of Miami', city:'Miami', specialties:['Level II Trauma','Cardiac/STEMI','Stroke'], lat:25.6918, lon:-80.3378},
     {name:'Jackson South Medical Center', city:'Miami', specialties:['Level II Trauma'], lat:25.5997, lon:-80.3510},
+    {name:'Homestead Hospital (Baptist Health)', city:'Homestead', specialties:['Level II Trauma','Cardiac/STEMI','Stroke'], lat:25.4687, lon:-80.4776},
     {name:'Aventura Hospital & Medical Center', city:'Aventura', specialties:['Level II Trauma','Cardiac/STEMI'], lat:25.9566, lon:-80.1377},
     // Miami-Dade — Specialty
     {name:'University of Miami Hospital (UHealth Tower)', city:'Miami', specialties:['Stroke','Neuro/Spine','ECMO','Cardiac/STEMI'], lat:25.7898, lon:-80.2108},
@@ -27329,17 +27327,59 @@ var STATE_HOSPITALS = {
   ]
 };
 
-function tlStateHospitalSelect(state) {
+// ── Master state selector — updates aircraft, hospitals, buttons ──
+function tlSelectState(state) {
   _tlSelectedState = state;
-  // Style the active button
+
+  // Style state buttons
   var btnIN = document.getElementById('tlStateIN');
   var btnFL = document.getElementById('tlStateFL');
-  var activeStyle = 'font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1.5px solid var(--cyan);background:rgba(0,212,245,.15);color:var(--cyan);transition:all .15s';
-  var dimStyle = 'font-size:.68rem;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:700;border:1px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s';
+  var activeStyle = 'font-size:.72rem;padding:10px 28px;border-radius:8px;cursor:pointer;font-weight:700;border:2px solid var(--cyan);background:rgba(0,212,245,.15);color:var(--cyan);transition:all .15s';
+  var dimStyle = 'font-size:.72rem;padding:10px 28px;border-radius:8px;cursor:pointer;font-weight:700;border:1.5px solid rgba(0,212,245,.3);background:transparent;color:var(--tx2);transition:all .15s';
   if(btnIN) btnIN.style.cssText = state==='IN' ? activeStyle : dimStyle;
   if(btnFL) btnFL.style.cssText = state==='FL' ? activeStyle : dimStyle;
+
+  // Update Aircraft dropdown based on state
+  var acSel = document.getElementById('tlAircraft');
+  if(acSel) {
+    var prevVal = acSel.value;
+    var html = '<option value="">Select Aircraft...</option>';
+    if(state === 'IN') {
+      html += '<optgroup label="StatFlight">';
+      html += '<option value="Stat Flight 1">Stat Flight 1</option>';
+      html += '<option value="Stat Flight 2">Stat Flight 2</option>';
+      html += '<option value="Stat Flight 3">Stat Flight 3</option>';
+      html += '<option value="Stat Flight 4">Stat Flight 4</option>';
+      html += '<option value="Stat Flight 5">Stat Flight 5</option>';
+      html += '<option value="Stat Flight 6">Stat Flight 6</option>';
+      html += '<option value="Stat Flight 7">Stat Flight 7</option>';
+      html += '</optgroup>';
+    } else if(state === 'FL') {
+      html += '<optgroup label="Trauma Star">';
+      html += '<option value="Trauma Star 1">Trauma Star 1</option>';
+      html += '<option value="Trauma Star 2">Trauma Star 2</option>';
+      html += '<option value="Trauma Star 3">Trauma Star 3</option>';
+      html += '</optgroup>';
+    }
+    acSel.innerHTML = html;
+    // Try to restore previous value if still in list
+    if(prevVal) {
+      for(var i=0;i<acSel.options.length;i++){
+        if(acSel.options[i].value===prevVal){ acSel.value=prevVal; break; }
+      }
+    }
+    tlAircraftSync();
+  }
+
+  // Render hospital list for the selected state
   tlStateHospitalRender();
+
+  // Save state preference
+  try{ localStorage.setItem('tl_operating_state', state); }catch(e){}
 }
+
+// Backward compat alias
+function tlStateHospitalSelect(state){ tlSelectState(state); }
 
 function tlStateHospitalRender() {
   var panel = document.getElementById('tlStateHospitalPanel');
