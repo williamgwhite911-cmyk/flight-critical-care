@@ -4976,6 +4976,21 @@ textarea.bs-field{resize:vertical}
       </div>
     </div>
 
+    <!-- Reset Confirm Dialogs (right below buttons so user sees them) -->
+    <div class="tl-reset-confirm" id="tlResetConfirmBox" style="display:none">
+      <span>Reset all timestamps?</span>
+      <button class="tl-reset-yes" onclick="tlReset()" type="button">Yes, reset</button>
+      <button class="tl-reset-no" onclick="document.getElementById('tlResetConfirmBox').style.display='none'" type="button">Cancel</button>
+    </div>
+    <div id="masterResetConfirmBox" style="display:none;margin-bottom:14px;padding:16px 18px;background:rgba(239,68,68,.12);border:2px solid rgba(239,68,68,.7);border-radius:12px;text-align:center">
+      <div style="font-size:1.1rem;font-weight:700;color:#f87171;margin-bottom:6px">&#9888; ERASE ALL PATIENT DATA?</div>
+      <div style="font-size:.78rem;color:#fca5a5;margin-bottom:14px;line-height:1.4">This will clear the Timeline, Patient Info, Vitals, Medications, Vent Settings, Handover Form, Flight Data, Notes, and all other sections. This action cannot be undone.</div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button onclick="masterResetExecute()" type="button" style="padding:10px 28px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;letter-spacing:.5px">YES — ERASE EVERYTHING</button>
+        <button onclick="document.getElementById('masterResetConfirmBox').style.display='none'" type="button" style="padding:10px 22px;background:rgba(255,255,255,.08);color:var(--tx2);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:.85rem;cursor:pointer">Cancel</button>
+      </div>
+    </div>
+
     <!-- State Selection — drives aircraft + hospital lists -->
     <div style="margin-bottom:14px">
       <div class="flbl">Operating State</div>
@@ -5328,22 +5343,6 @@ textarea.bs-field{resize:vertical}
     </div>
 
     <div id="tlSeqBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(239,68,68,.15);border:1.5px solid rgba(239,68,68,.6);border-radius:10px;color:#fca5a5;font-size:.8rem;line-height:1.5"></div>
-
-    <div class="tl-reset-confirm" id="tlResetConfirmBox" style="display:none">
-      <span>Reset all timestamps?</span>
-      <button class="tl-reset-yes" onclick="tlReset()" type="button">Yes, reset</button>
-      <button class="tl-reset-no" onclick="document.getElementById('tlResetConfirmBox').style.display='none'" type="button">Cancel</button>
-    </div>
-
-    <!-- Master Reset Confirmation -->
-    <div id="masterResetConfirmBox" style="display:none;margin-top:10px;padding:16px 18px;background:rgba(239,68,68,.12);border:2px solid rgba(239,68,68,.7);border-radius:12px;text-align:center">
-      <div style="font-size:1.1rem;font-weight:700;color:#f87171;margin-bottom:6px">&#9888; ERASE ALL PATIENT DATA?</div>
-      <div style="font-size:.78rem;color:#fca5a5;margin-bottom:14px;line-height:1.4">This will clear the Timeline, Patient Info, Vitals, Medications, Vent Settings, Handover Form, Flight Data, Notes, and all other sections. This action cannot be undone.</div>
-      <div style="display:flex;gap:10px;justify-content:center">
-        <button onclick="masterResetExecute()" type="button" style="padding:10px 28px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;letter-spacing:.5px">YES — ERASE EVERYTHING</button>
-        <button onclick="document.getElementById('masterResetConfirmBox').style.display='none'" type="button" style="padding:10px 22px;background:rgba(255,255,255,.08);color:var(--tx2);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:.85rem;cursor:pointer">Cancel</button>
-      </div>
-    </div>
 
   </div>
 </div></div>
@@ -28085,7 +28084,12 @@ function masterResetConfirm(){
   var tlBox=document.getElementById('tlResetConfirmBox');
   if(tlBox) tlBox.style.display='none';
   var el=document.getElementById('masterResetConfirmBox');
-  if(el) el.style.display=el.style.display==='none'?'block':'none';
+  if(el){
+    el.style.display=el.style.display==='none'?'block':'none';
+    if(el.style.display==='block'){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+  }
 }
 
 function masterResetExecute(){
