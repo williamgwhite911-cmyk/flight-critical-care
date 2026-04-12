@@ -421,6 +421,26 @@ select:focus,input[type=number]:focus{outline:none;border-color:var(--cyan);box-
 .ho-action-button.success{background:var(--teal);color:var(--bg0);border:1px solid var(--teal)}
 .ho-action-button.success:hover{background:rgba(0,232,176,.9)}
 
+/* ── HANDOFF FORM (digital version of PDF) ── */
+.hf-section{margin-bottom:10px}
+.hf-section-hdr{background:#1a5276;color:#fff;padding:5px 10px;border-radius:4px;font-size:.7rem;font-weight:800;letter-spacing:.04em;margin-bottom:6px}
+.hf-field{display:flex;flex-direction:column;gap:1px}
+.hf-field label{font-size:.55rem;font-weight:700;color:#4a9cc7;text-transform:uppercase;letter-spacing:.03em}
+.hf-input{background:rgba(14,47,90,.6);border:1px solid rgba(26,82,118,.5);border-radius:4px;color:#fff;padding:4px 7px;font-size:.72rem;font-family:inherit;transition:border-color .15s}
+.hf-input:focus{outline:none;border-color:#2980b9;box-shadow:0 0 0 2px rgba(41,128,185,.15)}
+textarea.hf-input{font-family:var(--mono,monospace)}
+.hf-chk{display:inline-flex;align-items:center;gap:3px;font-size:.62rem;font-weight:600;cursor:pointer;margin-right:4px}
+.hf-chk input[type=checkbox]{width:12px;height:12px;accent-color:#2980b9;cursor:pointer}
+.hf-table{width:100%;border-collapse:collapse;font-size:.65rem}
+.hf-table th{background:#2471a3;color:#fff;padding:4px 6px;font-size:.6rem;font-weight:700;text-align:center}
+.hf-table td{padding:2px}
+.hf-table td .hf-input{width:100%;text-align:center;padding:3px 4px;font-size:.65rem}
+.hf-table tr:nth-child(odd) td{background:rgba(13,40,72,.6)}
+.hf-table tr:nth-child(even) td{background:rgba(11,37,69,.8)}
+@media print{
+  #hoHandoffFormContainer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
 /* ── SEARCHABLE FACILITY DROPDOWN ── */
 .fac-search-wrap{position:relative;margin-bottom:12px}
 .fac-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg1);border:1px solid var(--bd1);border-radius:6px;z-index:1000;max-height:300px;overflow-y:auto;display:none}
@@ -4896,7 +4916,7 @@ textarea.bs-field{resize:vertical}
   <button class="nav-tab nav-tab-bedside"  onclick="showPage('bedside',this)">&#127973; Bedside</button>
   <button class="nav-tab nav-tab-anatomy" onclick="showPage('anatomy',this)">&#129516; Anatomy</button>
   <button class="nav-tab nav-tab-flight"   onclick="showPage('flight',this)">&#9992; Flight</button>
-  <button class="nav-tab nav-tab-handover" onclick="showPage('handover',this)">&#128203; Handover</button>
+  <button class="nav-tab nav-tab-handover" onclick="showPage('handover',this)">&#128203; Hand-Off</button>
   <button class="nav-tab nav-tab-druglib"  onclick="showPage('druglib',this)">&#128138; Drug Library</button>
   <span class="nav-tab-divider"></span>
   <button class="nav-tab" onclick="showPage('ptdir',this)" id="ptdirNavBtn">&#128196; Patient Directory</button>
@@ -4966,10 +4986,17 @@ textarea.bs-field{resize:vertical}
         <div class="flbl">Helicopter Type</div>
         <select id="tlHeloType" onchange="tlHeloTypeSync()" style="width:100%">
           <option value="">Select Aircraft...</option>
-          <option value="EC135" data-speed="140">EC135 (140 kts cruise)</option>
-          <option value="Bell 407" data-speed="120">Bell 407 (120 kts cruise)</option>
-          <option value="S-76" data-speed="155">Sikorsky S-76 (155 kts cruise)</option>
-          <option value="AW139" data-speed="165">AW139 (165 kts cruise)</option>
+          <optgroup label="Trauma Star (AW139)">
+            <option value="Trauma Star FK" data-speed="165">Trauma Star FK — AW139 (165 kts)</option>
+            <option value="Trauma Star LK" data-speed="165">Trauma Star LK — AW139 (165 kts)</option>
+            <option value="Trauma Star RR" data-speed="165">Trauma Star RR — AW139 (165 kts)</option>
+          </optgroup>
+          <optgroup label="Other Aircraft">
+            <option value="AW139" data-speed="165">AW139 (165 kts cruise)</option>
+            <option value="EC135" data-speed="140">EC135 (140 kts cruise)</option>
+            <option value="Bell 407" data-speed="120">Bell 407 (120 kts cruise)</option>
+            <option value="S-76" data-speed="155">Sikorsky S-76 (155 kts cruise)</option>
+          </optgroup>
         </select>
       </div>
       <div id="tlHeloSpeedDisplay" style="display:flex;align-items:flex-end;padding-bottom:4px">
@@ -5008,6 +5035,11 @@ textarea.bs-field{resize:vertical}
             <option value="Decatur County Memorial Hospital">Decatur County (Greensburg)</option>
             <option value="Margaret Mary Health">Margaret Mary (Batesville)</option>
           </optgroup>
+          <optgroup label="Florida Keys">
+            <option value="Lower Keys Medical Center">Lower Keys Medical Center (Key West)</option>
+            <option value="Baptist Health Fishermen's Community Hospital">Fishermen's Community Hospital (Marathon)</option>
+            <option value="Baptist Health Mariners Hospital">Mariners Hospital (Tavernier)</option>
+          </optgroup>
           <optgroup label="Scene / Rendezvous">
             <option value="Badlands Off Road Park">Badlands ATV Park (Attica)</option>
           </optgroup>
@@ -5041,6 +5073,21 @@ textarea.bs-field{resize:vertical}
             <option value="Advocate Christ Medical Center">Advocate Christ (Oak Lawn/Chicago) — Level I Trauma</option>
             <option value="Loyola University Medical Center">Loyola (Maywood/Chicago) — Level I Trauma</option>
             <option value="Northwestern Memorial Hospital">Northwestern Memorial (Chicago) — Level I Trauma</option>
+          </optgroup>
+          <optgroup label="Miami — Level I Trauma">
+            <option value="Jackson Memorial Hospital — Ryder Trauma Center">Ryder Trauma / Jackson Memorial — Level I</option>
+            <option value="HCA Florida Kendall Hospital">Kendall Regional — Level I Trauma / Burn Center</option>
+          </optgroup>
+          <optgroup label="Miami — Specialty">
+            <option value="University of Miami Hospital (UHealth Tower)">UM Hospital / UHealth — Academic Medical Center</option>
+            <option value="HCA Florida Mercy Hospital">Mercy Hospital — Hyperbaric Chamber</option>
+            <option value="Mount Sinai Medical Center">Mount Sinai (Miami Beach)</option>
+          </optgroup>
+          <optgroup label="Miami — Level II / Pediatric Trauma">
+            <option value="Baptist Hospital of Miami">Baptist Hospital of Miami — Level II Trauma</option>
+            <option value="Jackson South Medical Center">Jackson South — Level II Trauma</option>
+            <option value="HCA Florida Aventura Hospital">Aventura Hospital — Level II Trauma</option>
+            <option value="Nicklaus Children's Hospital">Nicklaus Children's — Pediatric Trauma</option>
           </optgroup>
         </select>
       </div>
@@ -17536,6 +17583,228 @@ Example:
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════════════════════
+       TRAUMA STAR PATIENT HANDOFF FORM (Digital)
+       ══════════════════════════════════════════════════════════ -->
+  <div class="ho-section">
+    <div class="ho-section-hdr" onclick="hoToggleSection(this)" style="background:linear-gradient(135deg,#0b2545,#1a5276);border:1px solid rgba(41,128,185,.4)">
+      <div style="display:flex;align-items:center;gap:10px;flex:1">
+        <span style="font-size:1.05rem;font-weight:800">&#128196; Trauma Star Patient Handoff Form</span>
+      </div>
+      <button type="button" onclick="event.stopPropagation();hoPopulateHandoffForm()" style="font-size:.68rem;padding:6px 14px;border-radius:6px;background:rgba(0,212,245,.15);border:1px solid rgba(0,212,245,.35);color:#00d4f5;cursor:pointer;white-space:nowrap;font-weight:700">&#x21bb; Auto-Populate from Chart</button>
+      <button type="button" onclick="event.stopPropagation();hoPrintHandoffForm()" style="font-size:.68rem;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#34d399;cursor:pointer;white-space:nowrap;font-weight:700">&#128424; Print</button>
+    </div>
+    <div class="ho-section-body expanded">
+      <div id="hoHandoffFormContainer" style="background:#0b2545;border-radius:10px;padding:18px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+
+        <!-- HEADER -->
+        <div style="background:#081d36;border-radius:8px;padding:14px 18px;margin-bottom:12px;border-top:3px solid #2980b9">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-size:1.3rem;font-weight:900;letter-spacing:.04em">TRAUMA STAR</div>
+              <div style="font-size:.72rem;color:#2980b9">Monroe County Fire Rescue &nbsp;|&nbsp; Patient Handoff Form</div>
+            </div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 8px;font-size:.72rem;min-width:200px">
+              <span style="font-weight:700;text-align:right">DATE:</span><input type="text" id="hfDate" class="hf-input" style="width:120px">
+              <span style="font-weight:700;text-align:right">TIME:</span><input type="text" id="hfTime" class="hf-input" style="width:120px">
+              <span style="font-weight:700;text-align:right">OCA #:</span><input type="text" id="hfOCA" class="hf-input" style="width:120px">
+              <span style="font-weight:700;text-align:right">CREW ID:</span><input type="text" id="hfCrewID" class="hf-input" style="width:120px">
+            </div>
+          </div>
+        </div>
+
+        <!-- MISSION INFORMATION -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">MISSION INFORMATION</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px">
+            <div class="hf-field"><label>Aircraft</label><input type="text" id="hfAircraft" class="hf-input"></div>
+            <div class="hf-field"><label>Flight #</label><input type="text" id="hfFlightNum" class="hf-input"></div>
+            <div class="hf-field"><label>Pilot</label><input type="text" id="hfPilot" class="hf-input"></div>
+            <div class="hf-field"><label>Crew 1</label><input type="text" id="hfCrew1" class="hf-input"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+            <div class="hf-field"><label>Crew 2</label><input type="text" id="hfCrew2" class="hf-input"></div>
+            <div class="hf-field"><label>Sending Facility</label><input type="text" id="hfSendFac" class="hf-input"></div>
+            <div class="hf-field"><label>Receiving Facility</label><input type="text" id="hfRecvFac" class="hf-input"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <span style="font-size:.68rem;font-weight:700">Sending Area:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaED"> ED</label>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaICU"> ICU</label>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaOB"> OB</label>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaOR"> OR</label>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaFloor"> Floor</label>
+            <label class="hf-chk"><input type="checkbox" id="hfAreaOther"> Other</label>
+            <div class="hf-field" style="flex:1;min-width:140px"><label>Sending Physician</label><input type="text" id="hfSendMD" class="hf-input"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+            <div class="hf-field"><label>Sending Nurse</label><input type="text" id="hfSendRN" class="hf-input"></div>
+            <div class="hf-field"><label>Accepting Physician</label><input type="text" id="hfAcceptMD" class="hf-input"></div>
+            <div class="hf-field"><label>Drop-Off Area</label><input type="text" id="hfDropOff" class="hf-input"></div>
+          </div>
+        </div>
+
+        <!-- PATIENT INFORMATION -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">PATIENT INFORMATION</div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 0.5fr 1fr 1fr;gap:8px">
+            <div class="hf-field"><label>Patient Name</label><input type="text" id="hfPatName" class="hf-input"></div>
+            <div class="hf-field"><label>DOB</label><input type="text" id="hfDOB" class="hf-input"></div>
+            <div class="hf-field"><label>Age</label><input type="text" id="hfAge" class="hf-input"></div>
+            <div class="hf-field"><label>Weight (kg)</label><input type="text" id="hfWeight" class="hf-input"></div>
+            <div class="hf-field"><label>OCA #</label><input type="text" id="hfOCA2" class="hf-input"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:3fr 1.5fr 0.5fr 0.8fr;gap:8px;margin-top:6px">
+            <div class="hf-field"><label>Address</label><input type="text" id="hfAddress" class="hf-input"></div>
+            <div class="hf-field"><label>City</label><input type="text" id="hfCity" class="hf-input"></div>
+            <div class="hf-field"><label>State</label><input type="text" id="hfState" class="hf-input"></div>
+            <div class="hf-field"><label>Zip</label><input type="text" id="hfZip" class="hf-input"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <span style="font-size:.68rem;font-weight:700">Sex:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfSexM"> M</label>
+            <label class="hf-chk"><input type="checkbox" id="hfSexF"> F</label>
+            <div class="hf-field" style="width:80px"><label>Blood Type</label><input type="text" id="hfBlood" class="hf-input"></div>
+            <div class="hf-field" style="flex:1"><label>Allergies</label><input type="text" id="hfAllergies" class="hf-input"></div>
+          </div>
+        </div>
+
+        <!-- MECHANISM / CHIEF COMPLAINT -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">MECHANISM OF INJURY / CHIEF COMPLAINT</div>
+          <textarea id="hfMechanism" class="hf-input" style="min-height:42px;width:100%;resize:vertical"></textarea>
+        </div>
+
+        <!-- VITAL SIGNS TABLE -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">VITAL SIGNS</div>
+          <table class="hf-table" id="hfVitalsTable">
+            <thead><tr><th>Time</th><th>HR</th><th>BP</th><th>SpO2</th><th>RR</th><th>ETCO2</th><th>GCS</th><th>Temp</th><th>Pain</th><th>Pupils</th></tr></thead>
+            <tbody>
+              <tr><td><input class="hf-input" id="hfV1Time"></td><td><input class="hf-input" id="hfV1HR"></td><td><input class="hf-input" id="hfV1BP"></td><td><input class="hf-input" id="hfV1SpO2"></td><td><input class="hf-input" id="hfV1RR"></td><td><input class="hf-input" id="hfV1ETCO2"></td><td><input class="hf-input" id="hfV1GCS"></td><td><input class="hf-input" id="hfV1Temp"></td><td><input class="hf-input" id="hfV1Pain"></td><td><input class="hf-input" id="hfV1Pupils"></td></tr>
+              <tr><td><input class="hf-input" id="hfV2Time"></td><td><input class="hf-input" id="hfV2HR"></td><td><input class="hf-input" id="hfV2BP"></td><td><input class="hf-input" id="hfV2SpO2"></td><td><input class="hf-input" id="hfV2RR"></td><td><input class="hf-input" id="hfV2ETCO2"></td><td><input class="hf-input" id="hfV2GCS"></td><td><input class="hf-input" id="hfV2Temp"></td><td><input class="hf-input" id="hfV2Pain"></td><td><input class="hf-input" id="hfV2Pupils"></td></tr>
+              <tr><td><input class="hf-input" id="hfV3Time"></td><td><input class="hf-input" id="hfV3HR"></td><td><input class="hf-input" id="hfV3BP"></td><td><input class="hf-input" id="hfV3SpO2"></td><td><input class="hf-input" id="hfV3RR"></td><td><input class="hf-input" id="hfV3ETCO2"></td><td><input class="hf-input" id="hfV3GCS"></td><td><input class="hf-input" id="hfV3Temp"></td><td><input class="hf-input" id="hfV3Pain"></td><td><input class="hf-input" id="hfV3Pupils"></td></tr>
+              <tr><td><input class="hf-input" id="hfV4Time"></td><td><input class="hf-input" id="hfV4HR"></td><td><input class="hf-input" id="hfV4BP"></td><td><input class="hf-input" id="hfV4SpO2"></td><td><input class="hf-input" id="hfV4RR"></td><td><input class="hf-input" id="hfV4ETCO2"></td><td><input class="hf-input" id="hfV4GCS"></td><td><input class="hf-input" id="hfV4Temp"></td><td><input class="hf-input" id="hfV4Pain"></td><td><input class="hf-input" id="hfV4Pupils"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- INTERVENTIONS -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">INTERVENTIONS &amp; TREATMENTS</div>
+          <div style="margin-bottom:6px"><span style="font-size:.68rem;font-weight:700">Airway:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfBVM"> BVM</label>
+            <label class="hf-chk"><input type="checkbox" id="hfOPA"> OPA</label>
+            <label class="hf-chk"><input type="checkbox" id="hfNPA"> NPA</label>
+            <label class="hf-chk"><input type="checkbox" id="hfChestDecomp"> Chest Decomp</label>
+            <label class="hf-chk"><input type="checkbox" id="hfChestSeal"> Chest Seal</label>
+            <label class="hf-chk"><input type="checkbox" id="hfCric"> Cric</label>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-size:.68rem;font-weight:700">Advanced Airway:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfETT"> ETT</label>
+            <div class="hf-field" style="width:55px"><label>Size</label><input class="hf-input" id="hfETTSize"></div>
+            <div class="hf-field" style="width:55px"><label>Depth</label><input class="hf-input" id="hfETTDepth"></div>
+            <label class="hf-chk"><input type="checkbox" id="hfIGel"> iGel</label>
+            <div class="hf-field" style="width:55px"><label>Size</label><input class="hf-input" id="hfIGelSize"></div>
+            <div class="hf-field" style="flex:1;min-width:100px"><label>Confirmed by</label><input class="hf-input" id="hfAirwayConf"></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-size:.68rem;font-weight:700">Vent:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfVentOn"> On</label>
+            <div class="hf-field" style="width:65px"><label>Mode</label><input class="hf-input" id="hfVMode"></div>
+            <div class="hf-field" style="width:45px"><label>Rate</label><input class="hf-input" id="hfVRate"></div>
+            <div class="hf-field" style="width:55px"><label>TV(mL)</label><input class="hf-input" id="hfVTV"></div>
+            <div class="hf-field" style="width:45px"><label>PEEP</label><input class="hf-input" id="hfVPEEP"></div>
+            <div class="hf-field" style="width:45px"><label>FiO2</label><input class="hf-input" id="hfVFiO2"></div>
+            <div class="hf-field" style="width:45px"><label>PIP</label><input class="hf-input" id="hfVPIP"></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-size:.68rem;font-weight:700">IV Access:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfIV1"> IV#1</label>
+            <div class="hf-field" style="width:45px"><label>Ga</label><input class="hf-input" id="hfIV1Ga"></div>
+            <div class="hf-field" style="width:70px"><label>Site</label><input class="hf-input" id="hfIV1Site"></div>
+            <label class="hf-chk"><input type="checkbox" id="hfIV2"> IV#2</label>
+            <div class="hf-field" style="width:45px"><label>Ga</label><input class="hf-input" id="hfIV2Ga"></div>
+            <div class="hf-field" style="width:70px"><label>Site</label><input class="hf-input" id="hfIV2Site"></div>
+            <div class="hf-field" style="flex:1;min-width:80px"><label>Fluid</label><input class="hf-input" id="hfFluid"></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            <label class="hf-chk"><input type="checkbox" id="hfIO1"> IO#1</label>
+            <div class="hf-field" style="width:70px"><label>Site</label><input class="hf-input" id="hfIO1Site"></div>
+            <label class="hf-chk"><input type="checkbox" id="hfIO2"> IO#2</label>
+            <div class="hf-field" style="width:70px"><label>Site</label><input class="hf-input" id="hfIO2Site"></div>
+            <div class="hf-field" style="flex:1;min-width:80px"><label>Fluid/Rate</label><input class="hf-input" id="hfIOFluid"></div>
+          </div>
+          <div style="margin-bottom:6px"><span style="font-size:.68rem;font-weight:700">Other:</span>
+            <label class="hf-chk"><input type="checkbox" id="hfTQ"> Tourniquet</label>
+            <label class="hf-chk"><input type="checkbox" id="hfWP"> Wound Pack</label>
+            <label class="hf-chk"><input type="checkbox" id="hfPB"> Pelvic Binder</label>
+            <label class="hf-chk"><input type="checkbox" id="hfBP"> Blood Products</label>
+            <label class="hf-chk"><input type="checkbox" id="hfTXA"> TXA</label>
+            <label class="hf-chk"><input type="checkbox" id="hfSplint"> Splint</label>
+            <label class="hf-chk"><input type="checkbox" id="hfCCollar"> C-Collar</label>
+            <label class="hf-chk"><input type="checkbox" id="hf12Lead"> 12-Lead</label>
+            <label class="hf-chk"><input type="checkbox" id="hfDefib"> Defib</label>
+            <label class="hf-chk"><input type="checkbox" id="hfCPR"> CPR</label>
+          </div>
+          <div class="hf-field"><label>Notes</label><input type="text" id="hfIntNotes" class="hf-input" style="width:100%"></div>
+        </div>
+
+        <!-- MEDICATIONS ADMINISTERED -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">MEDICATIONS ADMINISTERED</div>
+          <table class="hf-table" id="hfMedsTable">
+            <thead><tr><th>Time</th><th>Medication</th><th>Dose</th><th>Route</th><th>Response</th></tr></thead>
+            <tbody>
+              <tr><td><input class="hf-input" id="hfM1Time"></td><td><input class="hf-input" id="hfM1Drug"></td><td><input class="hf-input" id="hfM1Dose"></td><td><input class="hf-input" id="hfM1Route"></td><td><input class="hf-input" id="hfM1Resp"></td></tr>
+              <tr><td><input class="hf-input" id="hfM2Time"></td><td><input class="hf-input" id="hfM2Drug"></td><td><input class="hf-input" id="hfM2Dose"></td><td><input class="hf-input" id="hfM2Route"></td><td><input class="hf-input" id="hfM2Resp"></td></tr>
+              <tr><td><input class="hf-input" id="hfM3Time"></td><td><input class="hf-input" id="hfM3Drug"></td><td><input class="hf-input" id="hfM3Dose"></td><td><input class="hf-input" id="hfM3Route"></td><td><input class="hf-input" id="hfM3Resp"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TRANSPORT TIMELINE -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">TRANSPORT TIMELINE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+            <div class="hf-field"><label>Dispatched</label><input class="hf-input" id="hfTDisp"></div>
+            <div class="hf-field"><label>On Scene</label><input class="hf-input" id="hfTScene"></div>
+            <div class="hf-field"><label>Depart Scene</label><input class="hf-input" id="hfTDepart"></div>
+            <div class="hf-field"><label>Arrive Dest</label><input class="hf-input" id="hfTArrive"></div>
+            <div class="hf-field"><label>Total Time</label><input class="hf-input" id="hfTTotal"></div>
+          </div>
+          <!-- Visual timeline bar -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#0e2f5a;border-radius:6px">
+            <div style="text-align:center;font-size:.55rem;font-weight:700"><div style="width:10px;height:10px;border-radius:50%;background:#2980b9;margin:0 auto 3px"></div>DISPATCH</div>
+            <div style="flex:1;height:2px;background:#2980b9;margin:0 4px"></div>
+            <div style="text-align:center;font-size:.55rem;font-weight:700"><div style="width:10px;height:10px;border-radius:50%;background:#2980b9;margin:0 auto 3px"></div>ON SCENE</div>
+            <div style="flex:1;height:2px;background:#2980b9;margin:0 4px"></div>
+            <div style="text-align:center;font-size:.55rem;font-weight:700"><div style="width:10px;height:10px;border-radius:50%;background:#2980b9;margin:0 auto 3px"></div>DEPART</div>
+            <div style="flex:1;height:2px;background:#2980b9;margin:0 4px"></div>
+            <div style="text-align:center;font-size:.55rem;font-weight:700"><div style="width:10px;height:10px;border-radius:50%;background:#2980b9;margin:0 auto 3px"></div>EN ROUTE</div>
+            <div style="flex:1;height:2px;background:#2980b9;margin:0 4px"></div>
+            <div style="text-align:center;font-size:.55rem;font-weight:700"><div style="width:10px;height:10px;border-radius:50%;background:#2980b9;margin:0 auto 3px"></div>ARRIVAL</div>
+          </div>
+        </div>
+
+        <!-- PMH / HANDOVER NOTES -->
+        <div class="hf-section">
+          <div class="hf-section-hdr">PAST MEDICAL HISTORY / HANDOFF NOTES</div>
+          <textarea id="hfPMHNotes" class="hf-input" style="min-height:60px;width:100%;resize:vertical"></textarea>
+        </div>
+
+        <!-- SIGNATURES -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid #1a5276">
+          <div><div style="border-bottom:1px solid #1a5276;height:28px;margin-bottom:4px"></div><div style="font-size:.6rem;color:#4a7aa7">Flight Crew Signature</div></div>
+          <div><div style="border-bottom:1px solid #1a5276;height:28px;margin-bottom:4px"></div><div style="font-size:.6rem;color:#4a7aa7">Receiving Clinician Signature</div></div>
+          <div><div style="border-bottom:1px solid #1a5276;height:28px;margin-bottom:4px"></div><div style="font-size:.6rem;color:#4a7aa7">Time of Handoff</div></div>
+        </div>
+        <div style="text-align:center;font-size:.5rem;color:#4a7aa7;margin-top:8px">TRAUMA STAR &nbsp;|&nbsp; Monroe County Fire Rescue &nbsp;|&nbsp; CONFIDENTIAL PATIENT INFORMATION</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── NARRATIVE OUTPUT ── -->
   <div class="card" style="margin-top:20px">
     <div class="slbl" style="margin-bottom:12px">📄 Handover Narrative</div>
@@ -26790,7 +27059,23 @@ var FAC_FACILITIES = [
   {name:'OSF Saint Anthony Medical Center', city:'Rockford', lat:42.2540, lon:-89.0450, type:'Level I Trauma', aliases:['OSF Rockford','St. Anthony Rockford'], helipad:true, icu:true, system:'OSF HealthCare'},
   {name:'Advocate Christ Medical Center', city:'Oak Lawn', lat:41.7200, lon:-87.7360, type:'Level I Trauma', aliases:['Christ Hospital','Advocate Christ'], helipad:true, icu:true, system:'Advocate Aurora'},
   {name:'Loyola University Medical Center', city:'Maywood', lat:41.8640, lon:-87.8380, type:'Level I Trauma + Burn Center', aliases:['Loyola','Maywood Trauma'], helipad:true, icu:true, system:'Loyola Medicine'},
-  {name:'Northwestern Memorial Hospital', city:'Chicago', lat:41.8955, lon:-87.6215, type:'Level I Trauma', aliases:['Northwestern','NMH Chicago'], helipad:true, icu:true, system:'Northwestern Medicine'}
+  {name:'Northwestern Memorial Hospital', city:'Chicago', lat:41.8955, lon:-87.6215, type:'Level I Trauma', aliases:['Northwestern','NMH Chicago'], helipad:true, icu:true, system:'Northwestern Medicine'},
+  // ── Florida Keys Hospitals ──
+  {name:'Lower Keys Medical Center', city:'Key West', lat:24.5811, lon:-81.7428, type:'Acute Care Hospital', aliases:['LKMC','Key West Hospital','Lower Keys','Key West Regional'], helipad:true, icu:true, system:'Lower FL Keys Hospital District'},
+  {name:'Baptist Health Fishermen\'s Community Hospital', city:'Marathon', lat:24.7095, lon:-81.0829, type:'Critical Access Hospital', aliases:['Fishermen\'s','Marathon Hospital','Fishermens','Fisherman\'s Hospital'], helipad:true, icu:true, system:'Baptist Health South Florida'},
+  {name:'Baptist Health Mariners Hospital', city:'Tavernier', lat:25.0112, lon:-80.3265, type:'Critical Access Hospital', aliases:['Mariners','Tavernier Hospital','Mariners Hospital'], helipad:true, icu:true, system:'Baptist Health South Florida', special:'Hyperbaric chamber'},
+  // ── Miami-Dade Level I Trauma Centers ──
+  {name:'Jackson Memorial Hospital — Ryder Trauma Center', city:'Miami', lat:25.7914, lon:-80.2125, type:'Level I Trauma', aliases:['Ryder Trauma','Jackson Memorial','JMH','Ryder','Jackson Trauma'], helipad:true, icu:true, system:'Jackson Health', special:'Only adult+peds Level I in Miami-Dade; burn center'},
+  {name:'HCA Florida Kendall Hospital', city:'Miami', lat:25.7310, lon:-80.3860, type:'Level I Trauma', aliases:['Kendall Trauma','Kendall Hospital','HCA Kendall','Kendall Regional Medical Center','Kendall Regional'], helipad:true, icu:true, system:'HCA Florida', special:'Burn center; burn ICU'},
+  // ── Miami-Dade Specialty / Other Major Hospitals ──
+  {name:'University of Miami Hospital (UHealth Tower)', city:'Miami', lat:25.7967, lon:-80.2106, type:'Academic Medical Center', aliases:['UHealth','UM Hospital','University of Miami','UHealth Tower'], helipad:true, icu:true, system:'UHealth / University of Miami', special:'Neurosurgical ICU; Medical ICU; Cardiac ICU'},
+  {name:'HCA Florida Mercy Hospital', city:'Miami', lat:25.7409, lon:-80.2148, type:'Full Service Hospital', aliases:['Mercy','Mercy Hospital Miami','Mercy Hospital'], helipad:true, icu:true, system:'HCA Florida', special:'Hyperbaric & Wound Center (2 multi-place chambers)'},
+  {name:'Mount Sinai Medical Center', city:'Miami Beach', lat:25.8135, lon:-80.1419, type:'Full Service Hospital', aliases:['Mt Sinai','Mount Sinai Miami','Sinai Miami Beach'], helipad:true, icu:true, system:'Independent'},
+  {name:'Baptist Hospital of Miami', city:'Miami', lat:25.6831, lon:-80.3404, type:'Level II Trauma', aliases:['Baptist Miami','Miami Baptist','Baptist Health Miami','Baptist Kendall'], helipad:true, icu:true, system:'Baptist Health South Florida', special:'Miami Cancer Institute; Cardiac & Vascular Institute; Neuroscience Institute'},
+  // ── Miami-Dade Level II Trauma & Pediatric ──
+  {name:'Jackson South Medical Center', city:'Miami', lat:25.5975, lon:-80.3472, type:'Level II Trauma', aliases:['Jackson South','South Dade'], helipad:true, icu:true, system:'Jackson Health'},
+  {name:'HCA Florida Aventura Hospital', city:'Aventura', lat:25.9612, lon:-80.1423, type:'Level II Trauma', aliases:['Aventura Hospital','Aventura Trauma'], helipad:true, icu:true, system:'HCA Florida'},
+  {name:'Nicklaus Children\'s Hospital', city:'Miami', lat:25.7311, lon:-80.2402, type:'Pediatric Trauma Center', aliases:['Nicklaus','Miami Children\'s','MCH Peds'], helipad:true, icu:true, system:'Nicklaus Children\'s Health'}
 ];
 
 var FAC_ALL = [];
@@ -26808,10 +27093,13 @@ function facInitIndex(){
 
 // Helicopter cruise speeds in knots (1 knot = 1.151 mph)
 var HELO_SPEEDS = {
+  'Trauma Star FK': {kts:165, mph:190, label:'Trauma Star FK — AW139 — 165 kts'},
+  'Trauma Star LK': {kts:165, mph:190, label:'Trauma Star LK — AW139 — 165 kts'},
+  'Trauma Star RR': {kts:165, mph:190, label:'Trauma Star RR — AW139 — 165 kts'},
+  'AW139':  {kts:165, mph:190, label:'AW139 — 165 kts'},
   'EC135':  {kts:140, mph:161, label:'EC135 — 140 kts'},
   'Bell 407': {kts:120, mph:138, label:'Bell 407 — 120 kts'},
-  'S-76':   {kts:155, mph:178, label:'S-76 — 155 kts'},
-  'AW139':  {kts:165, mph:190, label:'AW139 — 165 kts'}
+  'S-76':   {kts:155, mph:178, label:'S-76 — 155 kts'}
 };
 
 function tlGetHeloSpeed(){
@@ -38535,6 +38823,150 @@ function hoInit(){
   document.getElementById('hoReceivingFacility').value=document.getElementById('bsReceivingFacility').value||'';
   hoRenderPhases();
   hoAutoLoad();
+}
+
+/* ── Auto-populate Handoff Form from chart data ── */
+function hoPopulateHandoffForm(){
+  function _v(id){ var el=document.getElementById(id); return el?(el.value||el.textContent||'').trim():''; }
+  function _s(id,v){ var el=document.getElementById(id); if(el) el.value=v||''; }
+
+  // Date / Time
+  var now=new Date();
+  _s('hfDate', (now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear());
+  _s('hfTime', now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}));
+
+  // Mission info
+  var aircraft = _v('tlHeloType') || _v('tlAircraft') || _v('ftCallSign') || _v('bsCallSign') || '';
+  _s('hfAircraft', aircraft);
+  _s('hfSendFac', _v('tlSendingFacility') || _v('bsSendingFacility') || _v('hoSendingFacility'));
+  _s('hfRecvFac', _v('tlReceivingFacility') || _v('bsReceivingFacility') || _v('hoReceivingFacility'));
+
+  // Crew
+  var pilot = _v('ftWalkPilotText') || '';
+  _s('hfPilot', pilot);
+  var c1 = _v('ftWalkCrew1') || (window.crewMember1?window.crewMember1.name:'') || _v('bsCrew1') || '';
+  var c2 = _v('ftWalkCrew2') || (window.crewMember2?window.crewMember2.name:'') || _v('bsCrew2') || '';
+  _s('hfCrew1', c1);
+  _s('hfCrew2', c2);
+  _s('hfCrewID', [c1,c2].filter(Boolean).join(' / '));
+
+  // Sending / Receiving details from handover fields
+  _s('hfSendMD', _v('hoSendingMD'));
+  _s('hfSendRN', _v('hoReportNurse'));
+  _s('hfAcceptMD', _v('hoReceivingMD'));
+
+  // Patient info
+  _s('hfPatName', window.patientName || '');
+  _s('hfDOB', window.patientDOB || _v('dobMonthYear') || '');
+  if(typeof abw!=='undefined' && abw) _s('hfWeight', abw);
+  // Age
+  if(window.patientDOB){
+    var bd=new Date(window.patientDOB+'T00:00:00'), today=new Date();
+    var ag=today.getFullYear()-bd.getFullYear();
+    if(today.getMonth()<bd.getMonth()||(today.getMonth()===bd.getMonth()&&today.getDate()<bd.getDate())) ag--;
+    _s('hfAge', ag>0?ag:'');
+  }
+  // Sex
+  if(typeof sex!=='undefined'){
+    var mEl=document.getElementById('hfSexM'), fEl=document.getElementById('hfSexF');
+    if(mEl) mEl.checked=(sex==='male');
+    if(fEl) fEl.checked=(sex==='female');
+  }
+  // Allergies
+  _s('hfAllergies', _v('hoAllergies') || _v('bsAllergies') || '');
+
+  // Mechanism / Chief Complaint
+  var cc = _v('tlChiefComplaint') || _v('hoDiagnosis') || '';
+  _s('hfMechanism', cc);
+
+  // Vitals from handover final vitals
+  _s('hfV1HR', _v('hoFinalHR'));
+  _s('hfV1BP', _v('hoFinalBP'));
+  _s('hfV1SpO2', _v('hoFinalSpO2'));
+  _s('hfV1RR', _v('hoFinalRR'));
+  _s('hfV1ETCO2', _v('hoFinalETCO2'));
+  _s('hfV1GCS', _v('hoFinalGCS'));
+  _s('hfV1Temp', _v('hoFinalTemp') || _v('hoTemp'));
+  _s('hfV1Pain', _v('hoPainLevel'));
+  _s('hfV1Pupils', _v('hoPupils'));
+  _s('hfV1Time', now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}));
+
+  // Vent settings
+  var ventMode=_v('hoVentMode'), ventRate=_v('hoVentRate'), ventTV=_v('hoVentTV'), ventFiO2=_v('hoVentFiO2'), ventPEEP=_v('hoVentPEEP');
+  if(ventMode||ventRate){
+    var ventCb=document.getElementById('hfVentOn'); if(ventCb) ventCb.checked=true;
+    _s('hfVMode', ventMode);
+    _s('hfVRate', ventRate);
+    _s('hfVTV', ventTV);
+    _s('hfVPEEP', ventPEEP);
+    _s('hfVFiO2', ventFiO2);
+  }
+
+  // IV access
+  _s('hfIV1Site', _v('hoIVAccess'));
+  _s('hfFluid', _v('hoIVFluid'));
+  if(_v('hoIVAccess')){ var iv1cb=document.getElementById('hfIV1'); if(iv1cb) iv1cb.checked=true; }
+
+  // Transport timeline from tlStamps
+  if(window.tlStamps){
+    var stamps=window.tlStamps;
+    function _fmtStamp(key){
+      if(!stamps[key]||!stamps[key].ts) return '';
+      var d=new Date(stamps[key].ts);
+      return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+    }
+    // Look for common stamp IDs
+    var allKeys=Object.keys(stamps);
+    var dispKey=allKeys.find(function(k){return /dispatch/i.test(k)})||allKeys[0]||'';
+    var sceneKey=allKeys.find(function(k){return /scene|arrive.*scene|on.?scene/i.test(k)})||allKeys[1]||'';
+    var departKey=allKeys.find(function(k){return /depart|leave|liftoff|takeoff/i.test(k)})||allKeys[2]||'';
+    var arriveKey=allKeys.find(function(k){return /arrive.*dest|landing|destination/i.test(k)})||allKeys[allKeys.length-1]||'';
+    _s('hfTDisp', dispKey?_fmtStamp(dispKey):'');
+    _s('hfTScene', sceneKey?_fmtStamp(sceneKey):'');
+    _s('hfTDepart', departKey?_fmtStamp(departKey):'');
+    _s('hfTArrive', arriveKey?_fmtStamp(arriveKey):'');
+    // Total time
+    if(dispKey && arriveKey && stamps[dispKey] && stamps[arriveKey]){
+      var t1=new Date(stamps[dispKey].ts), t2=new Date(stamps[arriveKey].ts);
+      var diff=Math.round((t2-t1)/60000);
+      if(diff>0) _s('hfTTotal', diff+' min');
+    }
+  }
+
+  // PMH / notes
+  _s('hfPMHNotes', _v('hoHPISummary') || _v('hoTeamConcerns') || '');
+
+  // Flash confirmation
+  var container=document.getElementById('hoHandoffFormContainer');
+  if(container){
+    container.style.boxShadow='0 0 0 3px rgba(0,212,245,.5)';
+    setTimeout(function(){ container.style.boxShadow='none'; },1200);
+  }
+}
+
+/* ── Print the digital handoff form ── */
+function hoPrintHandoffForm(){
+  var el=document.getElementById('hoHandoffFormContainer');
+  if(!el) return;
+  var win=window.open('','','width=850,height=1100');
+  win.document.write('<html><head><title>Trauma Star Patient Handoff Form</title>');
+  win.document.write('<style>');
+  win.document.write('body{margin:0;padding:16px;background:#0b2545;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}');
+  win.document.write('.hf-section{margin-bottom:8px}');
+  win.document.write('.hf-section-hdr{background:#1a5276;color:#fff;padding:4px 8px;border-radius:3px;font-size:9px;font-weight:800;letter-spacing:.04em;margin-bottom:4px}');
+  win.document.write('.hf-field label{font-size:7px;font-weight:700;color:#4a9cc7;text-transform:uppercase}');
+  win.document.write('.hf-input,.hf-field input,.hf-field textarea{background:rgba(14,47,90,.6);border:1px solid rgba(26,82,118,.5);border-radius:3px;color:#fff;padding:3px 5px;font-size:10px}');
+  win.document.write('.hf-chk{font-size:8px;font-weight:600}');
+  win.document.write('.hf-table{width:100%;border-collapse:collapse;font-size:9px}');
+  win.document.write('.hf-table th{background:#2471a3;color:#fff;padding:3px 4px;font-size:8px;font-weight:700}');
+  win.document.write('.hf-table td{padding:2px}');
+  win.document.write('.hf-table td input{width:100%;text-align:center;padding:2px;font-size:9px;background:rgba(13,40,72,.6);border:1px solid rgba(26,82,118,.3);color:#fff;border-radius:2px}');
+  win.document.write('@page{size:letter;margin:0.4in}');
+  win.document.write('</style></head><body>');
+  win.document.write(el.innerHTML);
+  win.document.write('</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); },300);
 }
 
 function hoRenderPhases(){
