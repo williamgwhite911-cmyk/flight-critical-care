@@ -17221,6 +17221,14 @@ Example:
       </div>
     </div>
 
+    <!-- Master Walk Around Button -->
+    <div style="margin-bottom:14px;text-align:center">
+      <button type="button" id="ftMasterWalkBtn" onclick="ftMasterWalkaround()"
+        style="padding:12px 32px;font-size:.82rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;border-radius:10px;border:2px solid rgba(52,211,153,.6);background:rgba(52,211,153,.12);color:#34d399;cursor:pointer;transition:all .15s;width:100%">
+        ✅ MASTER WALKAROUND — ALL GOOD, NO DEFICITS
+      </button>
+    </div>
+
     <!-- Dynamic checklist panel -->
     <div id="ftWalkPanel">
       <div style="text-align:center;padding:20px;color:var(--tx2);font-size:.72rem">
@@ -34050,6 +34058,81 @@ function ftWalkReset() {
   var badgeEl = document.getElementById('ftWalkBadgeEl');
   if(badgeEl) badgeEl.style.display = 'none';
   if(_ftWalkState.type) ftWalkRender();
+}
+
+// ── Master Walkaround — check ALL items at once ──────────────
+function ftMasterWalkaround() {
+  // Must have an aircraft type selected first
+  if (!_ftWalkState.type) {
+    // Auto-detect from aircraft dropdown, or default to rotor-wing
+    var acSel = document.getElementById('ftAircraftType');
+    if (acSel && acSel.value) {
+      ftAutoWalkaround();
+    } else {
+      // Default to rotor-wing (helicopter) since Trauma Star fleet is helicopters
+      ftWalkSelectType('rw');
+    }
+  }
+
+  var data = FT_WALK[_ftWalkState.type];
+  if (!data) return;
+
+  // Check every single item
+  data.sections.forEach(function(sec) {
+    sec.items.forEach(function(item) {
+      _ftWalkState.checks[item.id] = { label: item.label, red: item.red || false };
+    });
+  });
+
+  // Mark walkaround as uninterrupted
+  _ftWalkState.interrupted = 'uninterrupted';
+  var unEl = document.getElementById('ftWalkUnint');
+  var inEl = document.getElementById('ftWalkInt');
+  var warnEl = document.getElementById('ftWalkIntWarn');
+  if (unEl) unEl.classList.add('active');
+  if (inEl) inEl.classList.remove('active');
+  if (warnEl) warnEl.style.display = 'none';
+
+  // Set walkaround date/time to now
+  var timeEl = document.getElementById('ftWalkTime');
+  if (timeEl) {
+    var now = new Date();
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    timeEl.value = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) +
+      'T' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  }
+
+  // Re-render to show all checked + update progress bar
+  ftWalkRender();
+
+  // Restore all checkbox visual states after render
+  data.sections.forEach(function(sec) {
+    sec.items.forEach(function(item) {
+      var el = document.getElementById('ftWalk_' + item.id);
+      if (el) el.checked = true;
+    });
+  });
+
+  // Update the badge and red flag display
+  ftWalkUpdateRedFlag();
+  ftWalkBadge();
+
+  // Flash the button green to confirm
+  var btn = document.getElementById('ftMasterWalkBtn');
+  if (btn) {
+    btn.style.background = 'rgba(52,211,153,.35)';
+    btn.style.borderColor = '#34d399';
+    btn.innerHTML = '✅ WALKAROUND COMPLETE — ALL ITEMS CHECKED, NO DEFICITS';
+    setTimeout(function() {
+      btn.style.background = 'rgba(52,211,153,.12)';
+      btn.style.borderColor = 'rgba(52,211,153,.6)';
+      btn.innerHTML = '✅ MASTER WALKAROUND — ALL GOOD, NO DEFICITS';
+    }, 3000);
+  }
+
+  if (typeof dbFlash === 'function') {
+    dbFlash('Walkaround complete — all items verified, no deficits', '#34d399');
+  }
 }
 
 // ── END Walkaround Engine ──────────────────────────────────
