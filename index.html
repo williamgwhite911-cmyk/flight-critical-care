@@ -27722,7 +27722,16 @@ function tlStateHospitalRender() {
   if(!origin) {
     var sendSel = document.getElementById('tlSendingFacility');
     var sendVal = sendSel ? sendSel.value : '';
-    if(sendVal && typeof facFindCoords==='function') origin = facFindCoords(sendVal);
+    if(sendVal) {
+      // Check STATE_HOSPITALS first for exact match
+      var allSH = (STATE_HOSPITALS.IN||[]).concat(STATE_HOSPITALS.FL||[]);
+      for(var si=0;si<allSH.length;si++){
+        if(allSH[si].name===sendVal){origin={lat:allSH[si].lat,lon:allSH[si].lon};break;}
+      }
+      // Fallback to FAC lookup
+      if(!origin && typeof facFindCoords==='function') origin = facFindCoords(sendVal);
+      if(!origin && typeof facFindFacCoords==='function') origin = facFindFacCoords(sendVal);
+    }
   }
 
   // Calculate distances and sort by closest
@@ -27756,10 +27765,10 @@ function tlStateHospitalRender() {
 
     var distHtml = '';
     if(r.dist !== null) {
-      distHtml = '<div style="display:flex;gap:12px;margin-top:3px;font-size:.62rem">' +
-        '<span style="color:var(--cyan)"><strong>' + r.driveMi.toFixed(1) + '</strong> mi</span>' +
-        '<span style="color:var(--tx2)">' + r.driveMin + ' min ground</span>' +
-        '<span style="color:#34d399">' + r.flightMin + ' min flight</span>' +
+      distHtml = '<div style="display:flex;gap:10px;margin-top:4px;font-size:.62rem;flex-wrap:wrap">' +
+        '<span style="color:var(--cyan)">&#9992; <strong>' + r.dist.toFixed(1) + '</strong> mi straight</span>' +
+        '<span style="color:var(--tx2)">&#128663; ' + r.driveMi.toFixed(1) + ' mi / ' + r.driveMin + ' min ground</span>' +
+        '<span style="color:#34d399">&#128681; <strong>' + r.flightMin + ' min</strong> flight</span>' +
       '</div>';
     } else {
       distHtml = '<div style="font-size:.55rem;color:var(--amber);margin-top:2px">Select sending facility above for distance</div>';
@@ -28390,6 +28399,7 @@ function tlReset(){
   var tp=document.getElementById('tlTraumaCenters');if(tp)tp.style.display='none';
   var rf=document.getElementById('tlRecommendedFacility');if(rf)rf.style.display='none';
   var dp=document.getElementById('tlDistancePanel');if(dp)dp.style.display='none';
+  var mp=document.getElementById('tlRouteMapPanel');if(mp)mp.style.display='none';
   var eb=document.getElementById('tlETABanner');if(eb)eb.style.display='none';
   var tl=document.getElementById('tlTraumaCentersList');if(tl)tl.innerHTML='';
   var bs=document.getElementById('bsScenePanel');if(bs)bs.style.display='none';
@@ -28908,29 +28918,32 @@ function tlLoad(){
   try{
     var s = localStorage.getItem('icu_tl_stamps');
     if(s) window.tlStamps = JSON.parse(s);
+    // Restore operating state FIRST so facility dropdowns populate
+    var savedState=localStorage.getItem('tl_operating_state');
+    if(savedState && typeof tlSelectState==='function'){
+      tlSelectState(savedState);
+    }
     // Restore timeline fields
     var ac=localStorage.getItem('tlAircraft');
     if(ac){var el=document.getElementById('tlAircraft');if(el)el.value=ac;}
     var tx=localStorage.getItem('tlTransportType');
     if(tx){var el2=document.getElementById('tlTransportType');if(el2){el2.value=tx;var sp=document.getElementById('tlScenePanel');if(sp)sp.style.display=(tx==='Scene Call')?'block':'none';}}
     var ht=localStorage.getItem('tlHeloType');
-    if(ht){var el3=document.getElementById('tlHeloType');if(el3){el3.value=ht;tlHeloTypeSync();}}
+    if(ht){var el3=document.getElementById('tlHeloType');if(el3){el3.value=ht;if(typeof tlHeloTypeSync==='function')tlHeloTypeSync();}}
     var rv=localStorage.getItem('tlRendezvous');
-    if(rv){var el4=document.getElementById('tlRendezvousPoint');if(el4){el4.value=rv;tlRendezvousChange();}}
+    if(rv){var el4=document.getElementById('tlRendezvousPoint');if(el4){el4.value=rv;if(typeof tlRendezvousChange==='function')tlRendezvousChange();}}
     var ems=localStorage.getItem('tlSceneEMS');
     if(ems){var el5=document.getElementById('tlEmsAgency');if(el5)el5.value=ems;}
     var loc=localStorage.getItem('tlSceneLocation');
     if(loc){var el6=document.getElementById('tlPickupLocation');if(el6)el6.value=loc;}
-    // Restore chief complaint and receiving facility
+    // Restore chief complaint
     var cc=localStorage.getItem('tlChiefComplaint');
-    if(cc){var el7=document.getElementById('tlChiefComplaint');if(el7){el7.value=cc;setTimeout(tlComplaintChange,300);}}
-    var rf=localStorage.getItem('tlReceivingFacility');
-    if(rf){var el8=document.getElementById('tlReceivingFacility');if(el8)el8.value=rf;}
-    // Restore sending/receiving facilities
+    if(cc){var el7=document.getElementById('tlChiefComplaint');if(el7){el7.value=cc;setTimeout(function(){if(typeof tlComplaintChange==='function')tlComplaintChange();},300);}}
+    // Restore sending/receiving facilities (dropdowns already populated by tlSelectState above)
     var sf=localStorage.getItem('tlSendingFacility');
-    if(sf){var el=document.getElementById('tlSendingFacility');if(el)el.value=sf;}
-    var rf2=localStorage.getItem('tlReceivingFacility');
-    if(rf2){var el=document.getElementById('tlReceivingFacility');if(el)el.value=rf2;}
+    if(sf){var elSF=document.getElementById('tlSendingFacility');if(elSF){for(var si=0;si<elSF.options.length;si++){if(elSF.options[si].value===sf){elSF.value=sf;break;}}}}
+    var rf=localStorage.getItem('tlReceivingFacility');
+    if(rf){var elRF=document.getElementById('tlReceivingFacility');if(elRF){for(var ri=0;ri<elRF.options.length;ri++){if(elRF.options[ri].value===rf){elRF.value=rf;break;}}}}
     // Recalculate distance after restoring
     setTimeout(function(){if(typeof tlFacilityChange==='function')tlFacilityChange();},400);
   }catch(e){}
