@@ -5061,17 +5061,56 @@ textarea.bs-field{resize:vertical}
 
     <!-- Transport Route Map -->
     <div id="tlRouteMapPanel" style="display:none;margin-bottom:14px;padding:14px;border-radius:10px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
         <div style="font-size:.62rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em">&#128506; Transport Route & Diversion Hospitals</div>
-        <button onclick="tlToggleMapFullscreen()" style="font-size:.6rem;padding:4px 10px;border-radius:6px;background:rgba(0,212,245,.1);border:1px solid rgba(0,212,245,.3);color:var(--cyan);cursor:pointer" type="button">&#x26F6; Expand</button>
+        <div style="display:flex;gap:6px">
+          <button id="tlTrackBtn" onclick="tlToggleTracking()" style="font-size:.6rem;padding:4px 10px;border-radius:6px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#34d399;cursor:pointer;font-weight:700" type="button">&#128225; Track</button>
+          <button onclick="tlToggleMapFullscreen()" style="font-size:.6rem;padding:4px 10px;border-radius:6px;background:rgba(0,212,245,.1);border:1px solid rgba(0,212,245,.3);color:var(--cyan);cursor:pointer" type="button">&#x26F6; Expand</button>
+        </div>
+      </div>
+      <!-- Live Tracking Info Bar -->
+      <div id="tlTrackingBar" style="display:none;margin-bottom:8px;padding:10px 14px;border-radius:8px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25)">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span id="tlTrackPulse" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34d399;animation:tlPulseAnim 1.5s ease-in-out infinite"></span>
+            <span style="font-size:.62rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.05em">Live Tracking</span>
+          </div>
+          <div id="tlTrackSpeed" style="font-size:.6rem;color:var(--tx2)">—</div>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:6px">
+          <div>
+            <div style="font-size:.5rem;color:var(--tx2);text-transform:uppercase">Remaining</div>
+            <div id="tlTrackRemaining" style="font-size:.82rem;font-weight:700;color:var(--cyan)">—</div>
+          </div>
+          <div>
+            <div style="font-size:.5rem;color:var(--tx2);text-transform:uppercase">ETA to Receiving</div>
+            <div id="tlTrackETA" style="font-size:.82rem;font-weight:700;color:#34d399">—</div>
+          </div>
+          <div>
+            <div style="font-size:.5rem;color:var(--tx2);text-transform:uppercase">Altitude</div>
+            <div id="tlTrackAlt" style="font-size:.82rem;font-weight:700;color:var(--tx2)">—</div>
+          </div>
+          <div>
+            <div style="font-size:.5rem;color:var(--tx2);text-transform:uppercase">Heading</div>
+            <div id="tlTrackHeading" style="font-size:.82rem;font-weight:700;color:var(--tx2)">—</div>
+          </div>
+          <div>
+            <div style="font-size:.5rem;color:var(--tx2);text-transform:uppercase">Nearest Diversion</div>
+            <div id="tlTrackNearest" style="font-size:.82rem;font-weight:700;color:#fbbf24">—</div>
+          </div>
+        </div>
+        <div id="tlTrackCoords" style="margin-top:4px;font-size:.5rem;color:var(--tx2)">—</div>
       </div>
       <div id="tlRouteMapContainer" style="width:100%;height:340px;border-radius:8px;overflow:hidden;background:#1a1a2e;position:relative">
         <canvas id="tlRouteMapCanvas" style="width:100%;height:100%"></canvas>
       </div>
       <div id="tlRouteMapLegend" style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;font-size:.58rem;color:var(--tx2)">
-        <span>&#128994; Sending</span> <span>&#128308; Receiving</span> <span>&#128309; Diversion Hospitals</span> <span>&#10145;&#65039; Route</span>
+        <span>&#128994; Sending</span> <span>&#128308; Receiving</span> <span>&#128993; You (Live)</span> <span>&#128309; Diversion Hospitals</span> <span>&#10145;&#65039; Route</span>
       </div>
     </div>
+    <style>
+      @keyframes tlPulseAnim { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.3)} }
+    </style>
 
     <!-- Transport Distance & ETA Display -->
     <div id="tlDistancePanel" style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:9px;background:rgba(0,212,245,.04);border:1px solid rgba(0,212,245,.2)">
@@ -27068,6 +27107,7 @@ var FAC_FACILITIES = [
   {name:'Northwestern Memorial Hospital', city:'Chicago', lat:41.8955, lon:-87.6215, type:'Level I Trauma', aliases:['Northwestern','NMH Chicago'], helipad:true, icu:true, system:'Northwestern Medicine'},
   // ── Florida Keys Hospitals ──
   {name:'Lower Keys Medical Center', city:'Key West', lat:24.5811, lon:-81.7428, type:'Acute Care Hospital', aliases:['LKMC','Key West Hospital','Lower Keys','Key West Regional'], helipad:true, icu:true, system:'Lower FL Keys Hospital District'},
+  {name:'Naval Branch Health Clinic Key West (Navy Hyperbaric Chamber)', city:'Key West', lat:24.5760, lon:-81.7569, type:'Military Hyperbaric Facility', aliases:['Navy Hyperbaric','Key West Navy','NBHC Key West','Navy Chamber','Key West Hyperbaric'], helipad:false, icu:false, system:'U.S. Navy', special:'Hyperbaric recompression chamber for dive emergencies'},
   {name:'Baptist Health Fishermen\'s Community Hospital', city:'Marathon', lat:24.7095, lon:-81.0829, type:'Critical Access Hospital', aliases:['Fishermen\'s','Marathon Hospital','Fishermens','Fisherman\'s Hospital'], helipad:true, icu:true, system:'Baptist Health South Florida'},
   {name:'Baptist Health Mariners Hospital', city:'Tavernier', lat:25.0112, lon:-80.3265, type:'Critical Access Hospital', aliases:['Mariners','Tavernier Hospital','Mariners Hospital'], helipad:true, icu:true, system:'Baptist Health South Florida', special:'Hyperbaric chamber'},
   // ── Miami-Dade Level I Trauma Centers ──
@@ -27243,6 +27283,7 @@ var STATE_HOSPITALS = {
     {name:'Mercy Hospital (HCA Florida)', city:'Miami', specialties:['Hyperbaric','Cardiac/STEMI'], lat:25.7279, lon:-80.2260},
     // Monroe County / Keys
     {name:'Lower Keys Medical Center', city:'Key West', specialties:['Level II Trauma'], lat:24.5657, lon:-81.7418},
+    {name:'Naval Branch Health Clinic Key West (Navy Hyperbaric Chamber)', city:'Key West', specialties:['Hyperbaric'], lat:24.5760, lon:-81.7569},
     {name:'Fishermen\'s Hospital', city:'Marathon', specialties:[], lat:24.7130, lon:-81.0923},
     {name:'Mariners Hospital', city:'Tavernier', specialties:[], lat:25.0068, lon:-80.5170},
     // Broward County
@@ -27524,6 +27565,10 @@ function tlRenderRouteMap() {
   // All points for bounding box
   var allPts = [{lat:sendCoords.lat, lon:sendCoords.lon}, {lat:recvCoords.lat, lon:recvCoords.lon}];
   nearby.forEach(function(h) { allPts.push({lat:h.lat, lon:h.lon}); });
+  // Include live GPS position in bounding box
+  if(_tlTrackingActive && _tlTrackPos) {
+    allPts.push({lat:_tlTrackPos.lat, lon:_tlTrackPos.lon});
+  }
 
   var minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
   allPts.forEach(function(p) {
@@ -27680,6 +27725,109 @@ function tlRenderRouteMap() {
   ctx.fillStyle = 'rgba(0,212,245,.95)';
   ctx.font = 'bold 10px -apple-system, sans-serif';
   ctx.fillText(routeLabel, mx - tw/2, my - 2);
+
+  // ── Draw live GPS position if tracking ──
+  if(_tlTrackingActive && _tlTrackPos) {
+    // Include live position in bounding box (expand if needed)
+    var lx = toX(_tlTrackPos.lon), ly = toY(_tlTrackPos.lat);
+
+    // Draw breadcrumb trail
+    if(_tlTrackHistory.length > 1) {
+      ctx.strokeStyle = 'rgba(251,191,36,.4)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(toX(_tlTrackHistory[0].lon), toY(_tlTrackHistory[0].lat));
+      for(var ti=1;ti<_tlTrackHistory.length;ti++) {
+        ctx.lineTo(toX(_tlTrackHistory[ti].lon), toY(_tlTrackHistory[ti].lat));
+      }
+      ctx.stroke();
+    }
+
+    // Draw line from current position to receiving
+    ctx.setLineDash([3,3]);
+    ctx.strokeStyle = 'rgba(251,191,36,.5)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(rx, ry);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw remaining distance label
+    var remDist = facHaversine(_tlTrackPos.lat, _tlTrackPos.lon, recvCoords.lat, recvCoords.lon);
+    var remMin = Math.round(remDist / helo.mph * 60);
+    var remMx = (lx + rx) / 2, remMy = (ly + ry) / 2;
+    var remLabel = Math.round(remDist) + ' mi remaining | ~' + remMin + ' min';
+    ctx.font = 'bold 9px -apple-system, sans-serif';
+    var remTw = ctx.measureText(remLabel).width;
+    ctx.fillStyle = 'rgba(15,23,42,.85)';
+    ctx.fillRect(remMx - remTw/2 - 5, remMy + 4, remTw + 10, 16);
+    ctx.strokeStyle = 'rgba(251,191,36,.3)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(remMx - remTw/2 - 5, remMy + 4, remTw + 10, 16);
+    ctx.fillStyle = 'rgba(251,191,36,.95)';
+    ctx.fillText(remLabel, remMx - remTw/2, remMy + 15);
+
+    // Outer glow ring
+    ctx.beginPath();
+    ctx.arc(lx, ly, 18, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(251,191,36,.15)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Accuracy ring
+    if(_tlTrackPos.accuracy) {
+      var accRadius = Math.max(4, Math.min(30, _tlTrackPos.accuracy / 50));
+      ctx.beginPath();
+      ctx.arc(lx, ly, accRadius, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(251,191,36,.08)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(251,191,36,.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Main dot (yellow/gold)
+    ctx.beginPath();
+    ctx.arc(lx, ly, 9, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(251,191,36,.95)';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Heading indicator (triangle pointing direction of travel)
+    if(_tlTrackPos.heading !== null && !isNaN(_tlTrackPos.heading)) {
+      var hRad = (_tlTrackPos.heading - 90) * Math.PI / 180; // convert compass to canvas angle
+      var tipX = lx + 16 * Math.cos(hRad);
+      var tipY = ly + 16 * Math.sin(hRad);
+      ctx.fillStyle = 'rgba(251,191,36,.9)';
+      ctx.beginPath();
+      ctx.moveTo(tipX, tipY);
+      ctx.lineTo(tipX - 6 * Math.cos(hRad - 0.6), tipY - 6 * Math.sin(hRad - 0.6));
+      ctx.lineTo(tipX - 6 * Math.cos(hRad + 0.6), tipY - 6 * Math.sin(hRad + 0.6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Inner dot (helicopter icon text)
+    ctx.font = 'bold 8px -apple-system, sans-serif';
+    ctx.fillStyle = '#0f172a';
+    ctx.textAlign = 'center';
+    ctx.fillText('\u2708', lx, ly + 3);
+    ctx.textAlign = 'start';
+
+    // Label
+    ctx.font = 'bold 9px -apple-system, sans-serif';
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillText('YOU', lx + 14, ly - 6);
+    if(_tlTrackPos.speed !== null && _tlTrackPos.speed > 2) {
+      ctx.font = '7px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(251,191,36,.7)';
+      ctx.fillText(Math.round(_tlTrackPos.speed * 1.94384) + ' kts', lx + 14, ly + 4);
+    }
+  }
 }
 
 function tlToggleMapFullscreen() {
@@ -27691,6 +27839,173 @@ function tlToggleMapFullscreen() {
     container.style.height = '340px';
   }
   tlRenderRouteMap();
+}
+
+// ── Live GPS Tracking ──
+var _tlTrackingActive = false;
+var _tlTrackWatchId = null;
+var _tlTrackPos = null; // {lat, lon, alt, speed, heading, accuracy, timestamp}
+var _tlTrackHistory = []; // breadcrumb trail
+
+function tlToggleTracking() {
+  if(_tlTrackingActive) {
+    tlStopTracking();
+  } else {
+    tlStartTracking();
+  }
+}
+
+function tlStartTracking() {
+  if(!navigator.geolocation) {
+    alert('GPS not available on this device.');
+    return;
+  }
+  _tlTrackingActive = true;
+  _tlTrackHistory = [];
+  var btn = document.getElementById('tlTrackBtn');
+  if(btn) { btn.textContent = '\u23F9 Stop'; btn.style.background = 'rgba(248,113,113,.15)'; btn.style.borderColor = 'rgba(248,113,113,.5)'; btn.style.color = '#f87171'; }
+  var bar = document.getElementById('tlTrackingBar');
+  if(bar) bar.style.display = 'block';
+
+  _tlTrackWatchId = navigator.geolocation.watchPosition(
+    function(pos) {
+      _tlTrackPos = {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        alt: pos.coords.altitude,
+        speed: pos.coords.speed,
+        heading: pos.coords.heading,
+        accuracy: pos.coords.accuracy,
+        timestamp: pos.timestamp
+      };
+      // Add to breadcrumb trail (limit to last 200 points)
+      _tlTrackHistory.push({lat: _tlTrackPos.lat, lon: _tlTrackPos.lon, ts: pos.timestamp});
+      if(_tlTrackHistory.length > 200) _tlTrackHistory.shift();
+
+      tlUpdateTrackingInfo();
+      tlRenderRouteMap(); // Re-draw map with current position
+    },
+    function(err) {
+      console.warn('GPS error:', err.message);
+      var coords = document.getElementById('tlTrackCoords');
+      if(coords) coords.textContent = 'GPS Error: ' + err.message;
+    },
+    { enableHighAccuracy: true, maximumAge: 3000, timeout: 10000 }
+  );
+}
+
+function tlStopTracking() {
+  _tlTrackingActive = false;
+  if(_tlTrackWatchId !== null) {
+    navigator.geolocation.clearWatch(_tlTrackWatchId);
+    _tlTrackWatchId = null;
+  }
+  var btn = document.getElementById('tlTrackBtn');
+  if(btn) { btn.textContent = '\uD83D\uDCE1 Track'; btn.style.background = 'rgba(52,211,153,.1)'; btn.style.borderColor = 'rgba(52,211,153,.3)'; btn.style.color = '#34d399'; }
+  var bar = document.getElementById('tlTrackingBar');
+  if(bar) bar.style.display = 'none';
+  _tlTrackPos = null;
+  tlRenderRouteMap();
+}
+
+function tlUpdateTrackingInfo() {
+  if(!_tlTrackPos) return;
+
+  // Speed display
+  var speedEl = document.getElementById('tlTrackSpeed');
+  if(speedEl) {
+    if(_tlTrackPos.speed !== null && _tlTrackPos.speed >= 0) {
+      var kts = _tlTrackPos.speed * 1.94384; // m/s to knots
+      var mph = _tlTrackPos.speed * 2.23694;
+      speedEl.textContent = Math.round(kts) + ' kts / ' + Math.round(mph) + ' mph';
+    } else {
+      speedEl.textContent = 'Speed: acquiring...';
+    }
+  }
+
+  // Altitude
+  var altEl = document.getElementById('tlTrackAlt');
+  if(altEl) {
+    if(_tlTrackPos.alt !== null) {
+      var feet = Math.round(_tlTrackPos.alt * 3.28084);
+      altEl.textContent = feet.toLocaleString() + ' ft';
+    } else {
+      altEl.textContent = '—';
+    }
+  }
+
+  // Heading
+  var hdgEl = document.getElementById('tlTrackHeading');
+  if(hdgEl) {
+    if(_tlTrackPos.heading !== null && !isNaN(_tlTrackPos.heading)) {
+      var deg = Math.round(_tlTrackPos.heading);
+      var dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+      var dir = dirs[Math.round(deg / 22.5) % 16];
+      hdgEl.textContent = deg + '\u00B0 ' + dir;
+    } else {
+      hdgEl.textContent = '—';
+    }
+  }
+
+  // Coordinates
+  var coordsEl = document.getElementById('tlTrackCoords');
+  if(coordsEl) {
+    coordsEl.textContent = _tlTrackPos.lat.toFixed(5) + ', ' + _tlTrackPos.lon.toFixed(5) + ' (\u00B1' + Math.round(_tlTrackPos.accuracy) + 'm)';
+  }
+
+  // Remaining distance + ETA to receiving facility
+  var recvSel = document.getElementById('tlReceivingFacility');
+  var recvVal = recvSel ? recvSel.value : '';
+  var recvCoords = null;
+  if(recvVal) {
+    var allH = (STATE_HOSPITALS.IN||[]).concat(STATE_HOSPITALS.FL||[]);
+    for(var i=0;i<allH.length;i++) {
+      if(allH[i].name === recvVal) { recvCoords = {lat:allH[i].lat, lon:allH[i].lon}; break; }
+    }
+    if(!recvCoords && typeof facFindFacCoords==='function') recvCoords = facFindFacCoords(recvVal);
+    if(!recvCoords && typeof facFindCoords==='function') recvCoords = facFindCoords(recvVal);
+  }
+
+  var remEl = document.getElementById('tlTrackRemaining');
+  var etaEl = document.getElementById('tlTrackETA');
+  if(recvCoords) {
+    var remainMi = facHaversine(_tlTrackPos.lat, _tlTrackPos.lon, recvCoords.lat, recvCoords.lon);
+    if(remEl) remEl.textContent = remainMi.toFixed(1) + ' mi';
+
+    // ETA based on helicopter cruise speed
+    var helo = typeof tlGetHeloSpeed==='function' ? tlGetHeloSpeed() : {mph:161};
+    var etaMin = Math.round(remainMi / helo.mph * 60);
+    if(etaEl) {
+      if(etaMin <= 0) {
+        etaEl.textContent = 'ARRIVED';
+        etaEl.style.color = '#34d399';
+      } else {
+        etaEl.textContent = etaMin + ' min';
+        etaEl.style.color = etaMin <= 5 ? '#34d399' : etaMin <= 15 ? '#fbbf24' : '#00d4f5';
+      }
+    }
+  } else {
+    if(remEl) remEl.textContent = '—';
+    if(etaEl) etaEl.textContent = 'Select receiving';
+  }
+
+  // Nearest diversion hospital
+  var nearEl = document.getElementById('tlTrackNearest');
+  if(nearEl && _tlSelectedState) {
+    var hospitals = STATE_HOSPITALS[_tlSelectedState] || [];
+    var nearest = null;
+    var nearestDist = Infinity;
+    hospitals.forEach(function(h) {
+      if(h.name === recvVal) return; // skip receiving
+      var d = facHaversine(_tlTrackPos.lat, _tlTrackPos.lon, h.lat, h.lon);
+      if(d < nearestDist) { nearestDist = d; nearest = h; }
+    });
+    if(nearest) {
+      nearEl.textContent = nearest.city + ' — ' + nearestDist.toFixed(1) + ' mi';
+    } else {
+      nearEl.textContent = '—';
+    }
+  }
 }
 
 // Backward compat alias
@@ -28400,6 +28715,7 @@ function tlReset(){
   var rf=document.getElementById('tlRecommendedFacility');if(rf)rf.style.display='none';
   var dp=document.getElementById('tlDistancePanel');if(dp)dp.style.display='none';
   var mp=document.getElementById('tlRouteMapPanel');if(mp)mp.style.display='none';
+  if(typeof tlStopTracking==='function') tlStopTracking();
   var eb=document.getElementById('tlETABanner');if(eb)eb.style.display='none';
   var tl=document.getElementById('tlTraumaCentersList');if(tl)tl.innerHTML='';
   var bs=document.getElementById('bsScenePanel');if(bs)bs.style.display='none';
